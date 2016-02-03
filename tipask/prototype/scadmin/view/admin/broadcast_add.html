@@ -1,0 +1,24 @@
+<table>
+<tr>
+<td>
+			发布时间 </td><td>从:<input class="txt"  name="StartTime" id="StartTime" value="{eval echo date('Y-m-d H:i:s',time())}">
+			至:<input class="txt"  name="EndTime" id="EndTime" value="{eval echo date('Y-m-d H:i:s',time()+3600)}"></td></tr>
+<tr>
+<td>            
+			公告内容<p>(50字上限): </td><td><textarea name="Content" id="Content" cols="50" rows="3"></textarea></td></tr>
+<tr>
+<td> 
+            发布区域:</td><td>				
+			<select name="BroadCastZone" id="BroadCastZone">
+				<!-- {loop $BroadCastZoneList $zoneId $zoneName} -->
+					<option value="{$zoneId}" {if $broadcastInfo[BroadCastZone]==$zoneId}selected{/if}>{$zoneName}</option>
+				<!-- {/loop} -->                     
+			</select></td></tr>
+<tr>
+<td> 
+			是否有效:</td><td>				
+			<select name="BroadCastAvailable" id="BroadCastAvailable">
+				<option value=0 {if $broadcastInfo[BroadCastStatus]!=3}selected{/if}>有效</option>
+				<option value=1 {if $broadcastInfo[BroadCastStatus]==3}selected{/if}>撤销</option>
+			</select></td></tr>
+			</table>

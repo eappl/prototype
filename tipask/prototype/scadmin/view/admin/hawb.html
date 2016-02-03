@@ -1,0 +1,154 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;分单管理</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+<form method="post" action="index.php?admin_system/hawb" name="searchform">
+    <table width="100%"  cellspacing="0" cellpadding="6" align="center" class="tableborder">
+        <tbody>
+            <tr class="header" >
+				<td colspan="7">搜索用户</td>
+			</tr>
+            <tr class="altbg2">              
+				<td class="altbg2">搜索用户名: <input type="text" value="{$login_name_search}"  maxlength="100" name="user_name"   onmouseover="this.focus()" id="kw">
+                </td>
+            <td  class="altbg2">职位: 
+            <select name="job">
+            <option value="-1">全部</option>
+            <!-- {loop $job_option $key $job} -->
+            <option value="{$key}" {if isset($job_search) && $job_search == $key}selected{/if}>{$job}</option>
+            <!-- {/loop} -->
+            </select>
+            </td>
+            <td class="altbg2">是否忙碌: 
+            <select name="busy">
+            <option value="-1">全部</option>
+            <!-- {loop $busy_option $key $busy} -->
+            <option value="{$key}" {if isset($busy_search) && $busy_search == $key}selected{/if}>{$busy}</option>
+            <!-- {/loop} -->
+            </select>
+            </td>     
+            <td  class="altbg2">参与处理: 
+            <select name="handle">
+            <option value="-1">全部</option>
+            <!-- {loop $handle_option $key $handle} -->
+            <option value="{$key}" {if isset($handle_search) && $handle_search == $key}selected{/if}>{$handle}</option>
+            <!-- {/loop} -->
+            </select>
+            </td>
+            <td class="altbg2">接单类型:
+            <select name="hawb">
+            <option value="-1">全部</option>
+            <!-- {loop $hawb_option $key $hawb} -->
+            <option value="{$key}" {if isset($hawb_search) && $hawb_search == $key}selected{/if}>{$hawb}</option>
+            <!-- {/loop} -->
+            </select>
+            </td>
+            <td>是否在班:
+             <select name="is_onjob">
+            <option value="-1">全部</option>
+            <!-- {loop $is_onjob $key $isonjob} -->
+            <option value="{$key}" {if isset($isonjob_search) && $isonjob_search == $key}selected{/if}>{$isonjob}</option>
+            <!-- {/loop} -->
+            </select>
+            </td>       
+            <td>
+            	 <button  class="btn" type="submit" name="submit_search">搜索</button>
+            </td>
+        </tr>
+        </tbody>
+    </table> 
+</form>
+<table width="100%" cellpadding="4" cellspacing="1" > 
+       <tr class="header" >
+            <td>用户名</td>
+            <td>职位</td>
+            <td>是否忙碌</td>      
+            <td>是否在班</td> 
+            <td>参与处理</td>
+            <td>接单类型</td>       
+            <td>操作</td>
+        </tr>
+        <!-- {if isset($operator_list)} {loop $operator_list $key $operator} -->  
+        <tr>
+            <td width="200" class="altbg2" id="name{$key}">{$operator['login_name']}</td>     
+            <td width="200" class="altbg2">{$operator['p_name']}</td>
+            <td width="200" class="altbg2"><span style="color:{if $operator['isbusy'] == 1} red {elseif $operator['isbusy'] == 0} green {/if}"><b>{$busy_option[$operator['isbusy']]}</b></span></td>
+            <td width="200" class="altbg2"><span style="color:{if $operator['isonjob'] == 1} green {elseif $operator['isonjob'] == 0} red {/if}"><b>{$is_onjob[$operator['isonjob']]}</b></span></td>        
+            <td width="200" class="altbg2"><span style="color:{if $operator['ishandle'] == 1} red {elseif $operator['ishandle'] == 0} green {/if}"><b>{$handle_option[$operator['ishandle']]}</b></span></td>     
+            <td width="200" class="altbg2">{$operator['type_name']}</td>   
+            <td width="200" class="altbg2"><a href="javascript:;" onClick="buttoncontrol($key);">配置</a>
+				    <input type="hidden" name="js_isbusy{$key}" value="{$operator['isbusy']}" />
+					<input type="hidden" name="js_ishandle{$key}" value="$operator['ishandle']" />
+					<input type="hidden" name="js_type{$key}" value="{$operator['type']}" />       
+					<input type="hidden" name="js_isonjob{$key}" value="{$operator['isonjob']}" />
+			</td>
+         
+        </tr>
+        <!-- {/loop} --> 
+        <!-- {/if} --> 
+</table>
+<div class="pages"><div class="scott" style="float:right;">{$departstr}</div></div>
+<!--{template footer,admin}-->
+
+<script type="text/javascript">
+    function buttoncontrol(id){
+    	        var isbusy = $.trim($("input[name='js_isbusy"+id+"']").val());
+    	        var ishandle = $.trim($("input[name='js_ishandle"+id+"']").val());
+    	        var type = $.trim($("input[name='js_type"+id+"']").val());
+    	        var busy_status = isbusy == 1?'checked':'';  
+    	        var user = $.trim($("#name"+id).text());
+    	        var isonjob = $.trim($("input[name='js_isonjob"+id+"']").val());
+    	        var job_statu1='';
+    	        var job_statu2='';
+    	         if(ishandle == 1){
+    	        	 var handle_status1 = 'checked'; 
+    	         }	  	        
+    	        else if(ishandle == 0){
+    	        	var handle_status2 = 'checked';
+    	        }
+    	         if(isonjob == 1){
+    	        	 var job_statu1='checked';
+    	         }else if(isonjob == 0){
+    	        	var job_statu2='checked';
+    	        }
+    	         
+    	        $.post("index.php?admin_system/ajax_help_detail_type{$setting['seo_suffix']}", {id:id},
+     	       			  function(data){
+     	            			 $("#define_detail_type").html(data);
+     	            		    }
+     	       			  );
+        		$.dialog({
+                    id:'selecttopic',
+                    position:'center',
+                    align:'left',
+                    fixed:1,
+                    width:500,
+                    height:100,
+                    title:'分单管理配置',
+                    fnOk:function(){document.addtocategoryForm.submit();$.dialog.close('selecttopic')},
+                    fnCancel:function(){$.dialog.close('selecttopic')},
+                    content:'<div class="mainbox"><form name="addtocategoryForm"  action="index.php?admin_system/hawb_config{$setting['seo_suffix']}" method="post" >'+
+                            '<input type="hidden" name="id" value="'+id+'" /><br/>'+
+                            '<input type="hidden" name="user" value="'+user+'" />'+
+                            '用户名：'+user+ '<br/>'+
+                            '是否在班：<input type="radio"  style="border:0;" name="isonjob" value="1" '+job_statu1+'/>是<input style="border:0;" type="radio" name="isonjob" value="0" '+job_statu2+'/>否<br/>'+
+                    		'忙碌状态：<input style="border:0;" type="checkbox" name="isbusy" value="1" '+busy_status+' />忙碌<br/>'+
+                    		'处理人员：<input type="radio"  style="border:0;" name="ishandle" value="1" '+handle_status1+'/>是<input style="border:0;" type="radio" name="ishandle" value="0" '+handle_status2+'/>否<br/>'+
+                    		'详细类型：<div <div id="define_detail_type" style="display:inline"></div></form></div>'
+                }); 
+        	}     
+        
+</script>

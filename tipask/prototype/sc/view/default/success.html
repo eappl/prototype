@@ -1,0 +1,93 @@
+<!--{template header}-->
+<div class="huiWrapBg clearfix">
+    <div class="box1000 clearfix">
+        <div class="zx_location">您的位置：<a href="http://sc.5173.com">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>提交成功</span></div>
+    </div>
+
+	<div id="list_wdzs_kf" class="">
+	    <div class="wrapBox">
+	        <div class="hdBox">
+	            <div class="hd">
+	                <div class="ld"></div>
+	                <div class="rd"> 我们已经收到您的提问啦！客服正在解答中... </div>
+	            </div>
+	            <!-- 登陆且有接手客服 -->
+	           {if $loginName != '游客' && !empty($operatorInfo)} 
+	           	{if $operatorInfo['isbusy']==1 || $operatorInfo['isonjob']==0}
+	           	 	<div class="bd"> 抱歉，由于您的专属客服当前不在线，我们将安排其他客服为您提供专业服务。</div>
+	            {/if}
+	            <div class="bdnew c_f60"><span id="spanSeconds">9</span>秒后自动跳转至“<a href="{url question/$myAsk}">我的咨询</a>”</div>
+	           {/if}
+	           <!-- 未登录 -->
+	            {if $loginName == '游客'}
+	            	 <div class="bdnew c_f60"><span id="spanSeconds">9</span>秒后自动跳转至“<a href="{url question/$myAsk}">我的咨询</a>”</div>
+	            {/if}
+	        </div>
+			{if $loginName != '游客' && empty($operatorInfo)}
+	        <div class="tilBox">
+	            <h2>请选择您的专属客服，我们将为您提供一对一的优质服务</h2>
+	            <span class="ld"></span>
+	            <span class="rd"></span>
+	        </div>
+	        <ul id="kfList" class="clearfix"></ul>
+	        <div class="btnBox clearfix">
+	            <div id="changeList">换一批</div>
+	            <a id="thanks" href="{url question/my_ask}">进入我的咨询记录</a>
+	        </div>
+	        {/if}
+	    </div>
+	</div>
+</div>
+<!--{template footer}-->
+{if ($loginName != '游客' && !empty($operatorInfo)) || ($loginName == '游客')}
+<script type="text/javascript">
+var seconds = 10;
+onload = function(){
+  t = window.setInterval(redirection, 1000);
+}
+function redirection(){
+  if (seconds <= 0){
+    window.clearInterval(t);
+    return;
+  }
+
+  seconds --;
+  document.getElementById('spanSeconds').innerHTML = seconds;
+
+  if (seconds <= 1){
+    window.clearInterval(t);
+    location.href = "{url question/$myAsk}";
+  }
+}
+{/if}
+</script>
+<div id="floatBox" class="UED_hide">
+    <div class="wrapBox clearfix">
+        <div class="hd">
+        </div>
+        <div id="close_floatBox" onclick="$.LAYER.close();"></div>
+
+        <div class="bd">
+            <img class="pic" src="" alt=""/>
+            <div class="zl">
+                <dl>
+                    <dt>名称:</dt>
+                    <dd><strong id="loginName_fl"></strong></dd>
+                </dl>
+                <dl>
+                    <dt>微信:</dt>
+                    <dd id="weixin_fl"></dd>
+                </dl>
+                <dl>
+                    <dt>手机</dt>
+                    <dd id="mobile_fl"></dd>
+                </dl>
+                <dl>
+                    <dt>QQ:</dt>
+                    <dd id="qq_fl"></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="cMe_fb"></div>
+    </div>
+</div>

@@ -1,0 +1,338 @@
+@CHARSET "UTF-8";
+
+/** wee reset **/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td
+	{
+	padding: 0;
+	margin: 0;
+}
+
+img {
+	border: 0 none;
+}
+
+ol,ul {
+	list-style: none;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+label {
+	cursor: pointer;
+}
+
+table th {
+	text-align: left;
+}
+
+:link,:visited {
+	text-decoration: none;
+}
+
+.clearfix:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+}
+
+body {
+	font-family: Tahoma;
+	color: #333;
+	font-size: 12px;
+}
+
+#wrap {
+	padding: 8px 20px;
+	text-align: left;
+}
+
+#footer {
+	margin-top: 80px;
+	padding: 20px;
+	text-align: center;
+	border-bottom: 2px solid #555;
+	border-top: 2px solid #777;
+	background: #999;
+}
+
+select,input,textarea {
+	color: #333;
+	padding: 2px;
+}
+
+.txt,select {
+	vertical-align: middle;
+}
+
+.txt:hover,.txt:focus,textarea:hover,textarea:focus {
+	/*background: #F8F1A0;*/
+	border-color: #f1ca7f;
+}
+
+radio,checkbox {
+	background: none;
+	border: none;
+	vertical-align: middle;
+}
+
+checkbox {
+	height: 14px;
+}
+
+button {
+	cursor: pointer;
+}
+
+fieldset {
+border:1px solid #999;
+margin-top:1em;
+padding:0.5em;
+}
+fieldset legend {
+padding:4px;
+background-color:transparent;
+color:#444444;
+font-weight:bold;
+}
+
+/* pages: */
+.pages {
+	background: transparent;
+	clear: both;
+	font-size: 12px;
+	line-height: 150%;
+	margin: 4px 0;
+	overflow: hidden;
+}
+
+.pages a {
+	background: #fff;
+	border: 1px solid #ccc;
+	color: #000;
+	float: left;
+	margin-right: 3px;
+	padding: 1px 5px 0px;
+}
+
+.pages strong,.pages span {
+	float: left;
+	margin-right: 3px;
+	padding: 2px 4px 1px;
+}
+
+.pages a:hover {
+	background: #ff0000;
+	color: #fff;
+	text-decoration: none;
+}
+
+.pages strong {
+	color: #bc2931;
+	font-weight: 700;
+}
+/** end pages: */
+
+small {
+	color: #999;
+	font-weight: normal;
+	font-size: 12px;
+}
+
+small:hover {
+	color: #000;
+}
+
+/** 后台表格样式 **/
+
+.tbh,.tbv {
+	/*border-top: 2px solid #999;*/
+	clear: both;
+	width: 100%;	
+}
+
+.tbv td,.tbv th,.tbh th,.tbh td {
+	border-bottom: 1px dotted #ccc;
+	font-size: 12px;
+	line-height: 200%;
+	padding: 4px 0;
+	text-align: center;
+	border:1px dashed #ccc;
+}
+
+.tbh th {
+	color: #333;
+	padding-right: 16px;
+	background:#FFCC99;
+}
+.tbv th {
+	text-align: right;
+	color: #333;
+	padding-right: 16px;
+}
+
+.tbv th.rowtip {
+	width: 100px;
+}
+
+.tbv td.rowform {
+	width: 350px;
+}
+
+.noborder th,.noborder td {
+	border-bottom: 0 none;
+}
+
+.tbh tr.hover:hover td {
+	background: #CCFFCC;
+}
+
+.tbh tr.current td {
+	background: #FFFFCC;
+}
+
+.tbv td .txt,.tbv td textarea {
+	width: 300px;
+}
+
+.tbv td select {
+	width: 306px;
+}
+
+.tbv td label {
+	padding-right: 8px;
+}
+
+.tbv a:hover,.tbh a:hover {
+	text-decoration: underline;
+}
+
+/* message boxes: warning, error, confirmation */
+.notice {
+    color:              #000000;
+    background-color:   #FFFFDD;
+}
+h1.notice,
+div.notice {
+    margin:             0.5em 0 0.5em 0;
+    border:             0.1em solid #FFD700;
+    background-image:   url(./images/s_notice.png);
+    background-repeat:  no-repeat;
+    background-position: 10px 50%;
+    padding:            10px 10px 10px 36px;
+            }
+.notice h1 {
+    border-bottom:      0.1em solid #FFD700;
+    font-weight:        bold;
+    text-align:         left;
+    margin:             0 0 0.2em 0;
+}
+
+.warning {
+    color:              #CC0000;
+    background-color:   #FFFFCC;
+}
+p.warning,
+h1.warning,
+div.warning {
+    margin:             0.5em 0 0.5em 0;
+    border:             0.1em solid #CC0000;
+    background-image:   url(./images/s_warn.png);
+    background-repeat:  no-repeat;
+    background-position: 10px 50%;
+    padding:            10px 10px 10px 36px;
+            }
+.warning h1 {
+    border-bottom:      0.1em solid #cc0000;
+    font-weight:        bold;
+    text-align:         left;
+    margin:             0 0 0.2em 0;
+}
+
+.error {
+    background-color:   #FFFFCC;
+    color:              #ff0000;
+}
+
+h1.error,
+div.error {
+    margin:             0.5em 0 0.5em 0;
+    border:             0.1em solid #ff0000;
+    background-image:   url(./images/s_error.png);
+    background-repeat:  no-repeat;
+    background-position: 10px 50%;
+    padding:            10px 10px 10px 36px;
+            }
+div.error h1 {
+    border-bottom:      0.1em solid #ff0000;
+    font-weight:        bold;
+    text-align:         left;
+    margin:             0 0 0.2em 0;
+}
+
+.confirmation {
+    background-color:   #FFFFCC;
+}
+fieldset.confirmation {
+    border:             0.1em solid #FF0000;
+}
+fieldset.confirmation legend {
+    border-left:        0.1em solid #FF0000;
+    border-right:       0.1em solid #FF0000;
+    font-weight:        bold;
+    background-image:   url(./images/s_really.png);
+    background-repeat:  no-repeat;
+    background-position: 5px 50%;
+    padding:            0.2em 0.2em 0.2em 25px;
+            }
+/* end messageboxes */
+
+
+.navigation {
+	border: 1px solid #999;
+	background: #f7f7f8;
+	width: 100%;
+}
+
+.navigation dt {
+	display: none;
+}
+
+.navigation ul li {
+	float: left;
+	margin-right: 8px;
+}
+
+.navigation ul li a {
+	font-size: 12px;
+	display: block;
+	padding: 4px;
+}
+
+.operations {
+	width: 100%;
+}
+
+.operations ul li {
+	float: left;
+	margin-right: 8px;
+}
+
+.operations ul li a {
+	font-size: 12px;
+	display: block;
+	background: #efefef;
+	padding: 4px;
+}
+
+#thumbPreview {
+	position: relative;
+	top: -40px;
+	width: 10px;
+}

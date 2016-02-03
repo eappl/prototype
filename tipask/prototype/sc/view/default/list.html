@@ -1,0 +1,224 @@
+<!--{template header}-->
+<div class="box1000 m_t_10 clearfix">
+	<div class="right730">
+	<form name="searchForm" id="searchForm" action="index.php?list" method="post">
+	<!-- {if !empty($rigth_game) || !empty($tag_list)} -->
+		<div class="s_condition" id="searchlist">
+		<!-- {if !empty($rigth_game)} -->
+			<div class="s_category danxuan">
+				<span class="title">游戏名称：</span>
+				<!-- {loop $rigth_game $games} -->
+				<!-- {if $games['gameid'] != 'other_games'} -->
+				<a href="javascript:;" id="game_{$games['gameid']}" onclick="on_check_game('{$games['gameid']}');" class="{eval if($games['gameid'] == $game_id) echo current;}">{$games['game_name']}<span class="f_grey">({$games['num']})</span></a>			
+				<!-- {else} -->
+				<a href="javascript:;" id="other_game" onclick="on_check_game('other_games');" class="{eval if($games['gameid'] == $game_id) echo current;}">{$games['game_name']}<span class="f_grey">({$games['num']})</span></a>
+				<!-- {/if} -->
+				<!-- {/loop} -->
+				<input type="hidden" id="gameid" name="gameid" value="{$game_id}"/>
+			</div>
+		<!-- {/if} -->	
+            <!-- {loop $tag_list $tag} -->
+			<div class="s_category duoxuan">			
+				<span class="title">{$tag['name']}<ins>(可多选)</ins>：</span>			
+				<div class="s_expand">
+				    <!-- {if !empty($tag['child'])} {loop $tag['child'] $child}-->
+					<a href="#" id="a_{$child['id']}" onclick="on_check({$child['id']});" class="{eval if(in_array($child['id'],$tag_arr)) echo current;}">
+					<input type="hidden" id="tag_{$child['id']}" name="tag[]" value="{eval if(in_array($child['id'],$tag_arr)) echo $child['id'];}"/>
+						{$child['name']}
+						<span class="f_grey">({$child['num']})</span>
+					</a>
+					<!-- {/if} -->
+					<!-- {/loop} -->
+				</div>
+			</div>
+			<!-- {/loop} -->		  				
+	 </div>
+	 <!-- {/if} -->
+	</form>			
+		<div id="tabs3">		    
+			<div name="tabhead" class="zx_tab clearfix">
+				<a href="{url question/ask_skip}" class="link_q" target="_blank">
+					<span class="ico_01"></span>
+					我要提问
+				</a>
+				<ul class="tab_title">
+					<li><a href="#tabs3-1">大家正在问</a></li>
+					<li>
+						<a href="#tabs3-2" onclick="choice_type('{$all_num[1]}')">我的提问</a>
+						<span class="ico_speaker" style="display:none;"></span>
+					</li>
+				</ul>
+			</div>
+			<div name="tabpanel" id="tabs3-1">
+				<div id="tabs4">
+                    <ul class="type_tabs">
+                        <li><a href="#tabs4-1" onclick="ajax_list(0)">最新</a></li>
+                        <li><a href="#tabs4-2" onclick="ajax_list(1)">热门</a></li>
+                        <li><a href="#tabs4-3" onclick="ajax_list(2)">咨询</a></li>
+                        <li><a href="#tabs4-4" onclick="ajax_list(3)">投诉</a></li>
+                        <li><a href="#tabs4-5" onclick="ajax_list(4)">建议</a></li>
+                        <li><a href="#tabs4-6" onclick="ajax_list(5)">垃圾箱</a></li>
+                    </ul>                   
+                    <div name="tabtype" id="tabs4-1" class="qa_list_infor">
+                        <div id="loading_div0" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+                        <div id="content0"></div>
+                    </div>
+                    
+                    <div name="tabtype" id="tabs4-2" class="qa_list_infor">
+                        <div id="loading_div1" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+                        <div id="content1"></div>
+                    </div>
+                    
+                    <div name="tabtype" id="tabs4-3" class="qa_list_infor">
+                        <div id="loading_div2" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+                        <div id="content2"></div>                       
+                    </div>
+                    
+                    <div name="tabtype" id="tabs4-4" class="qa_list_infor">
+                        <div id="loading_div3" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+                        <div id="content3"></div>                      
+                    </div>
+                    
+                    <div name="tabtype" id="tabs4-5" class="qa_list_infor">
+                        <div id="loading_div4" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+                        <div id="content4"></div>                      
+                    </div>
+                    
+                     <div name="tabtype" id="tabs4-6" class="qa_list_infor">
+                        <div id="loading_div5" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+                        <div id="content5"></div>                      
+                    </div>
+                    
+                </div>			
+		    </div>
+		</div>
+	</div>
+	<div class="left250">
+		<div class="menu">
+			<h2>问题分类</h2>
+			<div class="menu_list">
+				<dl>
+					<dt>游戏名称</dt>
+					<!-- {loop $left_game $games} -->
+					<dd><a href="{url list//$games['gameid']/}">{$games['game_name']}</a></dd>
+					<!-- {/loop} -->				
+				</dl>
+				<ul class="menu_infor" style="display:none;">
+				    <!-- {loop $left_game $games} -->
+					<li><a href="{url list//$games['gameid']/}">{$games['game_name']}</a></li>
+					<!-- {/loop} -->
+					<li><a href="{url list//other_games/}">其它游戏</a></li>
+				</ul>
+			</div>
+		    <!--{if isset($taglist)}-->
+		    <!--{loop $taglist  $t}-->
+			<div class="l_dash"></div>
+			<div class="menu_list" style="overflow:visible;">
+				<dl>
+					<dt>{$t['name']}</dt>
+			<!--{if !empty($t['child'])}-->
+			<!--{eval $tmpTag = $t['child'];}-->
+				<!--{loop $t['child']  $t}-->
+					  <dd><a href="{url list///$t['id']}">{$t['name']}</a></dd> 
+			    <!--{/if}--><!--{/loop}-->
+			    </dl>
+			     <ul class="menu_infor" style="display:none;">
+			<!--{loop $tmpTag  $t}-->
+				 <li><a href="{url list///$t['id']}">{$t['name']}</a></li>
+		    <!--{/loop}-->
+		      </ul>
+			</div>	
+			<!--{/loop}-->
+			<!--{/if}-->
+	    </div>
+		<div class="qa_list">
+			<h2>常见问答</h2>
+			<ul><!-- {eval $num=0} --><!-- {if isset($common_list)} --><!-- {loop $common_list $key $common} -->
+				<li>
+					<span class="num">{eval echo $num +=1;}</span>
+					<a href="{$common['url']}"  target="_blank">{$common['title']}</a>
+				</li>
+				   <!-- {/loop} -->
+	         <!-- {/if} -->
+			</ul>
+		</div>
+	</div>
+</div>
+<!--{template footer}-->
+<script type="text/javascript">
+$(function(){
+	$.fed.tabs("#tabs3",{event:"click",currindex:0,interval:0}); 
+	$.fed.tabs("#tabs4",{event:"click",currindex:{$imgType},interval:0}); 
+	$.famsg.floatdiv("#entrance",{top:258,offset:0}); 
+});
+
+ajax_list({$imgType});
+//咨询中心新增类型标签 	
+function ajax_list(imgType){
+	var ajaxUrl = '';
+	switch(imgType){
+		case 0:
+			ajaxUrl = '?list/ajaxnew';
+			break;
+		case 1:
+			ajaxUrl = '?list/ajaxhot';
+			break;
+		case 2:
+			ajaxUrl = '?list/ajaxask';
+			break;
+		case 3:
+			ajaxUrl = '?index/ajaxcomplain';
+			break;
+		case 4:
+			ajaxUrl = '?list/ajaxask';
+			break;
+		case 5:
+			ajaxUrl = '?index/ajaxdustbin';
+			break;
+		default :
+			ajaxUrl = '?list/ajaxnew';
+	}
+	   $('#loading_div'+imgType).ajaxStart(function(){
+			$(this).show();
+	   });
+	   $('#loading_div'+imgType).ajaxStop(function(){
+			$(this).hide();
+	   });
+	   $('#content'+imgType).empty();
+	   $.ajax({
+	        type: "POST",
+	        url: ajaxUrl,
+	        data: "imgType="+imgType,
+	        success: function(data){		   
+	         	 $('#content'+imgType).html(data);
+	        }
+	   });
+}
+   function on_check(id){	    	   
+	    if($("#a_"+id).hasClass("current")){
+	    	$("#tag_"+id).attr('value','');
+	    }else{
+	    	$("#tag_"+id).attr('value',id);	    	
+	    }
+	    $("#searchForm").submit();
+   }
+   
+   function on_check_game(id){
+	   if($("#game_"+id).hasClass("current")){
+	        $("#gameid").attr('value','');
+	   }else{
+	    	$("#gameid").attr('value',id);	    	
+	   }
+	   $("#searchForm").submit();
+   }
+/*    function call_child(obj){
+	   if($(obj).attr('class') == 'q_show'){
+		   $(obj).attr('class','q_hide');
+		   $(obj).closest("dd").find('.more').show();;
+	   }else{
+		   $(obj).attr('class','q_show');
+		   $(obj).closest("dd").find('.more').hide();;
+	   }		   
+   } */
+
+</script>

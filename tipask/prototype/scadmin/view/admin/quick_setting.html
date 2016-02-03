@@ -1,0 +1,105 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;快捷回复设置</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+
+<table width="100%" cellspacing="0" cellpadding="4" align="center" class="tableborder">
+        <tbody>
+             <tr class="altbg1">
+            <td colspan="4">
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(1);" value="添加快捷回复分类">&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr>
+        </tbody>
+    </table> 
+
+<table width="100%" cellpadding="4" cellspacing="1"  id='common_table' class="tableborder" >
+    <caption>快捷回复分类设置</caption>
+	     <tr><td>快捷回复分类名称</td><td>操作</td></tr>  
+         <!--{if isset($cat_list)} {loop $cat_list $cat}-->
+         <tr >
+             <td id="quick_title_{$cat['id']}">{$cat['title']}</td>           
+             <td> <a href="index.php?admin_question/handle_quick_edit/{$cat['id']}{$setting['seo_suffix']}" target="main">编辑</a>&nbsp;&nbsp;&nbsp;
+             <a href="javascript:;" onclick="onremove($cat['id']);">删除</a>&nbsp;&nbsp;&nbsp;
+             <a href="javascript:;" onclick="onrename($cat['id']);">重命名</a>
+             </td>
+         </tr>
+         <!--{/loop}-->
+         <!--{/if}-->       
+</table>
+
+<table width="100%" cellspacing="0" cellpadding="4" align="center" class="tableborder">
+        <tbody>
+             <tr class="altbg1">
+            <td sytle="text-align:rigth;">
+                <a href="index.php?admin_question/handle" target="main">返回问题处理首页</a>             
+            </td>      
+        </tr>
+        </tbody>
+</table> 
+
+<!--{template footer,admin}-->
+<script type="text/javascript">
+
+function buttoncontrol(num){
+       	if(num == 1){
+   			$.dialog({
+                  id:'selecttopic',
+                  position:'center',
+                  align:'center',
+                  fixed:1,
+                  width:300,
+                  height:100,
+                  title:'添加分类',
+                  fnOk:function(){
+                  	if('' == $.trim($("#title").val()) ){
+                  		alert("分类名称不能为空！");
+                  		return false;
+                  	}document.addtoquickForm.submit();$.dialog.close('selecttopic')
+                  },
+                  fnCancel:function(){$.dialog.close('selecttopic')},
+                  content:'<div class="mainbox"><form name="addtoquickForm"  action="index.php?admin_question/handle_quick_add{$setting['seo_suffix']}" method="post" >分类名称：　　<input type="text" name="title" id="title" value="" size="30" maxlength="12"/></form></div>'
+              });               		
+       	}
+}
+
+function onremove(id){
+    if(confirm("您确定要删除本快捷回复分类吗，删除后本分类中的快捷回复也将被删除！"))
+        location.href = "index.php?admin_question/handle_quick_remove/"+id+"{$setting['seo_suffix']}";
+}
+
+function onrename(id){
+	var quick_title = $("#quick_title_"+id).html();
+	$.dialog({
+        id:'selecttopic',
+        position:'center',
+        align:'center',
+        fixed:1,
+        width:300,
+        height:100,
+        title:'添加分类',
+        fnOk:function(){
+        	if('' == $.trim($("#title").val()) ){
+        		alert("分类名称不能为空！");
+        		return false;
+        	}document.addtoquickForm.submit();$.dialog.close('selecttopic')
+        },
+        fnCancel:function(){$.dialog.close('selecttopic')},
+        content:'<div class="mainbox"><form name="addtoquickForm"  action="index.php?admin_question/handle_quick_add{$setting['seo_suffix']}" method="post" ><input type="hidden" name="id" value="'+id+'"/>分类名称：　　<input type="text" name="title" id="title" value="'+quick_title+'" size="30" maxlength="12"/></form></div>'
+    });
+}
+</script>

@@ -1,0 +1,217 @@
+<!--{template header}-->
+<div class="box1000 m_t_10 clearfix" id="J_detail">
+	<div class="right730">
+        <div class="zx_location">您的位置：<a href="./">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>{$crumb}</span></div>
+        <div class="select_deal clearfix">
+	        <span class="select_on">您选择的是：</span>
+	         <span class="location_listselect" id="liSelect" onclick="this.style.display='none'">{$qtypeName}</span>
+	         <ul class="location_select" id="liChangeId">{$allQtypeLiList}</ul>
+        </div>
+          <div class="bd detail_3btn">
+            <a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/complain.html" class="green">我要投诉</a>
+            <a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/ask.html" class="blue">我要咨询</a>
+            <a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/suggest.html" class="orange">我要建议</a>
+        </div>
+        <div id="tabs3">
+			<div name="tabhead" class="zx_tab clearfix" style="display:none;">
+				<ul class="tab_title">
+					<li><a href="#tabs3-1">今日</a></li>
+					<li>
+						<a href="#tabs3-2">本月</a>
+					</li>
+				</ul>
+		    </div>
+		    <ul class="type_tabs" id="newHotAskSuggestDuList">
+                        <li><a href="javascript:void(0)" onclick="ajax_listTag(0,{$qtype},'new')">最新</a></li>
+                        <li><a href="javascript:void(0)" onclick="ajax_listTag(1,{$qtype},'hot')">热门</a></li>
+                        <li><a href="javascript:void(0)" onclick="ajax_listTag(2,{$qtype},'ask')">咨询</a></li>
+                        <li><a href="javascript:void(0)" onclick="ajax_listTag(3,{$qtype},'complain')">投诉</a></li>
+                        <li><a href="javascript:void(0)" onclick="ajax_listTag(4,{$qtype},'suggest')">建议</a></li>
+                        <!-- <li><a href="javascript:void(0)" onclick="ajax_listTag(5,{$qtype},'dustbin')">垃圾箱</a></li> -->
+            </ul>
+	        <div id="tabs3-1" class="qa_list_infor qa_list_m0">
+	         <div id="loading_div1" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+	         <div id="content1"></div>
+			</div>
+	       <div id="tabs3-2" class="qa_list_infor qa_list_m0">
+	        <div id="loading_div1" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+	        <div id="content2"></div>
+		  </div>
+	   </div>
+	</div> 
+	<div class="left250">
+		<div class="menu">
+			<h2>问题分类</h2>
+			<div class="menu_list">
+				<dl>
+					<dt>游戏名称</dt>
+					<!-- {loop $left_game $games} -->
+					<dd><a href="{url list//$games['gameid']/}">{$games['game_name']}</a></dd>
+					<!-- {/loop} -->				
+				</dl>
+				<ul class="menu_infor" style="display:none;">
+				    <!-- {loop $left_game $games} -->
+					<li><a href="{url list//$games['gameid']/}">{$games['game_name']}</a></li>
+					<!-- {/loop} -->
+					<li><a href="{url list//other_games/}">其它游戏</a></li>
+				</ul>
+			</div>
+					
+		    <!--{if isset($taglist)}-->
+		    <!--{loop $taglist  $tag}-->
+			<div class="l_dash"></div>
+			<div class="menu_list" style="overflow:visible;">
+				<dl>
+					<dt>{$tag['name']}</dt>
+			<!--{if !empty($tag['child'])}-->
+			<!--{eval $tmpTag = $tag['child'];}-->
+				<!--{loop $tag['child'] $key $tag}-->
+					  <dd><a href="{url list///$tag['id']}">{$tag['name']}</a></dd> 
+			    <!--{/if}--><!--{/loop}-->
+			    </dl>
+			     <ul class="menu_infor" style="display:none;">
+			<!--{loop $tmpTag  $t}-->
+				 <li><a href="{url list///$tag['id']}">{$t['name']}</a></li>
+		    <!--{/loop}-->
+		      </ul>
+			</div>	
+			<!--{/loop}-->
+			<!--{/if}-->
+	    </div>
+		
+		<div class="qa_list">
+			<h2>常见问答</h2>
+			<ul><!-- {eval $num=0} --><!-- {if isset($common_list)} --><!-- {loop $common_list $key $common} -->
+				<li>
+					<span class="num">{eval echo $num +=1;}</span>
+					<a href="{$common['url']}" target="_blank">{$common['title']}</a>
+				</li>
+				   <!-- {/loop} -->
+	         <!-- {/if} -->
+			</ul>
+		</div>
+	</div>
+</div>
+<a href="http://bar.5173.com/showtopic-811345.aspx" id="entrance" class="entrance" target="_blank"></a>
+<!--{template footer}-->
+<script type="text/javascript">
+var thisPage = {name:"index"};
+$(function(){
+	$.fed.tabs("#tabs3",{event:"click",currindex:{$todayOrMonth},interval:0});
+	$.famsg.floatdiv("#entrance",{top:258,offset:0}); 
+});
+var currentType = {$currentType};
+$("#newHotAskSuggestDuList li").live('click', function() {
+	$("#newHotAskSuggestDuList li").each(function(){ 
+		$(this).removeClass();
+	});
+	$(this).addClass("current")
+});
+$(function(){
+    $("#newHotAskSuggestDuList li:eq("+currentType+")").addClass("current");
+});
+//咨询中心新增类型标签 	
+function ajax_listTag(imgType,qtype,question_type){
+	var ajaxUrl = '';
+	switch(imgType){
+		case 0:
+			ajaxUrl = 'index/questionDetailajaxNew';
+			break;
+		case 1:
+			ajaxUrl = 'index/questionDetailajaxHot';
+			break;
+		case 2:
+			ajaxUrl = 'index/questionDetailajaxask';
+			break;
+		case 3:
+			ajaxUrl = 'index/questionDetailajaxComplain';
+			break;
+		case 4:
+			ajaxUrl = 'index/questionDetailajaxask';
+			break;
+		case 5:
+			ajaxUrl = 'index/questionDetailajaxDustbin';
+			break;
+		default :
+			ajaxUrl = 'index/questionDetailajaxNew';
+	}
+	$('#loading_div1').ajaxStart(function(){
+		$(this).show();
+   });
+   $('#loading_div1').ajaxStop(function(){
+		$(this).hide();
+   });
+   $('#content1').empty();
+  // $('#content2').empty();
+   $.ajax({
+        type: "POST",
+        url: "?"+ajaxUrl,
+        data: {imgType:1,qtype:qtype,question_type:question_type,date:'today'},
+        success: function(data){		   
+         	 $('#content1').html(data);
+         	 var liChangeString = $('#liChangeId').html();
+         	 if(question_type=='suggest')
+         	 {
+         		var data = liChangeString.replace(/(complain|ask|suggest|hot|dustbin|new)/g,question_type);
+         			data = data.replace(/questionDetailajax(complain|ask|suggest|hot|dustbin|new)/gi,'questionDetailajaxask');
+         	 }
+         	 else
+         	 {
+         		 var data = liChangeString.replace(/(complain|ask|suggest|hot|dustbin|new)/gi,question_type);
+         	 }
+         		 
+        	 $('#liChangeId').empty();
+        	 $('#liChangeId').html(data);
+        }
+   });
+   /*
+   $.ajax({
+        type: "POST",
+        url: "?"+ajaxUrl,
+        data: {imgType:2,qtype:qtype,question_type:question_type,date:'month'},
+        success: function(data){		   
+         	 $('#content2').html(data);
+        }
+   });*/
+}
+//初始化加载 今日和本月统计量
+ajax_list({$qtype},'{$question_type}');
+function ajax_list(qtype,question_type){
+	var ajaxUrl = '';
+	switch(question_type){
+		case 'ask':
+			ajaxUrl = 'index/questionDetailajaxask';
+			break;
+		case 'complain':
+			ajaxUrl = 'index/questionDetailajaxComplain';
+			break;
+		default :
+			ajaxUrl = 'index/questionDetailajaxask';
+	}
+	   $('#loading_div1').ajaxStart(function(){
+			$(this).show();
+	   });
+	   $('#loading_div1').ajaxStop(function(){
+			$(this).hide();
+	   });
+	   $('#content1').empty();
+	  // $('#content2').empty();
+	   $.ajax({
+	        type: "POST",
+	        url: "?"+ajaxUrl,
+	        data: {imgType:1,qtype:qtype,question_type:question_type,date:'today'},
+	        success: function(data){		   
+	         	 $('#content1').html(data);
+	        }
+	   });
+	   /*
+	   $.ajax({
+	        type: "POST",
+	        url: "?"+ajaxUrl,
+	        data: {imgType:2,qtype:qtype,question_type:question_type,date:'month'},
+	        success: function(data){		   
+	         	 $('#content2').html(data);
+	        }
+	   });*/
+}
+</script>

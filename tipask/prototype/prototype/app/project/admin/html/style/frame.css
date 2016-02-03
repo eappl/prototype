@@ -1,0 +1,167 @@
+@CHARSET "UTF-8";
+
+/** wee reset **/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td
+	{
+	padding: 0;
+	margin: 0;
+}
+
+fieldset,img {
+	border: 0 none;
+}
+
+ol,ul {
+	list-style: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}  /* tables still need 'cellspacing="0"' in the markup */
+.clearfix:after {
+	clear: both;
+	content: ' ';
+	display: block;
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+}
+
+body {
+	font-family: Tahoma;
+	color: #333;
+	font-size: 12px;
+}
+
+label {
+	cursor: pointer;
+}
+
+caption,th {
+	text-align: left;
+}
+
+:link,:visited {
+	text-decoration: none;
+}
+
+#header {
+	background: #9999cc;
+	border-bottom: 2px solid #000;
+	height: 40px;
+	position: relative;
+}
+
+#header .logo {
+	background: transparent url("admin_logo.gif") no-repeat 12px 4px;
+	height: 38px;
+	text-indent: -9999px;
+	width: 122px;
+}
+
+#header .uinfo {
+	font-size: 14px;
+	position: absolute;
+	right: 20px;
+	top: 12px;
+	z-index: 20;
+}
+
+#header .uinfo a {
+	padding: 2px 8px;
+}
+
+#header .uinfo a:hover {
+	color: green;
+}
+
+#header .nav {
+	bottom: -2px;
+	left: 280px;
+	position: absolute;
+}
+
+#header .nav ul {
+	font-size: 14px;
+	position: relative;
+	line-height: 24px;
+}
+
+#header .nav ul li {
+	float: left;
+}
+
+#header .nav ul li a {
+	color: #000;
+	display: block;
+	font-weight: 700;
+	margin-right: 4px;
+	padding: 4px 9px 2px;
+	outline: none;
+}
+
+#header .nav ul li a:hover,#header .nav ul li a.current {
+	border: 1px solid transparent;
+	border-top: 2px solid transparent;
+	border-bottom: 0 none;
+	background: #fff;
+	border-color: #000;
+	color: #008000;
+	padding: 2px 8px;
+}
+
+#menu {
+	background: #ccccff;
+	border-right: 1px solid #000;
+	width: 161px;
+	height: 100%;
+	font-size: 14px;
+}
+
+#menu dl dt {
+	background: #9999cc;
+	border-bottom: 1px solid #000;
+	color: #CCCCFF;
+	letter-spacing: 2px;
+	padding: 4px;
+	text-align: center;
+}
+
+#menu dl dd {
+	margin: 10px 0;
+}
+
+#menu li {
+	height: auto !important;
+	margin: 3px 0px;
+}
+
+#menu dl li a {
+	border: 1px solid transparent;
+	_border: 1px solid #CCCCFF;
+	color: #333;
+	display: block;
+	margin-left: 10px;
+	margin-right: 2px;
+	padding: 2px 0px 1px 30px;
+	position: relative;
+}
+
+#menu dl li a:hover,#menu dl li a.current {
+	border: 1px solid #000;
+	border-right: 1px solid transparent;
+	_border-right: 1px solid #fff;
+	background: #fff;
+	margin-right: -1px;
+	text-decoration: none;
+	outline: none;
+}
+
+#menu dl {
+	display: none;
+}
+
+#menu #index {
+	display: block;
+}

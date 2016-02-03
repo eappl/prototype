@@ -1,0 +1,167 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+<script src="js/calendar.js" type="text/javascript"></script>
+
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;{$hasIntoComplainViewPrivilege[name]}</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+
+<form action="{$action}" method="post" onsubmit="return check_submit()" name="queviewSubmit">
+    <table width="100%" cellspacing="0" cellpadding="6" align="center" class="tableborder">
+        <tbody> 
+            <tr class="header" ><td colspan="6">投诉单转换记录</td></tr>
+            <tr>
+                <td  class="alt2" colspan = 2>申请转单时间：
+                从:<input class="txt" onclick="showcalendar();" name="StartDate" value="{$ConditionList[StartDate]}">
+                至:<input class="txt" onclick="showcalendar();" name="EndDate" value="{$ConditionList[EndDate]}"></td>
+ 
+			<td  class="alt2">用户名:<input class="txt" name="author" value="{$ConditionList[author]}"></td>
+			<td  class="alt2">原问题ID:<input class="txt" name="QuestionId" value="{$ConditionList[QuestionId]}">
+			</td>
+			<td  class="alt2"  colspan = 2>转单状态:					
+			<select name="TransformStatus" >
+				<!-- {loop $TransformComplainStatus $sid $sname} -->
+					<option value="{$sid}" {if $ConditionList[TransformStatus]==$sid}selected{/if}>{$sname}</option>
+				<!-- {/loop} -->                     
+			</select>
+			</td>
+			</tr>
+			
+			<tr>
+			<td  class="alt2"  colspan = 2>
+			审批客服:					
+                    <select name="AcceptOperator">
+                        <option value=-1 {if $ConditionList[AcceptOperator]==-1}selected{/if}>系统自动</option>
+						<option value=0 {if $ConditionList[AcceptOperator]==0}selected{/if}>全部</option>
+						<!-- {loop $operator_list $operator_id $operator_info} -->
+                        <option value="{$operator_info[login_name]}" {if $ConditionList[AcceptOperator]==$operator_info[login_name]}selected{/if}>{$operator_info['login_name']}</option>
+                        <!-- {/loop} -->                     
+                    </select>
+
+			&nbsp;&nbsp;操作客服:					
+                    <select name="ApplyOperator">
+						<option value=0 {if $ConditionList[ApplyOperator]==0}selected{/if}>全部</option>
+						<!-- {loop $operator_list $operator_id $operator_info} -->
+                        <option value="{$operator_info[login_name]}" {if $ConditionList[ApplyOperator]==$operator_info[login_name]}selected{/if}>{$operator_info['login_name']}</option>
+                        <!-- {/loop} -->                     
+                    </select>
+
+			<td  class="alt2"><input class="btn" type="submit" value="搜索">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+				</tr>
+				<tr>
+				</tr>
+            
+
+        </tbody>
+    </table>
+
+
+<table width="100%" cellspacing="0" cellpadding="4" align="center" class="tableborder">
+    <tbody>
+        <tr class="header"></tr>
+			<tr>
+				<td colspan="14">共有<span>{$TransformLogList['LogCount']}</span>项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="scott" style="float:right;">{$departstr}</div></td>
+				
+			</tr>
+			<tr class="header">
+				<td align = "center">操作时间</td>
+				<td>操作客服</td>
+				<td>审批时间</td>
+				<td>审批客服</td>
+				<td>审批状态</td>
+				<td>提问用户</td>
+				<td>提问内容</td>
+				<td>提问时间</td>
+				<td>评价状态</td>
+				<td>接手客服</td>
+				<td>转单理由</td>
+				<td>转出问题</td>
+				<td>目标分类</td>
+				<td>操作</td>
+			</tr>
+			<!-- {if isset($TransformLogList)} {loop $TransformLogList['LogList'] $LogInfo}-->
+        <tr title="{$LogInfo['QuestionInfo']['description']}">
+            <td  width="9%" class="alt2">{$LogInfo['applyTime']}</td>
+            <td  width="6%" class="alt2">{$LogInfo['ApplyOperator']}</td>
+			<td  width="9%" class="alt2">{$LogInfo['acceptTime']}</td>
+            <td  width="6%" class="alt2">{$LogInfo['AcceptOperator']}</td>
+			<td  width="6%" class="alt2">{$LogInfo['AcceptStatus']}</td>
+			<td  width="6%" class="alt2">{$LogInfo['QuestionInfo']['author']}</td>
+            <td  width="10%" class="alt2">{$LogInfo['QuestionInfo']['description_short']}</td>
+			<td  width="9%" class="alt2">{$LogInfo['QuestionInfo']['time']}</td>
+			<td  width="6%" class="alt2">{$LogInfo['QuestionInfo']['assess']}</td>
+			<td  width="6%" class="alt2">{$LogInfo['QuestionInfo']['js_kf']}</td>
+			<td  width="6%" class="alt2">{$LogInfo['TransformReason']}</td>
+			<td  width="6%" class="alt2">{$LogInfo['to_url']}</td>
+			<td  width="20%" class="alt2">{$LogInfo['to_type']}</td>
+            <td  width="20%" class="alt2">{if $AcceptComplainTransformLogPrivilege['return'] == 1 && intval($LogInfo['transform_status']) == 0}
+            <a href="javascript:;" onclick="on_access_transform({$LogInfo['TransformLogId']})" target="main">我要审核</a>
+            {/if} 
+			</td>
+        </tr>
+        <!-- {/loop} -->
+        <!-- {/if} -->
+				<td colspan="14">共有<span>{$TransformLogList['LogCount']}</span>项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="scott" style="float:right;">{$departstr}</div></td>
+    </tbody>
+</table>
+</form>
+<script type="text/javascript">
+
+   function on_access_transform(log_id){
+        	   $.ajax({
+                   type: "POST",
+                   url: "{url admin_complain/transformLogView_acceptform}",
+					data: "TransformLogId="+log_id,
+					success: function(optionstr){
+                       $.dialog({
+                           id:'selecttopic13',
+                           position:'center',
+                           align:'center',
+                           fixed:1,
+                           width:300,
+                           height:200,
+                           title:'投诉转单审核',
+                           fnOk:function(){
+
+							AcceptResult = $("#AcceptResult").val();
+							AcceptReason = $("#AcceptReason").val();
+							  $.ajax({
+                                   type: "POST",
+                                   url: "{url admin_complain/transformLogView_accept}",
+                                   data: "TransformLogId="+log_id+"&AcceptResult="+AcceptResult+"&AcceptReason="+AcceptReason,
+								   success: function(data)
+								   {
+                                	   data = JSON.parse(data);
+									   if(data.return ==1)
+									   {
+											alert(data.comment);
+											window.location.reload();
+									   }
+									   else
+									   {
+											alert(data.comment);
+											window.location.reload();
+									   }
+                                   }
+                               });
+                        	   $.dialog.close('selecttopic13');},
+                           fnCancel:function(){$.dialog.close('selecttopic13')},
+                           content:'<div class="mainbox"><form name="acceptTransformForm"  action="" method="post" >'+optionstr+'</form></div>'
+                       });
+                   }
+               });
+   }
+</script>

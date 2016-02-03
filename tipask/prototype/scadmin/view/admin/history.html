@@ -1,0 +1,95 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+
+<table width="100%" cellspacing="0" cellpadding="4" align="center" class="tableborder">
+    <tbody>
+        <tr class="header">
+         <td  colspan="7" width="200" class="altbg2">
+         </td>
+        </tr>        
+        
+        <tr>
+        <td>
+        <ul>
+        <!-- {if isset($q_list)} {loop $q_list $question}-->
+	        <li><a href="javascript:;" onclick="on_history_show({$question['id']})">{eval echo cutstr($question['title'],20)}
+	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{eval echo date("Y-m-d H:i:s",$question['time'])}
+	        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{if $question['is_pj']==0}未评价{elseif $question['is_pj']==1}明白了{elseif $question['is_pj']==2}不明白{/if}
+	        </a></li>
+	        <div id="history_div_{$question['id']}" style="display:none;">
+	            <li>{$question['author']}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提问于&nbsp;&nbsp;{eval echo date("Y-m-d H:i:s",$question['time'])}</li>
+		        <li>
+		            <!-- {if $question['status'] == 1} -->
+		            <img src="css/admin/question_img/t2.gif" alt="Big Boat">
+		            <!-- {elseif $question['status'] == 2} -->
+		            <img src="css/admin/question_img/t3.gif" alt="Big Boat">
+		            <!-- {elseif $question['status'] == 3} -->
+		            <img src="css/admin/question_img/t4.gif" alt="Big Boat">
+		            <!-- {/if} -->
+		            <!-- {if $question['hidden'] == 0} -->
+		            <img src="css/admin/question_img/t5.gif" alt="Big Boat">
+		            <!-- {elseif $question['hidden'] == 1} -->
+		            <img src="css/admin/question_img/t6.gif" alt="Big Boat">
+		            <!-- {/if} -->
+		            <!-- {if $question['revocation'] == 0} -->
+		            <img src="css/admin/question_img/t7.gif" alt="Big Boat">
+		            <!-- {elseif $question['revocation'] == 1} -->
+		            <img src="css/admin/question_img/t8.gif" alt="Big Boat">
+		            <!-- {/if} -->
+		            <!-- {if $question['from'] == 1} -->
+		            <img src="css/admin/question_img/zxzx.gif" alt="Big Boat">
+		            <!-- {/if} -->
+		            <!-- {if $question['handle_status'] == 1} -->
+		            <img src="css/admin/question_img/tszx.gif" alt="Big Boat">
+		            <!-- {/if} -->
+		            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$question['title']&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		            <!-- {if $question['cid']} -->-{$cat[$question['cid']]}-<!-- {/if} -->
+		            <!-- {if $question['cid1']} -->-{$cat[$question['cid1']]}-<!-- {/if} -->
+		            <!-- {if $question['cid2']} -->-{$cat[$question['cid2']]}-<!-- {/if} -->
+		            <!-- {if $question['cid3']} -->-{$cat[$question['cid3']]}-<!-- {/if} -->
+		            <!-- {if $question['cid4']} -->-{$cat[$question['cid4']]}-<!-- {/if} -->
+		        </li>
+		        <li>
+		        <!-- {if $question['r_site'] == 1} -->
+		                                 来源站点：寄售&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏名称：{$question['game_name']}
+		        <!-- {elseif $question['r_site'] == 2} -->
+		                                来源站点：担保&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏名称：{$question['game_name']}
+		        <!-- {elseif $question['r_site'] == 3} -->
+		                                来源站点：账号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏名称：{$question['game_name']}
+		        <!-- {/if} -->
+		        </li>
+		        <li>{$question['description']}</li>
+		        <!-- {if !empty($question['answerModel'])} {loop $question['answerModel'] $answer}-->
+			        <!-- {if $answer['Atime'] != 0} -->
+			        <li>{$answer['Aauthor']}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回答于&nbsp;&nbsp;{eval echo date("Y-m-d H:i:s",$answer['Atime'])}</li>
+			        <li>{$answer['Acontent']}</li>
+			        <!-- {/if} -->
+	           <!-- {/loop} -->
+	           <!-- {/if} -->     
+           </div>
+        <!-- {/loop} -->
+        <!-- {/if} --> 
+        </ul>
+        </td>        
+        </tr>                  
+    </tbody>
+    <input name="ctrlcase" class="btn" id="close_history" type="button" onClick="on_close_history();" value="返回回答页面">&nbsp;&nbsp;&nbsp;
+</table>
+
+<!--{template footer,admin}-->
+<script type="text/javascript">
+   function on_history_show(id){
+	   if($("#history_div_"+id+":visible").length > 0){
+		   $("#history_div_"+id).hide();
+	   }else{
+		   $("div[id*='history_div_']").hide();
+		   $("#history_div_"+id).show();
+	   }	   
+   }
+   
+   function on_close_history(){
+	   window.parent.frames["waitanswer"].location.href="index.php?admin_question/handle_answer{$setting['seo_suffix']}";
+   }
+</script>

@@ -1,0 +1,30 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+
+<table width="100%" cellpadding="4" cellspacing="1" >	   
+       <tr class="header" >
+            <td width="15%">操作编号</td>
+            <td width="10%">操作人</td>
+            <td width="60%">操作内容</td>       
+            <td width="15%">操作时间</td>
+        </tr>
+        <!-- {if !empty($log_list)} {loop $log_list $log}-->  
+        <tr>
+            <td class="altbg2">{$log['id']}</td>     
+            <td class="altbg2">{$log['user']}</td>
+            <td class="altbg2">{$log['message']}</td>    
+            <td class="altbg2">{$log['time']}</td>          
+        </tr>
+        <!-- {/loop} -->
+        <!-- {/if} --> 
+        <input name="ctrlcase" class="btn" id="close_history" type="button" onClick="on_close_record();" value="返回回答页面">&nbsp;&nbsp;&nbsp; 
+</table>
+
+<!--{template footer,admin}-->
+<script type="text/javascript">
+function on_close_record(){
+	   window.parent.frames["waitanswer"].location.href="index.php?admin_question/handle_answer{$setting['seo_suffix']}";
+}
+</script>

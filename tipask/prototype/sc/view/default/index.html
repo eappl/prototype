@@ -1,0 +1,243 @@
+<!--{template header}-->
+<div class="box1000 m_t_10 clearfix" id="J_sideFloat12">
+	<div class="right730">
+		   <div class="consulting_num">
+        	<div class="left_time">
+            	<a id="today" href="javascript:void(0);" class="today_on" onclick="questionNum('today')"><i>今日</i></a>
+                <a id="month" href="javascript:void(0);" class="today_off" onclick="questionNum('month')"><i>本月</i></a>
+            </div>
+            <div id="loading_div10" style="display:none;text-align:center"><img src="css/common/loading.gif"></div>
+            <div id="quantity" class="volume_number">
+            </div>
+        </div>
+		<div id="tabs3">
+			<div name="tabhead" class="zx_tab clearfix">
+				<ul class="tab_title">
+					<li><a href="#tabs3-1">大家正在问</a></li>
+					<li><a href="{$all_num[1]}" target="_blank" id="maopao">我的提问</a></li>
+				</ul>
+			</div>
+			<div class="bd index_3btn">
+            	<a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/complain.html" class="green">我要投诉</a>
+        		<a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/ask.html" class="blue">我要咨询</a>
+                <a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/suggest.html" class="orange">我要建议</a>
+        	</div>
+			<div name="tabpanel" id="tabs3-1">
+				<div id="tabs4">
+                    <ul class="type_tabs">
+                        <li><a href="#tabs4-1" onclick="ajax_list(0)">最新</a></li>
+                        <li><a href="#tabs4-2" onclick="ajax_list(1)">热门</a></li>
+                        <li><a href="#tabs4-3" onclick="ajax_list(2)">咨询</a></li>
+                        <li><a href="#tabs4-4" onclick="ajax_list(3)">投诉</a></li>
+                        <li><a href="#tabs4-5" onclick="ajax_list(4)">建议</a></li>
+                        <!-- <li><a href="#tabs4-6" onclick="ajax_list(5)">垃圾箱</a></li> -->
+                    </ul>
+                    
+                    <div id="tabs4-1" class="qa_list_infor">
+	                    <div id="loading_div0" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+	                    <div id="content0"></div>	                     
+                    </div>
+                    <div id="tabs4-2" class="qa_list_infor">
+	                    <div id="loading_div1" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+	                    <div id="content1"></div>	                     
+                    </div>
+                    <div id="tabs4-3" class="qa_list_infor">
+	                    <div id="loading_div2" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+	                    <div id="content2"></div>	                     
+                    </div>
+                    <div id="tabs4-4" class="qa_list_infor">
+	                    <div id="loading_div3" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+	                    <div id="content3"></div>	                     
+                    </div>
+                    <div id="tabs4-5" class="qa_list_infor">
+	                    <div id="loading_div4" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+	                    <div id="content4"></div>	                     
+                    </div>
+                    <div  id="tabs4-6" class="qa_list_infor">
+                     <div id="loading_div5" align="center" style="display:none;"><img src="css/common/loading.gif"></div>
+                        <div id="content5"></div>  
+                    </div>
+                    
+                </div>			
+		    </div>
+		</div>
+	</div>
+	<div class="left250">
+		<div class="menu">
+			<h2>问题分类</h2>
+			<div class="menu_list">
+				<dl>
+					<dt>游戏名称</dt>
+					<!-- {loop $left_game $games} -->
+					<dd><a href="{url list//$games['gameid']/}">{$games['game_name']}</a></dd>
+					<!-- {/loop} -->				
+				</dl>
+				<ul class="menu_infor" style="display:none;">
+				    <!-- {loop $left_game $games} -->
+					<li><a href="{url list//$games['gameid']/}">{$games['game_name']}</a></li>
+					<!-- {/loop} -->
+					<li><a href="{url list//other_games/}">其它游戏</a></li>
+				</ul>
+			</div>
+					
+		    <!--{if isset($taglist)}-->
+		    <!--{loop $taglist  $tag}-->
+			<div class="l_dash"></div>
+			<div class="menu_list" style="overflow:visible;">
+				<dl>
+					<dt>{$tag['name']}</dt>
+			<!--{if !empty($tag['child'])}-->
+			<!--{eval $tmpTag = $tag['child'];}-->
+				<!--{loop $tag['child'] $key $tag}-->
+					  <dd><a href="{url list///$tag['id']}">{$tag['name']}</a></dd> 
+			    <!--{/if}--><!--{/loop}-->
+			    </dl>
+			     <ul class="menu_infor" style="display:none;">
+			<!--{loop $tmpTag  $t}-->
+				 <li><a href="{url list///$tag['id']}">{$t['name']}</a></li>
+		    <!--{/loop}-->
+		      </ul>
+			</div>	
+			<!--{/loop}-->
+			<!--{/if}-->
+	    </div>
+		
+		<div class="qa_list">
+			<h2>常见问答</h2>
+			<ul><!-- {eval $num=0} --><!-- {if isset($common_list)} --><!-- {loop $common_list $key $common} -->
+				<li>
+					<span class="num">{eval echo $num +=1;}</span>
+					<a href="{$common['url']}" target="_blank">{$common['title']}</a>
+				</li>
+				   <!-- {/loop} -->
+	         <!-- {/if} -->
+			</ul>
+		</div>
+	</div>
+</div>
+<a href="http://bar.5173.com/showtopic-811345.aspx" id="entrance" class="entrance" target="_blank"></a>
+<!--{template footer}-->
+<script type="text/javascript">
+var thisPage = {name:"index"};
+var current  = '';
+$(function(){
+	$.fed.tabs("#tabs3",{event:"click",currindex:0,interval:0}); 
+	$.fed.tabs("#tabs4",{event:"click",currindex:{$imgType},interval:0}); 
+	 
+	$.famsg.floatdiv("#entrance",{top:258,offset:0});
+	$("#maopao").bind("click", function(event){
+		  event.stopPropagation();
+	});
+	
+});
+$('#zx1').live('click', function() {
+	  $("#quantity-1").show();
+	  $("#quantity-2").hide();
+	  $("#quantity-3").hide();
+	  
+	});
+$('#ts2').live('click', function() {
+	  $("#quantity-2").show();	
+	  $("#quantity-1").hide();
+	  $("#quantity-3").hide();
+	});
+$('#jy3').live('click', function() {
+	  $("#quantity-3").show();
+	  $("#quantity-1").hide();
+	  $("#quantity-2").hide();
+	});
+
+ajax_list({$imgType},{$Qtype});
+//咨询中心新增类型标签 	
+function ajax_list(imgType,qtype){
+	var ajaxUrl = '';
+	switch(imgType){
+		case 0:
+			ajaxUrl = 'index/ajaxnew';
+			break;
+		case 1:
+			ajaxUrl = 'index/ajaxhot';
+			break;
+		case 2:
+			ajaxUrl = 'index/ajaxask';
+			break;
+		case 3:
+			ajaxUrl = 'index/ajaxcomplain';
+			break;
+		case 4:
+			ajaxUrl = 'index/ajaxask';
+			break;
+		case 5:
+			ajaxUrl = 'index/ajaxdustbin';
+			break;
+		default :
+			ajaxUrl = 'index/ajaxnew';
+	}
+	  $('#loading_div'+imgType).show();
+	   $('#content'+imgType).empty();
+	   $.ajax({
+	        type: "POST",
+	        url: "?"+ajaxUrl,
+	        data: {imgType:imgType,qtype:qtype},
+	        success: function(data){		
+	         	 $('#loading_div'+imgType).hide();
+	         	 $('#content'+imgType).html(data);
+	        }
+	   });
+}
+function questionNum(date)
+{
+	if(date == 'today')
+	{
+		$('#today').removeClass();
+		$('#today').addClass('today_on');
+		$('#month').removeClass();
+		$('#month').addClass('today_off');
+	}
+	else
+	{
+		$('#month').removeClass();
+		$('#month').addClass('today_on');
+		$('#today').removeClass();
+		$('#today').addClass('today_off');
+	}
+	   $('#loading_div10').show();
+	   $('#quantity').empty();
+	   $.ajax({
+	        type: "POST",
+	        url: "?index/questionQtypeNum",
+	        data: {date:date,current:current},
+	        success: function(data){	
+	        	 $('#loading_div10').hide();
+	         	 $('#quantity').html(data);
+	         	var li_type_question = $(".type_question").find("li");
+				li_type_question.css("margin","15px 0 0 19px");				
+				$(".consulting_num>.left_time").height($("#quantity").height()+15);
+				 $(".quantity_type li").each(function(i){
+					$(this).bind('click',function(){
+						$(this).addClass("current").siblings().removeClass("current");
+						$(".type_question").hide();
+						$("#"+ "dvcon" + (i+1)).show();
+					})
+				}) 
+	        }
+	   });
+	   
+}
+questionNum('today');
+function currentClass1(num)
+{
+	if(num == 1)
+	{
+		current = 1;
+	}
+	else if(num == 2)
+	{
+		current = 2;
+	}
+	else
+	{
+		current = 3;
+	}
+}	
+</script>

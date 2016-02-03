@@ -1,0 +1,50 @@
+<!--{template header}-->
+<script type="text/javascript" src='{SITE_URL}/js/front.js'></script>
+<div class="box1000 m_t_10 clearfix">
+	<div class="box-l">
+	  <!-- {if isset($search_result) && !empty($search_result)} -->
+    	<h3 class="searchlist-tongji">为您找到 <strong>{$rownum}</strong> 条相关结果</h3>
+        <ul class="searchlist">
+        <!-- {loop $search_result $result} -->
+        	<li>
+				<!-- {if $result['url']!=''} -->
+						<h4><a href="{$result['url']}" target="_blank">{$result['title']}</a></h4>
+						 <p class="list-txt"><a href="{$result['url']}">{$result['description']}</a></p>
+						 <div class="searchinfo-tongji"><span>更新时间：{if $result['time'] > 0}{eval echo date('Y/m/d H:i',{$result['time']});}{/if}</span>
+				<!-- {else} -->
+					<h4><a href="{$result['question_url']}" target="_blank">{$result['title']}</a></h4>
+					<p class="list-txt"><a href="{$result['question_url']}">{$result['description']}</a></p>
+					<div class="searchinfo-tongji"><ins {if $result['atime'] <= 0}class="off"{/if}>{if $result['atime'] <= 0}{if $result['atime'] < 0}已撤销{else}未回复{/if}{else}已回复{/if}</ins><span>提问时间：{if $result['time'] > 0}{eval echo date('Y/m/d H:i',{$result['time']});}{/if}</span>
+				<!-- {/if} -->
+                </div>
+            </li>                             
+         <!-- {/loop} -->   
+        </ul>
+        <div class="pagination">{$departstr}</div>
+     <!-- {else} -->
+        <div class="search_null">
+        	<s class="ico_warning_5"></s>
+            <h3>很抱歉，没有找到与"<strong>{eval echo cutstr($search_html,40,'...');}</strong>"相关问题。</h3>
+            <p>您可以修改问题关键字重新搜索。</p>
+        </div>
+     <!-- {/if} -->   
+    </div>
+	<div class="box-r">
+
+			<!-- 常见问答 -->
+		<div class="qa_list">
+			<h2>常见问答</h2>
+			<ul><!-- {eval $num=0} --><!-- {if isset($common_list)} --><!-- {loop $common_list $key $common} -->
+				<li>
+					<span class="num">{eval echo $num +=1;}</span>
+					<a href="{$common['url']}">{$common['title']}</a>
+				</li>
+				   <!-- {/loop} -->
+	         <!-- {/if} -->
+			</ul>
+		</div>
+    </div>
+	
+</div>
+
+<!--{template footer}-->

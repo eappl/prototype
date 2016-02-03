@@ -1,0 +1,254 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+{eval $setting=$this->setting;}
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+  <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;咨询配置</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+	<tr>
+		<td class="{$type}">{$message}</td>
+	</tr>
+</table>
+<!--{/if}-->
+<form action="index.php?admin_config/consult" method="post" onsubmit="return oncheck();">
+	<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+		<tr>
+			<td class="altbg1" width="45%"><b>提问是否有次数限制:</b><br><span class="smalltxt">即用户发布提问是否限制次数，登录用户根据用户名限制，匿名用户根据ip限制</span></td>
+			<td class="altbg2">
+				<input class="radio"  type="radio" value="0" name="limit_question_num" id="limit_question_num1" {if 0==$setting['limit_question_num'] }checked{/if}><label for="yes">没有限制</label>&nbsp;&nbsp;&nbsp;&nbsp;
+				<input class="radio"  type="radio" value="1" name="limit_question_num" id="limit_question_num2" {if $setting['limit_question_num']}checked{/if}><label for="no">限制</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span id="limit_num">	<input class="txt" value="<!--{if !empty($setting['limit_question_num'])}--> $setting['limit_question_num'] <!--{/if}-->" name="number" id ="number">次/小时</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>追问是否有次数限制:</b><br><span class="smalltxt">即用户发布追问是否限制次数，登录用户根据用户名限制，匿名用户根据ip限制</span></td>
+			<td class="altbg2">
+				<input class="radio"  type="radio" value="0" name="limit_question_num_add" id="limit_question_num1_add" {if 0==$setting['limit_question_num_add'] }checked{/if}><label for="yes">没有限制</label>&nbsp;&nbsp;&nbsp;&nbsp;
+				<input class="radio"  type="radio" value="1" name="limit_question_num_add" id="limit_question_num2_add" {if $setting['limit_question_num_add']}checked{/if}><label for="no">限制</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span id="limit_num_add">	<input class="txt" value="<!--{if !empty($setting['limit_question_num_add'])}--> $setting['limit_question_num_add'] <!--{/if}-->" name="number_add" id ="number_add">次/小时</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>客服指定回答时间:</b><br><span class="smalltxt">即客服必须在以下时间内回答，提问页面会有倒计时</span></td>
+			<td class="altbg2"><input class="txt"  value="{$setting['answer_time']}" name="answer_time" id ="answer_time">分钟</td>
+		</tr>
+		
+		<tr>
+			<td class="altbg1" width="45%"><b>评价次数限制:</b><br><span class="smalltxt">即用户评价是否限制次数，超过次数则无法再更改评价</span></td>
+			<td class="altbg2">
+				<input class="radio"  type="radio" value="0" name="limit_assess_num" id="limit_assess_num1" {if 0==$setting['limit_assess_num'] }checked{/if}><label for="yes">没有限制</label>&nbsp;&nbsp;&nbsp;&nbsp;
+				<input class="radio"  type="radio" value="1" name="limit_assess_num" id="limit_assess_num2" {if $setting['limit_assess_num']}checked{/if}><label for="no">限制</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span id="limit_assess">	<input class="txt" value="<!--{if !empty($setting['limit_assess_num'])}--> $setting['limit_assess_num'] <!--{/if}-->" name="assess_num" id ="assess_num">次</span>
+			</td>
+		</tr>		
+		<!-- <tr>
+			<td class="altbg1" width="45%"><b>客服回答模板:</b><br><span class="smalltxt">即客服输入框预先载入的文字，方便客服回答</span></td>
+			<td class="altbg2">
+                  	<textarea class="area" name="answer_template" style="height:200px;width:400px;" id="content">{$setting['answer_template']}</textarea>
+		    </td>
+		</tr> -->
+		
+		<tr>
+			<td class="altbg1" width="45%"><b>协助处理回复开关:</b><br>开关开启协助处理可直接回复用户</td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="help_reply" id="help_reply_1" {if $setting['help_reply'] }checked{/if}><label for="yes">开启</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="help_reply" id="help_reply_2" {if 0==$setting['help_reply']}checked{/if}><label for="no">关闭</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>	
+		<tr>
+			<td class="altbg1" width="45%"><b>投诉同步失败报警阈值:</b><br>投诉同步失败多少次就不再同步</td>
+			<td class="altbg2">
+				<input class="txt"  type="text" value="{$setting['ts_warn_num']}" name="ts_warn_num" id="ts_warn_num" />
+			</td>
+		</tr>		
+		<tr>
+			<td class="altbg1" width="45%"><b>投诉同步失败报警时间间隔:</b><br>查询在这段时间内投诉失败的次数</td>
+			<td class="altbg2">
+				<input class="txt"  type="text" value="{$setting['ts_warn_time']}" name="ts_warn_time" id="ts_warn_time" />秒
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>投诉同步失败报警最大数量:</b><br>投诉失败超过这个数量会报警</td>
+			<td class="altbg2">
+				<input class="txt"  type="text" value="{$setting['ts_warn_maxNum']}" name="ts_warn_maxNum" id="ts_warn_maxNum" />
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>咨询、建议转投诉开关:</b><br>关闭咨询、建议问题无法转成投诉问题</td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="askSuggestTransComplain" id="askSuggestTransComplain" {if $setting['askSuggestTransComplain'] }checked{/if}><label for="yes">开启</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="askSuggestTransComplain" id="askSuggestTransComplain" {if 0==$setting['askSuggestTransComplain']}checked{/if}><label for="no">关闭</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>投诉撤销按钮开关:</b></td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="complainSwitch"  {if $setting['complainSwitch'] }checked{/if}><label for="yes">开启</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="complainSwitch"  {if 0==$setting['complainSwitch']}checked{/if}><label for="no">关闭</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>投诉撤销理由按钮开关:</b></td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="complainReasonSwitch"  {if $setting['complainReasonSwitch'] }checked{/if}><label for="yes">开启</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="complainReasonSwitch"  {if 0==$setting['complainReasonSwitch']}checked{/if}><label for="no">关闭</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>
+		<!-- <tr>
+			<td class="altbg1" width="45%"><b>投诉转咨询、建议开关:</b><br>关闭投诉无法转咨询、建议</td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="complainTransAskSuggest" id="complainTransAskSuggest" {if $setting['complainTransAskSuggest'] }checked{/if}><label for="yes">开启</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="complainTransAskSuggest" id="complainTransAskSuggest" {if 0==$setting['complainTransAskSuggest']}checked{/if}><label for="no">关闭</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr> -->
+		<tr>
+			<td class="altbg1" width="45%"><b>协助处理不重新分单开关:</b></td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="helpReApply"  {if $setting['helpReApply'] }checked{/if}><label for="yes">重新分单</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="helpReApply"  {if 0==$setting['helpReApply']}checked{/if}><label for="no">不重新分单</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>客服电话显示开关:</b></td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="telDisplay"  {if $setting['telDisplay'] }checked{/if}><label for="yes">显示</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="telDisplay"  {if 0==$setting['telDisplay']}checked{/if}><label for="no">不显示</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>客服QQ显示开关:</b></td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="qqDisplay"  {if $setting['qqDisplay'] }checked{/if}><label for="yes">显示</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="qqDisplay"  {if 0==$setting['qqDisplay']}checked{/if}><label for="no">不显示</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>小能显示开关:</b></td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="xnDisplay"  {if $setting['xnDisplay'] }checked{/if}><label for="yes">显示</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="xnDisplay"  {if 0==$setting['xnDisplay']}checked{/if}><label for="no">不显示</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>小能站点siteid:</b></td>
+			<td class="altbg2">
+				<input class="txt"  type="text" value="{$setting['xn_siteid']}" name="xn_siteid" id="xn_siteid" />
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>小能站点sellerid:</b></td>
+			<td class="altbg2">
+				<input class="txt"  type="text" value="{$setting['xn_sellerid']}" name="xn_sellerid" id="xn_sellerid" />
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>小能站点默认settingid:</b></td>
+			<td class="altbg2">
+				<input class="txt"  type="text" value="{$setting['xn_default_settingid']}" name="xn_default_settingid" id="xn_default_settingid" />
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>IP黑名单(请以'|'分割):</b></td>
+			<td class="altbg2">
+			<textarea name="IpBlackList" rows="5" cols="80">
+			{$setting['IpBlackList']}
+			</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>专属客服优先进单开关:</b></td>
+			<td class="altbg2">
+			<input class="radio"  type="radio" value="1" name="selfServiceFirst"  {if $setting['selfServiceFirst'] }checked{/if}><label for="yes">优先进单</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="radio"  type="radio" value="0" name="selfServiceFirst"  {if 0==$setting['selfServiceFirst']}checked{/if}><label for="no">不优先进单</label>&nbsp;&nbsp;&nbsp;&nbsp;            
+			</td>
+		</tr>
+		<tr>
+			<td class="altbg1" width="45%"><b>用户评价逾期时间:</b></td>
+			<td class="altbg2">
+				<input class="txt"  type="text" value="{$setting['assessOverTimeLimit']}" name="assessOverTimeLimit" id="assessOverTimeLimit" />秒
+			</td>
+		</tr>
+		</table>
+	<br>
+	<center><input type="submit" class="button" name="submit" value="提 交" /></center>
+</form>
+<br>
+<script type="text/javascript">
+    $(function(){
+	
+         if ({eval echo $setting['limit_question_num']}==0)
+             $("#limit_num").hide();
+         if ({eval echo $setting['limit_question_num_add']}==0)
+             $("#limit_num_add").hide();
+		 if ({eval echo $setting['limit_assess_num']}==0)
+             $("#limit_assess").hide();
+         if ({eval echo $setting['limit_handle_count']}==0)
+             $("#limit_count").hide();
+    });    
+
+    $("#limit_question_num1").click(function(){
+	    $("#limit_num").hide();
+	});
+	$("#limit_question_num2").click(function(){
+	    $("#limit_num").show();
+	});
+	
+    $("#limit_question_num1_add").click(function(){
+	    $("#limit_num_add").hide();
+	});
+	$("#limit_question_num2_add").click(function(){
+	    $("#limit_num_add").show();
+	});
+	
+    $("#limit_assess_num1").click(function(){
+	    $("#limit_assess").hide();
+	});
+	$("#limit_assess_num2").click(function(){
+	    $("#limit_assess").show();
+	});
+	
+	
+   function oncheck(){
+       var num = $.trim($("#number").val());
+	   var num_add = $.trim($("#number_add").val());
+       var answer_time = $.trim($("#answer_time").val());
+       var ts_warn_num = $("#ts_warn_num").val();
+       var ts_warn_time = $("#ts_warn_time").val();
+       var ts_warn_maxNum = $("#ts_warn_maxNum").val();
+       
+       if(num !='' && !(/^\d+$/.test(num))){
+    		   alert('提问限制次数必须是大于0的整数');
+        	   return false;
+       }
+       if(num_add !='' && !(/^\d+$/.test(num_add))){
+    		   alert('追问限制次数必须是大于0的整数');
+        	   return false;
+       }
+       if(!(/^\d+$/.test(answer_time))){
+		   alert('客服指定回答时间必须是大于0的整数');
+    	   return false;
+       }
+
+       if((num !='' && num <=0)||(num_add !='' && num_add <=0)||(answer_time !='' && answer_time<=0)){
+    	   alert('必须输入大于0的整数');
+    	   return false;
+       }
+       if( ts_warn_num !='' && !(/^\d+$/.test( ts_warn_num ) ) ) {
+		   alert('投诉同步失败报警阈值必须为整数');
+    	   return false;
+   		}
+       if( ts_warn_time !='' && !(/^\d+$/.test( ts_warn_time ) ) ) {
+		   alert('投诉同步失败报警时间间隔必须为整数');
+    	   return false;
+   		}
+       if( ts_warn_maxNum !='' && !(/^\d+$/.test(ts_warn_maxNum)) ) {
+		   alert('投诉同步失败报警最大数量必须为整数');
+    	   return false;
+   		}
+	   return true;
+   }
+   
+</script>
+<!--{template footer,admin}-->

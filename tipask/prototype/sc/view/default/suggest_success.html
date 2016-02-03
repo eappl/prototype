@@ -1,0 +1,97 @@
+<!--{template header}-->
+<div class="box1000 m_t_10 clearfix">
+	<div class="zx_location">您的位置：<a href="./">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>我要建议</span></div>
+    <div class="service_content">
+    	<div class="box-l alert_status">
+    	<div class="search_null">
+        	<s class="ico_success_5"></s>
+            <h3>感谢您的宝贵建议！客服正在收录反馈中…</h3>          
+        </div>
+    	</div>
+         <ul class="status_jd1">
+            <li class="dian"></li>
+            <li class="xian_on"></li>
+            <li class="dian_on"></li>
+            <li class="xian"></li>
+            <li class="dian"></li>
+        </ul> 
+         <ul class="status_detail1">
+            <li>提交建议<span>{$date}</span></li>
+            <li class="step2"><strong>等待答复</strong>预计<ins id="confirmTime"></ins>内回复</li>
+       <!-- {if !empty($time)} -->
+         <script type="text/javascript">
+			var now  = {$now};
+			var date = {$time};
+			date     =  Math.abs(now-date-600); 
+			var confirmTime = document.getElementById("confirmTime");
+			function clock(){
+				  var dateTmp = date;
+				  var minute  = Math.floor(dateTmp/60);
+				  dateTmp -= minute*60;
+				  var second  = dateTmp; 
+				  date--;
+				  var timeStr = minute+'分'+ (second<10 ?'0':'') +second+'秒';
+				  confirmTime.innerHTML = timeStr;			    		 
+				 if(date<0) {
+				 } else { window.setTimeout('clock()',1000);
+				 }
+			}
+			clock();
+		 </script>
+         <!-- {/if} -->
+            <li>处理完成</li>
+         </ul>
+         <p class="jump_text"><ins id="spanSeconds">10</ins>秒后自动跳转至“<a href="{url question/my_suggest}">我的建议</a>”</p>
+    </div>
+</div>
+<!--{template footer}-->
+<script type="text/javascript">
+var seconds = 10;
+onload = function(){
+  t = window.setInterval(redirection, 1000);
+}
+function redirection(){
+  if (seconds <= 0){
+    window.clearInterval(t);
+    return;
+  }
+
+  seconds --;
+  document.getElementById('spanSeconds').innerHTML = seconds;
+
+  if (seconds == 0){
+    window.clearInterval(t);
+    location.href = "{url question/my_suggest}";
+  }
+}
+</script>
+<div id="floatBox" class="UED_hide">
+    <div class="wrapBox clearfix">
+        <div class="hd">
+        </div>
+        <div id="close_floatBox" onclick="$.LAYER.close();"></div>
+
+        <div class="bd">
+            <img class="pic" src="" alt=""/>
+            <div class="zl">
+                <dl>
+                    <dt>名称:</dt>
+                    <dd><strong id="loginName_fl"></strong></dd>
+                </dl>
+                <dl>
+                    <dt>微信:</dt>
+                    <dd id="weixin_fl"></dd>
+                </dl>
+                <dl>
+                    <dt>手机</dt>
+                    <dd id="mobile_fl"></dd>
+                </dl>
+                <dl>
+                    <dt>QQ:</dt>
+                    <dd id="qq_fl"></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="cMe_fb"></div>
+    </div>
+</div>

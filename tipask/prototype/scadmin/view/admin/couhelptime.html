@@ -1,0 +1,97 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+<script src="js/calendar.js" type="text/javascript"></script>
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;协助响应时长统计</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+<form method="post"  name="searchform"  onsubmit="return search_submit();">
+    <table width="100%"  cellspacing="0" cellpadding="1" class="tableborder" >
+        <tbody>
+         <caption>协助响应时长统计搜索</caption>
+            <tr class="altbg2">
+	            <td width="40%">统计日期: <input type="text" value="{eval echo date("Y-m-d",$start);}"  name="start_time" onfocus="this.value=''" onclick="showcalendar();"/>
+	            	至: <input type="text" value="{eval echo date("Y-m-d",$end_time);}"  name="end_time" onfocus="this.value=''" onclick="showcalendar();"/>
+	            </td>
+                <td width="60%">部门: <select name="department"><option value="-1">全部</option><!--{if isset($dpt_select)}-->{$dpt_select}<!--{/if}--></select></td>
+	        </tr>
+	        <tr class="altbg2">
+	        	<td width="25%">操作员: <input type="text" value="{$operator}"   name="operator" size="55"/>多个操作员以“|”分割</td>
+            	<td style="text-align:center">
+            	<input class="btn" name="submit_search" type="submit" value="搜索">&nbsp;&nbsp;&nbsp;&nbsp;
+            	<input class="btn" type="button" value="导出" onclick="help_export();">
+            	</td>
+	        </tr>
+        </tbody>
+    </table> 
+</form>
+<table width="100%" cellpadding="4" cellspacing="1">
+	   <caption>协助响应时长统计</caption>
+       <tr class="header" >
+            <td>操作员</td>
+            <td>回复量</td>
+            <td>平均响应时长</td>  
+            <td style="text-align:right;">0-10<br/>数量  &nbsp;</td>    
+            <td>分钟<br/>  &nbsp;比率</td>
+            <td style="text-align:right;">11-20<br/>数量  &nbsp;</td>    
+            <td>分钟<br/>  &nbsp;比率</td>
+            <td style="text-align:right;">21-30<br/>数量  &nbsp;</td>    
+            <td>分钟<br/>  &nbsp;比率</td>
+            <td style="text-align:right;">30分<br/>数量  &nbsp;</td>    
+            <td>钟以上<br/>  &nbsp;比率</td>
+        </tr>  
+       <!-- {if isset($sorce_list)} {loop $sorce_list $k $v} -->
+	          <tr class="altbg2">
+	            <td>{$v['aid']}</td>    
+	            <td>{$v['reply']}</td> 
+	            <td>{$v['avg_time']}</td> 
+	            <td style="text-align:right;">{$v['ten_reply']}</td> 
+	            <td>{$v['ten_rate']}</td> 
+	            <td style="text-align:right;">{$v['twenty_reply']}</td> 
+	            <td>{$v['twenty_rate']}</td> 
+	            <td style="text-align:right;">{$v['thirty_reply']}</td> 
+	            <td>{$v['thirty_rate']}</td> 
+	            <td style="text-align:right;">{$v['more_reply']}</td> 
+	            <td>{$v['more_rate']}</td> 
+         <!-- {/loop} -->
+       <!-- {/if} -->
+</table>
+<!--{template footer,admin}-->
+<script type="text/javascript">
+function help_export(){
+	   location.href="index.php?admin_count/helpTime_export";
+}
+	/* 根据传入参数个数判断时间大小  */
+function compareTime(start_time,end_time)
+{
+		var arr = start_time.split("-");
+		var start_time = new Date(arr[0], arr[1]-1, arr[2]);
+		var arr2 = end_time.split("-");
+		var end_time = new Date(arr2[0], arr2[1]-1, arr2[2]);
+		return (start_time.valueOf() > end_time.valueOf()) ? true : false;
+}
+function search_submit(){
+		 var start_time = document.forms['searchform'].elements['start_time'].value;
+	 	 var end_time   = document.forms['searchform'].elements['end_time'].value;
+	 	 if((start_time != ''  && end_time == '') || (start_time == ''  && end_time != '') ){
+			  alert('开始与结束日期必须全填');
+			  return false;
+		  }
+		  if(start_time != '' && end_time != '' && compareTime(start_time,end_time)){
+			alert('开始日期不能大于结束日期');
+			return false;
+		  }
+	return true;
+} 
+</script>

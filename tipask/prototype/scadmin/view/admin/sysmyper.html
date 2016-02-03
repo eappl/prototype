@@ -1,0 +1,226 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function selectCell(obj) {
+        var trid=obj.value;
+        $("#"+trid+" input[name='regular_code[]']").each(function(){
+            this.checked = obj.checked;
+        });
+    }
+</script>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+  <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;设置操作员权限</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+	<tr>
+		<td class="{$type}">{$message}</td>
+	</tr>
+</table>
+<!--{/if}-->
+<form action="index.php?admin_system/operator_permission/{$setting['seo_suffix']}" method="post">
+<input type="hidden" name="id" value="$operator_id">
+<table width="100%" cellspacing="1" cellpadding="4" align="center" class="tableborder">
+	<tbody>
+</table>
+	<table width="100%" cellspacing="1" cellpadding="4" align="center" class="tableborder">
+	<tr class="header">
+		<td colspan="2">菜单权限</td>
+	</tr>
+	<tr id="regular_sys">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_sys"  class="checkbox" type="checkbox" onclick="selectCell(this);">系统管理
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="1" {if in_array(1,$permission_arr)}checked{/if} class="checkbox" type="checkbox">操作员管理
+	    </div>
+        <div style="width: 200px; float: left;">
+            <input name="regular_code[]" value="2" {if in_array(2,$permission_arr)}checked{/if} class="checkbox" type="checkbox">部门设置
+        </div> <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="3" {if in_array(3,$permission_arr)}checked{/if} class="checkbox" type="checkbox">职位设置
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="4" {if in_array(4,$permission_arr)}checked{/if} class="checkbox" type="checkbox">岗位设置
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="5" {if in_array(5,$permission_arr)}checked{/if} class="checkbox" type="checkbox">分单管理
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="6" {if in_array(6,$permission_arr)}checked{/if} class="checkbox" type="checkbox">协助处理管理
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="43" {if in_array(43,$permission_arr)}checked{/if} class="checkbox" type="checkbox">菜单管理
+	    </div>   
+      </td>
+    </tr>
+    
+    <tr id="regular_con">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_con"  class="checkbox" type="checkbox" onclick="selectCell(this);">咨询配置维护
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="7" {if in_array(7,$permission_arr)}checked{/if} class="checkbox" type="checkbox">咨询配置
+	    </div>
+        <div style="width: 200px; float: left;">
+            <input name="regular_code[]" value="8" {if in_array(8,$permission_arr)}checked{/if} class="checkbox" type="checkbox">分类维护
+        </div> <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="9" {if in_array(9,$permission_arr)}checked{/if} class="checkbox" type="checkbox">标签维护
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="10" {if in_array(10,$permission_arr)}checked{/if} class="checkbox" type="checkbox">首页栏目维护
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="11" {if in_array(11,$permission_arr)}checked{/if} class="checkbox" type="checkbox">接单管理
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="12" {if in_array(12,$permission_arr)}checked{/if} class="checkbox" type="checkbox">用户禁言管理
+	    </div>
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="35" {if in_array(35,$permission_arr)}checked{/if} class="checkbox" type="checkbox">工时利用率
+	    </div>	           
+	      <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="41" {if in_array(41,$permission_arr)}checked{/if} class="checkbox" type="checkbox">短信配置管理
+	    </div>	
+      </td>
+    </tr>
+    
+    <tr id="regular_que">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_que"  class="checkbox" type="checkbox" onclick="selectCell(this);">咨询问题管理
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="13" {if in_array(13,$permission_arr)}checked{/if} class="checkbox" type="checkbox">查看全部问题
+	    </div>
+        <div style="width: 200px; float: left;">
+            <input name="regular_code[]" value="14" {if in_array(14,$permission_arr)}checked{/if} class="checkbox" type="checkbox">接手处理问题
+        </div> <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="15" {if in_array(15,$permission_arr)}checked{/if} class="checkbox" type="checkbox">查看协助处理
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="16" {if in_array(16,$permission_arr)}checked{/if} class="checkbox" type="checkbox">查看我的问题
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="17" {if in_array(17,$permission_arr)}checked{/if} class="checkbox" type="checkbox">我的协助处理
+	    </div>	         
+      </td>
+    </tr>
+   
+    <tr id="regular_cou">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_cou"  class="checkbox" type="checkbox" onclick="selectCell(this);">数据统计
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="18" {if in_array(18,$permission_arr)}checked{/if} class="checkbox" type="checkbox">分类数据统计
+	    </div>
+        <div style="width: 200px; float: left;">
+            <input name="regular_code[]" value="19" {if in_array(19,$permission_arr)}checked{/if} class="checkbox" type="checkbox">日期数据统计
+        </div> 
+        <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="20" {if in_array(20,$permission_arr)}checked{/if} class="checkbox" type="checkbox">客服数据统计
+	    </div>
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="21" {if in_array(21,$permission_arr)}checked{/if} class="checkbox" type="checkbox">回复时长统计
+	    </div> 
+	    <div style="width: 200px; float: left;">
+            <input name="regular_code[]" value="37" {if in_array(37,$permission_arr)}checked{/if} class="checkbox" type="checkbox">响应时长统计
+        </div> 
+        <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="38" {if in_array(38,$permission_arr)}checked{/if} class="checkbox" type="checkbox">协助数据统计
+	    </div>
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="39" {if in_array(39,$permission_arr)}checked{/if} class="checkbox" type="checkbox">协助响应时长统计
+	    </div>           
+      </td>
+    </tr>
+    
+    <tr id="regular_set">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_set"  class="checkbox" type="checkbox" onclick="selectCell(this);">个人设置
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="22" {if in_array(22,$permission_arr)}checked{/if} class="checkbox" type="checkbox">个人设置
+	    </div>        
+      </td>
+    </tr>
+    <!--
+    <tr id="regular_qa">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_qa"  class="checkbox" type="checkbox" onclick="selectCell(this);">质检管理
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="23" {if in_array(23,$permission_arr)}checked{/if} class="checkbox" type="checkbox">全部质检数据
+	    </div>
+        <div style="width: 200px; float: left;">
+            <input name="regular_code[]" value="24" {if in_array(24,$permission_arr)}checked{/if} class="checkbox" type="checkbox">我的质检结果
+        </div> <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="25" {if in_array(25,$permission_arr)}checked{/if} class="checkbox" type="checkbox">添加质检表
+	    </div>
+      </td>
+    </tr>
+    
+    <tr id="regular_in">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_in"  class="checkbox" type="checkbox" onclick="selectCell(this);">内检管理
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="26" {if in_array(26,$permission_arr)}checked{/if} class="checkbox" type="checkbox">查询内检数据
+	    </div>
+        <div style="width: 200px; float: left;">
+            <input name="regular_code[]" value="27" {if in_array(27,$permission_arr)}checked{/if} class="checkbox" type="checkbox">内检申诉数据
+        </div>     
+      </td>
+    </tr>
+    -->
+    <tr id="regular_his">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_his"  class="checkbox" type="checkbox" onclick="selectCell(this);">历史问题
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="40" {if in_array(40,$permission_arr)}checked{/if} class="checkbox" type="checkbox">查看历史问题
+	    </div>        
+      </td>
+    </tr>
+    
+    <tr class="header">
+		<td colspan="2">按钮权限</td>
+	</tr>
+	
+	<tr id="regular_button">
+    <td class="altbg1" width="18%">
+        <input name="chkGroup" value="regular_button"  class="checkbox" type="checkbox" onclick="selectCell(this);">按钮管理
+    </td>
+    <td class="altbg2">
+	    <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="28" {if in_array(28,$permission_arr)}checked{/if} class="checkbox" type="checkbox">开启或撤销问题
+	    </div>
+        <div style="width: 200px; float: left;">
+            <input name="regular_code[]" value="29" {if in_array(29,$permission_arr)}checked{/if} class="checkbox" type="checkbox">修改问题分类
+        </div> <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="30" {if in_array(30,$permission_arr)}checked{/if} class="checkbox" type="checkbox">修改游戏
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="31" {if in_array(31,$permission_arr)}checked{/if} class="checkbox" type="checkbox">修改标签
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="32" {if in_array(32,$permission_arr)}checked{/if} class="checkbox" type="checkbox">修改客服回答
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="33" {if in_array(33,$permission_arr)}checked{/if} class="checkbox" type="checkbox">标注问题
+	    </div> <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="34" {if in_array(34,$permission_arr)}checked{/if} class="checkbox" type="checkbox">问题编辑
+	    </div>
+	     <div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="36" {if in_array(36,$permission_arr)}checked{/if} class="checkbox" type="checkbox">未处理编辑
+	    </div><div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="42" {if in_array(42,$permission_arr)}checked{/if} class="checkbox" type="checkbox">撤销协助处理单
+	    </div>   
+		<div style="width: 200px; float: left;">
+	        <input name="regular_code[]" value="44" {if in_array(44,$permission_arr)}checked{/if} class="checkbox" type="checkbox">
+			部门配置菜单权限
+	    </div> 		
+      </td>
+    </tr>
+	</tbody>
+</table>
+    <input type="submit" class="button" name="submit" value="提交" />
+</form>
+<br>
+<!--{template footer,admin}-->
+

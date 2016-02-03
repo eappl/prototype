@@ -1,0 +1,364 @@
+<html>
+<link href="css/admin/admincp.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="{SITE_URL}js/ueditor/editor_config.js"></script>
+<script type="text/javascript" src="{SITE_URL}js/ueditor/editor_all.js"></script>
+<script type="text/javascript" src="{SITE_URL}js/ueditor/third-party/SyntaxHighlighter/shCore.js"></script>
+
+<link rel="stylesheet" href="{SITE_URL}js/ueditor/themes/default/ueditor.css"/>
+<link rel="stylesheet" href="{SITE_URL}js/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css"/>
+{eval $user=$this->user; $setting=$this->setting;$ask_login_name=$this->ask_login_name;}
+<style>
+body,table{padding:0;margin:0;}
+
+if (options.overlay){
+this.setOverlay(id);
+}
+</style>
+</head>
+<body>
+<table width="100%" cellspacing="0" cellpadding="0" class="tableborder">
+    <tbody>
+        <tr>
+        <td> 
+        <ul>
+        <!-- {if isset($q_list)} {loop $q_list $question} -->
+        <!-- {if $question['pid'] == 0} -->
+	        <li>
+		                      用户名：{$question['author']}
+		        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提问时间：{eval echo date("Y-m-d H:i:s",$question['time'])}
+		        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;浏览量：{$question['views']}
+		        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评价状态：{$assess_status[$question['is_pj']]}
+		        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        <!-- {if $question['revocation']==1}-->
+		       	 <span style="color:red;">已撤销</span>&nbsp;&nbsp;&nbsp;&nbsp;撤销时间：{eval echo date('Y-m-d H:i:s',$question['revocation_time']);}
+		        <!-- {/if} -->  
+		        <a href="javascript:;" onclick="put_dustbin({$question['id']})">放入垃圾箱</a>
+	        </li>
+	        <!-- {if $MobileView == 1} -->
+			<li>联系方式 
+			<!-- {if strlen($question['comment']['contact']['mobile'])>1} -->
+			
+			&nbsp;&nbsp;&nbsp;&nbsp;手机：{$question['comment']['contact']['mobile']}
+			
+			<!-- {/if} -->
+			<!-- {if strlen($question['comment']['contact']['qq'])>1} -->
+			&nbsp;&nbsp;&nbsp;&nbsp;QQ：{$question['comment']['contact']['qq']}
+			<!-- {/if} -->
+			<!-- {if strlen($question['comment']['contact']['weixin'])>1} -->
+			&nbsp;&nbsp;&nbsp;&nbsp;微信：{$question['comment']['contact']['weixin']}
+			<!-- {/if} -->
+			</li>
+			<!-- {/if} -->
+			
+
+	        <li>
+	            
+				<!-- {if $question['status'] == 1} -->
+	            <img src="css/admin/question_img/t2.gif" alt="Big Boat">
+	            <!-- {elseif $question['status'] == 2} -->
+	            <img src="css/admin/question_img/t3.gif" alt="Big Boat">
+	            <!-- {elseif $question['status'] == 3} -->
+	            <img src="css/admin/question_img/t4.gif" alt="Big Boat">
+	            <!-- {/if} -->
+	            
+	            <!-- {if $question['cid']} -->-{$cat[$question['cid']]}-<!-- {/if} -->
+	            <!-- {if $question['cid1']} -->-{$cat[$question['cid1']]}-<!-- {/if} -->
+	            <!-- {if $question['cid2']} -->-{$cat[$question['cid2']]}-<!-- {/if} -->
+	            <!-- {if $question['cid3']} -->-{$cat[$question['cid3']]}-<!-- {/if} -->
+	            <!-- {if $question['cid4']} -->-{$cat[$question['cid4']]}-<!-- {/if} -->
+	        </li>
+	        <li>
+				<!-- {if strlen($question['game_name'])>1} -->游戏名称：{$question['game_name']}   <!-- {/if} -->
+				<!-- {if strlen($question['operator_name'])>1 } --><br>运营商名称：{$question['operator_name']}<!-- {/if} -->
+				<!-- {if strlen($question['area_name'])>1 } --><br>大区名称：{$question['area_name']}<!-- {/if} -->
+				<!-- {if strlen($question['server_name'])>1 } --><br>服务器名称：{$question['server_name']}<!-- {/if} -->
+				<!-- {if $question['r_site'] == 1} -->
+		                                 来源站点：寄售&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏名称：{$question['game_name']}
+		        <!-- {elseif $question['r_site'] == 2} -->
+		                                来源站点：担保&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏名称：{$question['game_name']}
+		        <!-- {elseif $question['r_site'] == 3} -->
+		                                来源站点：账号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏名称：{$question['game_name']}
+		        <!-- {/if} -->
+	        </li>
+	        <input type="hidden" value="{$question['id']}" id="q_id">
+			<li>订单号：
+			<!-- {if $question['comment']['order_id']==-1}-->
+			无订单操作 &nbsp;&nbsp; 
+			<!-- {else} -->
+			{$question['comment']['order_id']} &nbsp;&nbsp;
+			<!-- {/if} -->
+			<a href="#" id="{$question['id']}"  onclick="on_modify(this,4);">修改订单号	</a></li>
+	        <li>描述：<br/><span id="q_description" style="white-space:pre-wrap;word-wrap:break-word;">{$question['description']}</span></li>
+	        <li>
+
+	        <!-- {if $question['attach']!=''} -->
+	        	附件信息：&nbsp;&nbsp;
+	        	<a href="{$question['attach']}" target="_blank">附件</a>&nbsp;&nbsp;
+	        	<a href="#"  id="{$question['id']}" title="{$question['attach']}" onclick="on_modify(this,3);">删除附件</a>
+	        <!-- {/if} -->
+	        </li>
+			<li>用户IP：{$question['ip']}</li>
+			<li>用户浏览器：{$question['comment']['Browser']}</li>
+			<li>用户操作系统：{$question['comment']['OS']}</li>
+	        <li>接手客服：$question['js_kf']</li>
+	        <li>接手时间：{eval echo !empty($question['receive_time']) ? date("Y-m-d H:i:s", $question['receive_time']) : '';}</li>
+	        <!-- {if !empty($question['answerModel'])} {loop $question['answerModel'] $aid $answer}-->
+	        <!-- {if $answer['first_answer']==$question['first_answer']} -->
+				<li>首次回复时间：{eval echo !empty($answer['first_answer']) ? "<span style='color:red;'>".$answer['first_operator']."</span> ".date("Y-m-d H:i:s", $answer['first_answer']) : '';}</li>
+				<li>最后更新时间：{eval echo !empty($answer['Atime']) ? "<span style='color:red;'>".$answer['operator']."</span> ".date("Y-m-d H:i:s", $answer['Atime']) : '';}</li>
+			<!-- {else} -->
+				<li>回复时间：{eval echo !empty($answer['Atime']) ? date("Y-m-d H:i:s", $answer['Atime']) : '';}</li>
+			<!-- {/if} -->
+	        <li>
+		        <span style="color:red;">{$answer['Aauthor']}</span> &nbsp;&nbsp;回复：
+		        <!-- {if $question['status'] != 1} -->
+		        <a href="#" id="{$aid}" onclick="on_modify(this,1);" title="{eval echo htmlspecialchars($answer['Acontent'])}">修改</a>
+		    	<!-- {/if} -->
+	        </li>
+	        <li>{$answer['Acontent']}</li>
+	        <!-- {/loop} -->
+	        <!-- {/if} -->
+        <!-- {else} -->
+            <li>
+	            {$question['author']}&nbsp;&nbsp;&nbsp;
+	            <span style="color:blue;">追问：{$question['description']}</span>
+	            	<a href="#" id="{$question['id']}" title="{$question['description']}" onclick="on_modify(this,2);">
+	        			<span style="color:#666;font-size:13px;">修改</span>
+	        		</a>
+	        		<a href="javascript:;"  onclick="put_dustbin({$question['id']})">放入垃圾箱</a>
+	            <br/>追问时间：{eval echo date("Y-m-d H:i:s",$question['time'])}
+	            <!-- {if $question['revocation']==1} -->
+	            	 &nbsp;&nbsp;<span style="color:red;">已撤销</span>&nbsp;&nbsp;撤销时间：{eval echo date('Y-m-d H:i:s',$question['revocation_time']);}
+            	<!-- {/if} -->
+            </li>
+			<li>用户IP：{$question['ip']}</li>
+			<li>用户浏览器：{$question['comment']['Browser']}</li>
+			<li>用户操作系统：{$question['comment']['OS']}</li>
+			<li>接手客服：$question['js_kf']</li>
+            <li>接手时间：{eval echo !empty($question['receive_time']) ? date("Y-m-d H:i:s", $question['receive_time']) : '';}</li>
+        	<!-- {if !empty($question['answerModel'])} {loop $question['answerModel'] $aid $answer}-->
+	        <!-- {if $answer['first_answer']==$question['first_answer']} -->
+				<li>首次回复时间：{eval echo !empty($answer['first_answer']) ? "<span style='color:red;'>".$answer['first_operator']."</span> ".date("Y-m-d H:i:s", $answer['first_answer']) : '';}</li>
+				<li>最后更新时间：{eval echo !empty($answer['Atime']) ? "<span style='color:red;'>".$answer['operator']."</span> ".date("Y-m-d H:i:s", $answer['Atime']) : '';}</li>
+			<!-- {else} -->
+				<li>回复时间：{eval echo !empty($answer['Atime']) ? date("Y-m-d H:i:s", $answer['Atime']) : '';}</li>
+			<!-- {/if} -->
+	        <li>
+	        	<span style="color:red;">{$answer['Aauthor']}</span>
+	        	&nbsp;&nbsp;回复：
+	        	<!-- {if $question['status'] != 1} -->
+	        	<a href="#" id="{$aid}" onclick="on_modify(this,1);" title="{eval echo htmlspecialchars($answer['Acontent'])}">修改</a>
+	        	<!-- {/if} -->
+	        </li>
+	        <li>{$answer['Acontent']}</li>
+	        <!-- {/loop} -->
+	        <!-- {/if} -->    
+        <!-- {/if} -->
+        <!-- {/loop} -->
+        <!-- {/if} -->
+        {if !empty($transformLog)}
+		<!-- {loop $transformLog $transform}   --> 
+        	订单类型：于 {eval echo date("Y-m-d H:i:s",$transform['applyTime'])} 由  {$transform['ApplyOperator']} 申请从  {$question_type[$transform['from_type']]} 转为 {$question_type[$transform['to_type']]}
+			{if intval($transform['transform_status'])==0}
+			<span style="color:red;">&nbsp;待审核</span><br>
+			{/if}
+			{if intval($transform['transform_status'])==1}
+			<span style="color:red;">&nbsp;{$transform['ApplyOperator']} 已审核通过</span><br>
+			{/if}
+			{if intval($transform['transform_status'])==2}
+			<span style="color:red;">&nbsp;{$transform['ApplyOperator']} 已拒绝</span><br>
+			{/if}
+        <!-- {/loop} -->
+		{/if}
+        {if !empty($comment['transfer'])}
+		<!-- {loop $comment['transfer'] $transfer}   -->      
+		<li>转单记录：于 {eval echo date("Y-m-d H:i:s",$transfer['transfer_time'])} 由  {$transfer['from_operator']} 转给 {$transfer['to_operator']} , 理由为:{$transfer['transfer_reason']} </li>
+        <!-- {/loop} -->
+		{/if}
+        <li></li>
+        </ul>
+        </td>        
+        </tr>                  
+    </tbody>
+</table>
+<!-- 回答模板去掉 -->
+<!-- 
+<input type="hidden" id="answer_template_value" value="{$setting['answer_template']}" >
+<div id="txtvalue" style="display:none"></div> 
+-->
+</body>
+
+<script type="text/javascript">
+
+// 回答模板去掉
+/*  $(function(){
+	var default_content = $("#baidu_editor_0",window.parent.frames.document).contents().find("body");
+	var t_answer_template = "{$t_answer_template}";
+	if(t_answer_template != ''){
+		default_content.html(decodeURIComponent(t_answer_template));
+	}else{
+		default_content.html('');
+		var str=$("#answer_template_value").val().replace(/\n/g,'<p>');
+	    default_content.append(str);
+	    $("#txtvalue").html(str);
+	}	
+ }); */
+ function on_modify(obj,type){
+	 if(type == 1)
+	 { //修改问题
+		 document.cookie  = "modify_question_id="+obj.id;
+		 content = $("#baidu_editor_0",window.parent.frames.document).contents().find("body");
+		 content.html(obj.title);
+	 }
+	 else if(type == 2)
+	 { //修改追问
+		 $.dialog({
+             id:'selecttopic',
+             position:'center',
+             align:'left',
+             fixed:1,
+             width:400,
+             height:100,
+             title:'追问标题修改',
+             fnOk:function(){
+               var zq_title = $("#zq_title").val();
+          	   if($("#zq_title").val() == ''){
+          		   alert("请输入标题！");
+          		   return;
+          	   }
+          	   $.ajax({
+                     type: "POST",
+                     url: "{url admin_question/handle_zwquestion_edit}",
+                     data: "zq_title="+zq_title+"&zw_id="+obj.id,
+                     success: function(data){
+                  	   if(data == 0) {
+							alert("修改失败！");
+                       } else if(data==3){
+							alert("你没有 修改追问 权限！");
+						} else {
+							window.location.reload();
+						}
+                     }
+                 });     
+          	  $.dialog.close('selecttopic');
+          	},
+            fnCancel:function(){$.dialog.close('selecttopic')},
+            content:'<div class="mainbox">标题：<textarea id="zq_title" cols="100" rows="3">'+obj.title+'</textarea></div>'
+         });
+	 }
+	 else if(type == 3)
+	 { //删除附件
+		 $.post(
+				 "{url admin_question/handle_attach_dt}",
+				  {id:obj.id,attach:obj.title},
+				  function(data){
+					if(data==0){
+						alert("删除失败！");
+					} else if(data==3){
+						alert("你没有 删除附件 权限！");
+					} else {
+						window.location.reload();
+					}
+				 }
+		 );
+	 }
+	 else if(type == 4)
+	 {
+	 $.ajax({
+				type: "POST",
+				data: "qid="+obj.id,
+				url: "{url admin_question/ajaxhandle_order_update}",
+				success: function(optionstr){
+				   $.dialog({
+					   id:'selecttopic13',
+					   position:'center',
+					   align:'center',
+					   fixed:1,
+					   width:400,
+					   height:200,
+					   title:'修改订单',
+					   fnOk:function(){
+
+					var qid = $("#Id").val();
+					var order_id = $("#order").val();
+					$.ajax({
+								type: "POST",
+								data: "qid="+qid+"&order_id="+order_id,				
+								url: "{url admin_question/ajax_order_update}",
+								success: function(data){
+									if(data == 1)
+									{
+										alert("订单号更新成功！");
+									}
+									else
+									{
+										alert("订单号更新失败！");
+									}
+									window.location.reload();
+								}
+								});						  
+						   $.dialog.close('selecttopic13');},
+					   fnCancel:function(){$.dialog.close('selecttopic13')},
+					   content:'<div class="mainbox"><form name="orderUpdateForm"  action="" method="post" >'+optionstr+'</form></div>'
+				   });
+				}
+				});
+	 }
+ }
+ function put_dustbin(Qid)
+ {
+	$.dialog({
+        id:'selecttopic22',
+        position:'center',
+        align:'left',
+        fixed:1,
+        width:400,
+        height:100,
+        overlay:false,
+        title:'放入垃圾箱',
+        fnOk:function(){
+           var reason = $("#reason option:selected").val();
+     	   if(reason == '')
+     	   {
+     		   alert("请输入放入垃圾箱原因！");
+     		   return;
+     	   }
+     	   else
+     	   {
+     		  $.get("?admin_question/handle_dustbin/"+reason+'/'+Qid,function(data){
+  	    		if(data == 1)
+  	    		{
+  	    			alert("放入回收站成功");
+  	    		}
+  	    		else if(data == 2)
+  	    		{
+  	    			alert("没有垃圾箱这个分类");
+  	    		}
+  	    		else if(data == 3)
+  	    		{
+  	    			alert("你没有 放入垃圾箱 这个权限");
+  	    		}
+  	    		else if(data == 4)
+  	    		{
+  	    			alert("问题不存在");
+  	    		}
+  	    		location.reload();
+  	    	  });
+     		 
+     	   }
+     	  $.dialog.close('selecttopic22');
+     	},
+       fnCancel:function(){
+    	   $.dialog.close('selecttopic22');
+       },
+       content:'<div class="mainbox">放入垃圾箱原因：<select name="reason" id="reason"><option value="0" selected>重复提问</option><option value="1">用户要求删除</option><option value="2">数据测试</option><option value="3">欺诈广告</option><option value="4">恶意信息</option>'+
+       '</select></div>'
+	});
+ }   
+ 
+</script>
+</html>

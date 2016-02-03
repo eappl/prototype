@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>f5检测页面</title>
+</head>
+
+ <h2>当前时间：
+   <div id="webjx"></div>
+   <script>setInterval("webjx.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);
+   </script>
+   
+操作系统及 PHP:{$serverinfo}
+<p>服务器软件:{$_SERVER['SERVER_SOFTWARE']}
+<p>MySQL 版本:{$dbversion}
+<p>上传许可:{$fileupload}
+<p>magic_quote_gpc:{$magic_quote_gpc}
+<p>allow_url_fopen:{$allow_url_fopen}
+<p>{$db_self_test}
+<p>{$pdo_self_test}  
+<p>{$cache_self_test} 
+</h2>
+
+
+</body>
+</html>

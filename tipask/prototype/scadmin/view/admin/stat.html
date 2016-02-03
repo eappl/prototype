@@ -1,0 +1,19 @@
+<!--{template header,admin}-->
+            <TABLE class="tableborder" cellSpacing="1" cellPadding="4" width="100%" align="center">
+              <TBODY>	   
+	              <TR>
+	                <TD style="PADDING-LEFT: 20px">操作系统及 PHP:{$serverinfo}</TD>
+	                <TD>服务器软件:{$_SERVER['SERVER_SOFTWARE']}</TD>
+	              </TR>
+	              <TR>
+	                <TD style="PADDING-LEFT: 20px">MySQL 版本:{$dbversion}</TD>
+	                <TD>上传许可:{$fileupload}</TD>
+	              </TR>	              
+	              <TR>
+	                <TD style="PADDING-LEFT: 20px">magic_quote_gpc:{$magic_quote_gpc}</TD>
+	                <TD>allow_url_fopen:{$allow_url_fopen} </TD>
+	              </TR>
+	              </TBODY>
+            </TABLE>
+           
+<!--{template footer,admin}-->

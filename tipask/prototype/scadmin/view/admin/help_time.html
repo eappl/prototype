@@ -1,0 +1,66 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<style type="text/css">
+body,table{padding:0;margin:0;}
+table{
+	width:100%;
+	border-collapse:collapse;
+	border:2px solid #64C1B4;
+}
+table td{
+	background: #f9f9f9;
+	text-align:center;
+}
+.ltd{width:150px;text-align:right;}
+</style>
+</head>
+<body>
+<table border="1">
+        <tr>
+       	 <td colspan="2" style="text-align:right;">
+       		 <span style="font-size:14px;color:red;font-weight:bold;">逾期倒计时: <b id="overduetime"></b></span>
+       	 </td>
+        </tr>
+		<tr><td class="ltd">问题id：</td><td> <a href="javascript:;" onclick="on_view_question({$helplist['qid']})">{$helplist['qid']}</a></td></tr>  
+		<tr><td class="ltd">申请日期：</td><td> {$helplist['start']}</td></tr>  
+		<tr><td class="ltd">申请人：</td><td> {$helplist['applicant']}  </td></tr>  
+		<tr><td class="ltd">协助人：</td><td> {$helplist['aid']}  </td></tr>  
+		<tr><td class="ltd">协助内容：</td><td> {$helplist['aid_content']}</td></tr>  
+		<!--<tr><td class="ltd">反馈时间：</td><td> {$helplist['back_time']}</td></tr>  
+		<tr><td class="ltd">反馈内容：</td><td>{$helplist['back_content']}</td></tr>  -->
+</table>
+</body>
+<script type="text/javascript">
+var now = (new Date()).valueOf();
+var date = {$overdueTime};
+date = date - Math.round(now/1000); // 逾期时间秒数
+function clock(){
+	  var overduetime = document.getElementById("overduetime");
+	  var dateTmp = date;
+	  var hour   = Math.floor(dateTmp/3600);
+	  dateTmp -= hour*3600;
+	  var minute = Math.floor(dateTmp/60);
+	  dateTmp -= minute*60;
+	  var second = dateTmp; 
+	  date--;
+	  var timeStr = '' + (hour<10 ?'0':'') +hour+'时' + (minute<10 ?'0':'') + minute+'分'+ (second<10 ?'0':'') +second+'秒';
+	  overduetime.innerHTML = timeStr;			    		 
+		if(date<0) {
+			overduetime.innerHTML='已逾期';
+			opener.document.getElementById('hasOverDue'+{$id}).innerHTML = '<span style="color:red">已逾期<span>';
+		 }else{
+			 window.setTimeout('clock()',1000);
+		 }
+	}
+	clock();
+	 function on_view_question(id){
+		   document.cookie  = "view_question_id="+id;
+		   self.close();
+		   window.opener.location.href = "index.php?admin_question/handle/"+id+"{$setting['seo_suffix']}";
+	   }	
+</script>
+</html>
+
+

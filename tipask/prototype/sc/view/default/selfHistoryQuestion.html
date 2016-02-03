@@ -1,0 +1,100 @@
+<!--{template header}-->
+<div class="huiWrapBg clearfix">
+    <div class="box1000 clearfix">
+        <div class="zx_location">您的位置：<a href="http://sc.5173.com">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>历史回复记录</span></div>
+    </div>
+	
+    <div class="history_list">
+    	<div class="history_kefu clearfix">
+        	<!--{if !empty($operatorInfo['is_photo'])}--> 
+         		       <img src="{$operatorInfo['photo']}" width="76px" height="76px"/>
+         		 <!--{else}-->
+         		 	   <img src="http://img01.5173cdn.com/zixun_center/build/1.00/images/default_kf.png" width="76px" height="76px"/>
+                 <!--{/if}-->
+            <p>{$operatorInfo['name']}，{$operatorInfo['cno']}的服务记录一共<span class="c_f60">{$selfAuthorNum}</span>条</p>
+            <div>
+            <form name="selfHistoryQuestion" action="{url question/selfHistoryQuestion}" method="post">
+        		<input type="hidden" name="js_kf" value="{$js_kf}"/>
+        		<input type="hidden" name="ask_status" value="{$ask_status}"/>
+	        </form>
+            	<span class="listselect_type">{if $ask_status == 1}已回复{elseif $ask_status == 0}待回复{elseif $ask_status == -1}全部{else}回复状态{/if}</span>
+	            <ul class="list_select">
+		            <li onclick="changeSelect(-1)">全部</li>
+		            <li onclick="changeSelect(0)">待回复</li>
+		            <li onclick="changeSelect(1)">已回复</li>
+	            </ul>
+            </div>
+        </div>
+        <div class="bd"> 
+	        <a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/ask.html" class="blue">我要咨询</a>
+	        <a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/suggest.html" class="orange">我要建议</a>
+	        <a target="_blank" href="http://sc.5173.com/index.php?question/ask_run/complain.html" class="green">我要投诉</a>
+        </div>
+        <ul class="history_reply">
+        <!-- {if !empty($question_list)} -->
+            <!-- {loop $question_list $Q} -->
+        	<li>
+            	<div class="reply_left">
+                	<a href="{$Q['QuestionUrl']}" class="linkcrude">【{$Q['type']}】{eval echo cutstr({$Q['description']},40,'...');}</a>
+                   		 回复时间：<span class="data">{$Q['Atime']}</span>
+                   		 浏览次数：<span class="data">{$Q['views']}</span>
+                   		 <a class="btn-w-25" href="{url index/default/0/$Q['qtype']}"><span>{$Q['category']}</span></a>
+                </div>
+                <span class="reply_right already_g"></span>
+                {if $Q['status']==1} <!-- 未回复 -->
+               		 <span class="reply_right already_g">未回复</span>
+                {else}
+                	 <span class="reply_right already_g">已回复</span>
+                {/if}
+               
+            </li>
+            <!-- {/loop} -->
+        <!-- {/if} -->
+        </ul>
+        <div class="pagination">{$questr}</div>
+    </div>
+</div>
+
+<!--{template footer}-->
+<script type="text/javascript">
+$(function(){
+	//首页问题类型下拉框	
+	$('.listselect_type').live('click', function(event) {
+		var e = window.event || event;
+		if (e.stopPropagation) {
+			e.stopPropagation();
+		} else {
+			e.cancelBubble = true;
+		}
+			$(".list_select").show();
+			$(this).attr("style","border-top:1px solid #ddd;border-left:1px solid #ddd;border-right:1px solid #ddd;color:#ff6600"); 
+	});
+	
+	$("ul.list_select li").live('click', function() {
+		$(".listselect_type").text($(this).text());
+		$(".list_select").hide();
+		$(".listselect_type").attr("style","border:0px","color:#333;");
+	})
+	$('.history_kefu div').live('mouseleave', function() {
+		$(".list_select").hide();
+		$(".listselect_type").attr("style","border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #fff;color:#999");
+	});		
+	
+	$('ul.list_select li').live('mousemove', function() {
+		$(this).addClass("onmovebg");
+	});
+	$('ul.list_select li').live('mouseleave', function() {
+		$(this).removeClass("onmovebg");
+	});
+	
+});
+function changeSelect(type){
+	var selfAuthorQuestion = document.forms['selfHistoryQuestion'];
+	if(selfAuthorQuestion.js_kf.value=='')
+	{
+		history.go(-1);
+	}
+	selfAuthorQuestion.ask_status.value = type;
+	selfAuthorQuestion.submit();
+}
+</script>

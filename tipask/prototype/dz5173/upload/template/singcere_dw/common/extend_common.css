@@ -1,0 +1,234 @@
+/*Append Singcere!*/
+body {background: #000 url("../../template/singcere_dw/src/img/logo/logo_dw.jpg") no-repeat 50% 0;}
+html{overflow-y:scroll;}
+
+#hd h2{display:none;}
+#subforum-box td.fl_icn{padding:6px 10px!important;}
+.pn { -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; border-radius:3px;}
+.ie8 #qmenu { line-height: auto; }
+#ft { padding: 10px 0; overflow:hidden;}
+.ie8 .xld .atc { max-width:none; }
+.tip { width:130px;}
+.frame-tab .tb .a a { color:{TABLETEXT}}
+#diy-tg { margin:7px 6px 0 0;}
+#um { width:550px; float:left; padding-right:0;}
+#hd .fastlg { float:left; width:550px;}
+#toptb { background: none; border: none;}
+#toptb a{color: #fff;}
+#switchwidth { display: none;}
+.rfm { border:none;}
+.fl_tb img { border-radius:3px;}
+.frame, .frame-tab { border:none;}
+.frame-tab .tb {line-height:36px;height:36px;}
+.frame-title, .frametitle, .tab-title {height:41px;line-height:34px;background: url(../../template/singcere_dw/src/img/styleskin/style1_btn.png) repeat-x 0 -132px; color:#fff; border:0 none!important;}
+.bm_h {height:41px;line-height:34px;background:url(../../template/singcere_dw/src/img/styleskin/{DWBTNIMAGE}) repeat-x 0 -132px; color:#fff; border:0 none!important;}
+.bml .bm_h { color:#444;}
+.tb .o { border-radius:3px;}
+.bm_h .xi2 { color:#fff;}
+.xld .atc { float:left; margin-left:0; margin-right:10px;}
+/* 用户个人信息页面重定义 */
+#uhd { border:none; border-radius:3px; margin-bottom:10px;}
+#uhd .tb { border:none;}
+#uhd .tb .a a { border:none;}
+.miniblog a { background:url({STYLEIMGDIR}/weibo.png) no-repeat; display:block; width:220px; height:90px; text-decoration:none;}
+.miniblog a .ct { padding:10px 0 0 50px; }
+.miniblog a .qq { background:url({STYLEIMGDIR}/qq_logo.png) no-repeat 10px 12px; }
+.miniblog a .sina { background:url({STYLEIMGDIR}/sina_logo.png) no-repeat 10px 12px; }
+.miniblog a .lnk { color:#C50743;  }
+
+/* #subforum-box td.fl_icn img{width:48px;height:48px;} */
+#subforum-box .bm{border:0 none!important;}
+#subforum-box .bm_h{border:0 none!important;height:36px;line-height:36px;background:url({STYLEIMGDIR}/styleskin/{DWBTNIMAGE}) repeat-x 0 -132px;}
+#subforum-box .bm_h h2{height:36px;line-height:36px;padding-left:20px;background:url({STYLEIMGDIR}/dwicons_default.png) no-repeat 0 -9px;font-family:\5fae\8f6f\96c5\9ed1;color:#FFF;font-size:14px;}
+#subforum-box .bm_h a{font-family:\5fae\8f6f\96c5\9ed1;color:#FFF;font-size:14px;}
+#subforum-box .fl_tb td{background:none;border-bottom:1px dashed #CDCDCD!important;padding:6px 0;}
+#subforum-box .bm_c{border:1px solid #CECECE;border-top:0 none;background:url({STYLEIMGDIR}/styleskin/{DWBTNIMAGE}) repeat-x 0 -168px;padding:0!important;position:relative;overflow:hidden;}
+#subforum-box table.fl_tb{margin-bottom:-1px;}
+.xi1,.onerror{color:#F60;}
+#chart{color:#666;height:30px;line-height:30px;overflow:hidden;margin-bottom:0!important;}
+#chart .chart em{color:#FFF;}
+#chart .y a{color:#FFF;}
+#chart .chart{color:#aaa;background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat -85px -272px;}
+#um .pipe{color:#FFF;}
+.fl_tb td{background:#FFF url({STYLEIMGDIR}/dwbg_td.png) repeat-x 0 100%;border:0 none!important;}
+/* head */
+#login-info{text-align:left;width:100%;height:78px;}
+#login-info .fastlg{padding-top:10px;}
+#login-info .fastlg .pns{padding-left:11px;}
+#login-info .fastlg .pns a{color:#CDCDCD;}
+#login-info .fastlg .pns label{color:#FFF;}
+#login-info .fastlg .pns td a{display:inline-block;padding:0 12px 0 20px;line-height:30px;margin-left:-2px;}
+#login-info .fastlg .pns td a.btn-recovery-password{background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat -86px -110px;}
+#login-info .fastlg .pns td a.btn-register{background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat -86px -151px;}
+#login-info .fastlg .pns td a.btn-login-by-qq{background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat -86px -193px;}
+#login-info .fastlg .pns td a.btn-login-by-sina{background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat -84px -307px;}
+html>body #login-info .fastlg .pns td a.btn-recovery-password{background-position:-86px -112px\9;}
+html>body #login-info .fastlg .pns td a.btn-register{background-position:-86px -153px\9;}
+* html #header-bg{width:100%;height:114px;position:relative;top:-114px;z-index:-1;margin:0 auto -114px;_background: none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://bbs.duowan.com/static/image/common/styleskin/{DWNAVIMAGE}', sizingMethod='crop');}
+html>body #header{background: url(../../template/singcere_dw/src/img/styleskin/style1_nav.png) repeat-x 0 0;}
+#hd .wp{zoom:1;padding-top:0;}
+#nv{height:36px;line-height:36px;background:none;border:0 none!important;}
+#nv li{height:36px;line-height:36px;background:none!important;}
+#nv li a{background:none!important;height:36px;line-height:36px;}
+#nv a.switch-wide{padding-left:20px;background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat -86px 15px;}
+html>body #nv a.switch-wide{background-position:-86px 13px\9;}
+.widthauto #nv a.switch-wide{background-position:-86px -25px;background-position:-86px -27px\9;-background-position:-86px -25px;}
+#nv a.switch-diy{padding:0 20px;background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat -85px -148px;color: #fff;}
+
+#um, #um a{color:#FFF;}
+#um .a { color: #333}
+#um .avt{float:left;margin:5px 10px 0 15px;}
+#um .avt img{padding:0;border:0 none;background:none;-moz-border-radius:0;-webkit-border-radius:0;border-radius:0;}
+#um p{text-align:left;}
+#um p strong a{color:#FC0!important;}
+#scbar{width:387px;height:32px;line-height:32px;overflow:hidden; float:right; margin: 25px 15px 0 0; background:url({STYLEIMGDIR}/dwbg_search.png) no-repeat 0 0;border:0 none;}
+#scbar form{display:block;width:387px;height:32px;overflow:hidden;}
+#scbar_txt{width:260px;padding-left:9px;border: none;background: none;}
+.scbar_txt_td,.scbar_type_td,.scbar_btn_td{background:none;}
+.scbar_icon_td, scbar_hot_td, #scbar_hot { display:none;}
+.scbar_btn_td { text-align: center;}
+#scbar_btn strong{color:#444 !important; line-height: 24px; padding: 0;}
+#pt{color:#666;height:30px;line-height:30px;overflow:hidden;margin:5px 0;}
+#pt .z,#pt .z a{color:#FFF;}
+#pt .nvhm{background:url({STYLEIMGDIR}/home.gif) no-repeat 0px 7px;}
+#pt .z em {background: url({STYLEIMGDIR}/navigation-pipe.png) no-repeat 9px 12px;}
+.ie_all #pt .z em { background-position:9px 12px;}
+#category_lk{padding:10px;}
+/* footer */
+#ft{border:0 none;color:#CCC;font-family:Tahoma,Helvetica,sans-serif;font-size:0.83em;}
+#ft #frt a{color:#FC0;}
+#ft #flk a{color:#CCC;}
+/* 帖子页 */
+#content-box{zoom:1;padding:15px;background-color:#FFF;}
+.tl .th{margin-top:0;}
+#content-box .bm_c{padding:0 0 10px;}
+.forum-rules{zoom:1;margin:10px 0;padding:10px;border:1px solid #CDCDCD;background-color:#F3F3F3;}
+#threadlist .th table th,
+#threadlist .th table td{border:0 none !important;}
+/* 好友 */
+#friends-box{zoom:1;background:#FFF;}
+#friedns-box #ct{border:0 none;}
+.ct2_a,.ct3_a{background-color:#FFF;border:0 none;}
+.ct2_a .mn{padding:15px 0 5px 0;width:795px;}
+.ct2_a .mn .tb{padding-top:0;}
+.tbn .bbda{border-bottom:1px solid #5B5B5B;}
+.tbn .mt{padding:10px 0 10px 15px;}
+.tbn li{margin:0;height:36px;line-height:36px;text-indent:30px;border-bottom:1px solid #5B5B5B;}
+.tbn li a{height:36px;line-height:36px;font-size:12px;}
+.tbn li.a{padding:0;}
+.tbn li.a a{color:#333;}
+.tbn li span.mtn{margin-top:0!important;padding-right:6px;}
+.tbn li.a span.mtn{color:#333;}
+/*  */
+.forum-info{margin-bottom:15px;}
+.forum-info .fl_icn_g{width:auto;height:48px;padding-right:10px;}
+.forum-info .fl_icn_g img{height:48px;}
+.forum-info h1.xs2{margin-bottom:4px;}
+.forum-info h1.xs2 span.i{padding-left:10px;}
+/*  */
+.tb{padding-left:0px;border-bottom:2px solid {HIGHLIGHTLINK};}
+.tb li{margin:0 3px 0 0;}
+.tb a{border:0 none;background:#EEE;color:#333;}
+.tb .a a,.tb .current a{background:{HIGHLIGHTLINK};color:#FFF;}
+/* 家园 */
+#wp #ct .appl li a{color:#FFF;}
+#wp #ct .appl li.a a{color:#333;}
+/* 个人资料 */
+#space-profile{background-color:#FFF;margin-top:30px;padding:15px;overflow:hidden;zoom:1;}
+#space-profile #pprl{width:700px;}
+.ct2 #space-profile .mn{width:700px;}
+.tdats .tfxf{width:645px!important;}
+.tdats #tba,
+.tdats .tscr{width:345px!important;}
+/* 论坛版块管理 */
+html.widthauto #forum-modcp-box{}
+html.widthauto #forum-modcp-box #ct{margin-left:137px;padding:12px 15px;}
+html.widthauto #forum-modcp-box #ct .mn{}
+html.widthauto #forum-modcp-box #ct .appl{margin-left:-152px;margin-top:-12px;}
+/* 快速导航 */
+#qmenu{background:none;text-shadow:none;color:#FFF;font-weight:400;width:auto;margin:0;height:36px!important;line-height:36px;padding:0 15px 0 25px;background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat -80px -65px!important;}
+html>body #qmenu{background-position:-80px -67px\9!important;}
+#qmenu_menu{border:0 none;background:#FFF url({STYLEIMGDIR}/dwbg_pop_menu.png) repeat-x 0 0;
+ -webkit-box-shadow: 0px 0px 4px rgba(0,0,0,.6);
+     -moz-box-shadow: 0px 0px 4px rgba(0,0,0,.6);
+          box-shadow: 0px 0px 4px rgba(0,0,0,.6);
+}
+#qmenu_menu i.arrow{display:block;width:15px;height:8px;overflow:hidden;position:absolute;top:-8px;left:111px;background:url({STYLEIMGDIR}/dwicons_v1.png) no-repeat 0 0;}
+table.forum-info-box{width:100%;}
+table.forum-info-box td{padding:0!important;background:none!important;vertical-align:top;}
+table.forum-info-box td.forum-icon-box{width:1%;}
+table.forum-info-box td dl{margin-left:0!important;}
+#subforum-box .fl_tb td.fl_g{padding:10px 0!important;}
+#subforum-box table.forum-info-box td{border:0 none!important;}
+/* 公告链接颜色 */
+#anc .xi2{color:#FFF;}
+/* 手机版页面 */
+body.pg_mobile #ct{background-color:#FFF;margin-top:30px;}
+.pl10{padding-left:10px!important;}
+/* 裁判点评 */
+body.pg_misc #wp .mn #postform{background-color:#FFF;padding:15px;}
+/* 发帖表情 */
+#smiliesdiv_tb{width:400px!important;padding-left:5px;}
+#smiliesdiv_tb li{white-space:nowrap;}
+/* 短消息 */
+table#pmlist{width:100%;}
+table#pmlist td{padding:4px 0;}
+/* 发帖按钮 */
+.pgs #newspecial,
+.pgs #newspecialtmp,
+.pgs #post_reply,
+.pgs #post_replytmp{width:80px;height:33px;}
+.pgs #newspecial:hover,
+.pgs #newspecialtmp:hover {background-position:0 -33px;}
+.pgs #post_reply:hover,
+.pgs #post_replytmp:hover {background-position:0 -99px;}
+.pgs #newspecial img,
+.pgs #newspecialtmp img,
+.pgs #post_reply img,
+.pgs #post_replytmp img{visibility:hidden;}
+.pgs #newspecial,
+.pgs #newspecialtmp,
+.pgs #post_reply,
+.pgs #post_replytmp{background:url({STYLEIMGDIR}/styleskin/{DWBTNIMAGE}) no-repeat 0 0;}
+.pgs #post_reply,
+.pgs #post_replytmp{background-position:0 -66px;}
+/* 签名档 */
+#content-box .user-signature{width:700px;max-height:300px;-height:expression(this.scrollHeight>(300-1) ? "300px":"auto");zoom:1;overflow:hidden;padding-bottom:0;margin-bottom:10px;}
+/* 个人资料导航 */
+#space-header{height:36px;line-height:36px;overflow:hidden;background:url({STYLEIMGDIR}/styleskin/{DWBTNIMAGE}) repeat-x 0 -132px;}
+#space-header-nav{float:left;}
+#space-header-nav a,
+#space-header-nav b{float:left;color:#FFF;margin:0 15px;font-weight:700;}
+#space-header-nav b.current{color:#FC0;}
+#space-header-nav span{float:left;color:#FFF;}
+#space-profile .mn .bm{border-top:0 none;background:url({STYLEIMGDIR}/styleskin/{DWBTNIMAGE}) repeat-x 0 -168px;}
+#space-profile .mn .bm_c .buddy li{width:250px;}
+#content-box .bm{background-color:{DWPOSTBODYBGC};}
+#forum-box .sub-forum .bm_h{height:36px;line-height:36px;background:url({STYLEIMGDIR}/dwbg_sub_forum.png) repeat-x 0 -164px;}
+#forum-box .sub-forum .bm_h h2{height:36px;line-height:36px;background:url({STYLEIMGDIR}/dwbg_sub_forum.png) no-repeat 0 10px;}
+#forum-box .sub-forum .bm_h h2 a{color:#333;}
+/* 帖子正文 */
+#content-box #postlist .pcb{padding-bottom:20px;}
+/* 查看参与投票会员页 */
+#content-box .voterlist{height:auto;width:100%;overflow:hidden;}
+/* logo */
+#logo{display:block;width:220px;height:70px;margin:auto;overflow:hidden;text-indent:-9999px;}
+#blank100{display:block;width:100%;height:73px;clear:both;margin:auto;}
+/* 发送消息-好友群发 */
+table#pmlist #buddy{width:80px;}
+table#pmlist #buddy label input,
+table#pmlist .userlist label input{float:left;display:inline;margin:4px 5px 0 0;margin:-1px 1px 0 0\9;}
+table#pmlist .userlist{overflow:hidden;}
+table#pmlist .userlist li{float:left;width:20%;height:20px;line-height:20px;}
+/* login button */
+#login-info .fastlg .pns{padding-left:18px;color:#CDCDCD;padding-top:12px;}
+#login-info .fastlg .pns td input{vertical-align:middle;}
+#login-info button.btn-login{background:transparent url({STYLEIMGDIR}/btn_login.png) no-repeat 0 0;border:0 none;width:86px;height:30px;}
+#login-info button.btn-login em{visibility:hidden;}
+/* first screen banner */
+.full-banner{width:100%;position:relative;overflow:hidden;}
+.full-banner .bd{width:960px;overflow:hidden;margin:auto;}
+.full-banner .bd .blank10{display:block;width:100%;height:10px;clear:both;overflow:hidden;}
+
+/* 弹出层隐藏以便移到页面右下角 */
+#div_minipage {visibility:hidden;}

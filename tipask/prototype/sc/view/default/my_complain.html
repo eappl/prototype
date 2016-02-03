@@ -1,0 +1,126 @@
+<!--{template header}-->
+<div class="box1000 m_t_10 clearfix" id="content">
+	<div class="zx_location">您的位置：<a href="./">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>我的投诉</span></div>
+    
+    <div class="service_left">
+    	<ul>
+        	<li onclick="location.href='{url question/my_ask}'"><ins class="tiwen"></ins><span>我的咨询<ins>（{eval echo $MyServiceLog['logCount']['ask']>99?'99+':$MyServiceLog['logCount']['ask']}）</ins></span><s></s></li>
+            <li class="on" onclick="location.href='{url question/my_complain}'"><ins class="tousu"></ins><span>我的投诉<ins>（{eval echo $MyServiceLog['logCount']['complain']>99?'99+':$MyServiceLog['logCount']['complain']}）</ins></span><s></s></li>
+            <li onclick="location.href='{url question/my_suggest}'"><ins class="jianyi"></ins><span>我的建议<ins>（{eval echo $MyServiceLog['logCount']['suggest']>99?'99+':$MyServiceLog['logCount']['suggest']}）</ins></span><s></s></li>
+            <li onclick="location.href='{url question/my_selfAuthor}'"><ins class="jianyi"></ins><span>专属客服<ins>（{eval echo $MyServiceLog['logCount']['selfAuthor']>99?'99+':$MyServiceLog['logCount']['selfAuthor']}）</ins></span><s></s></li>
+            <li onclick="location.href='{url question/my_dustbin}'"><ins class="laji"></ins><span>垃圾箱<ins>（{eval echo $MyServiceLog['logCount']['dustbin']>99?'99+':$MyServiceLog['logCount']['dustbin']}）</ins></span><s></s></li>
+        </ul>
+    </div>
+    
+    <div class="service_right">
+    	<form name="my_ask" action="{url question/my_complain}" method="post">
+	        <span class="question_time">提问时间：
+	        	<select name="ask_time" id="ask_time" onchange="change(1)">
+	        		<option value="0" {if $ask_time==0}selected{/if}>全部</option>
+	        		<option value="1" {if $ask_time==1}selected{/if}>最近一周</option>
+	        		<option value="2" {if $ask_time==2}selected{/if}>最近一个月</option>
+	        		<option value="3" {if $ask_time==3}selected{/if}>最近3个月</option>
+	        	</select>状态：
+	        	<select  name="ask_status" id="ask_status" onchange="change()">
+	        		<option value="-1">全部</option>
+	        	  <!-- {loop $comStatus $k $v} -->
+	        	  		<!-- {if $k==$ask_status} --><option value="{$k}" selected>{$v}</option> 
+	        	  		<!-- {else} --><option value="{$k}">{$v}</option> 
+	        	  		<!-- {/if} -->
+	        	  <!-- {/loop} -->
+	        	</select>
+	        </span>
+        </form>
+        <table class="data_table">
+        	<tr>
+            	<th class="w_112">编号</th>
+                <th class="w_230">投诉内容</th>
+                <th class="w_110">提问时间</th>
+                <th class="w_80">状态</th>
+                <th class="w_110">回复时间</th>
+                <th class="w_105">操作</th> 
+            </tr>
+            <!-- {if !empty($MyServiceLog['question_list'])} -->
+            <!-- {loop $MyServiceLog['question_list'] $v} -->
+             <tr>
+            	<td class="w_112">{$v['id']}</td>
+            	<td class="w_230">
+	            	<a href="{url question/complain_detail/$v['id']/$v['status']}" onclick=remove_id({$v['id']},2) class="question_f14">
+	            	{eval echo cutstr($v['description'],14,'...')}
+	            	</a>
+            	</td>
+                <td class="w_110">{eval echo empty($v['time'])?'':date("Y-m-d H:i",$v['time'])}</td>
+                <td class="w_80"><span {if $v['status']==3 || $v['status']==2}{else}class="c_f60"{/if}>{$comStatus[$v['status']]}</span></td>
+                <td class="w_110">{eval echo empty($v['atime'])?'':date("Y-m-d H:i",$v['atime'])}</td>
+                <td class="w_105"><a href="{url question/complain_detail/$v['id']/$v['status']}" onclick=remove_id({$v['id']},2)>查看</a>
+                {if $v['status']==0 || ($complainSwitch==1&&$v['status']!=2)  }<span class="btn_demo_1"><a href="javascript:onclick=revoke({$v['id']},'{$v['author']}');">撤销</a></span>{/if}
+                {if $v['status']==1}
+                <a href="{url question/complain_detail/$v['id']/$v['status']}" onclick=remove_id({$v['id']},2)>确认</a>
+                {/if}
+                </td>
+            </tr>
+            <!-- {/loop} -->
+            <!-- {else} -->
+            <tr>
+            	<td colspan="5">
+                	<div class="norecord_w">
+                        <span></span><p><strong class="tousu">亲，您没有投诉记录哦~</strong></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- {/if} -->
+        </table>
+        <div class="pagination">{$MyServiceLog['questr']}</div>
+    </div>
+</div>
+<a href="http://bar.5173.com/showtopic-811345.aspx" id="entrance" class="entrance" style="position: fixed; left: 50%; top: 258px; margin-left: 0px; "></a>
+	<div id="layer_sell_v1" class="UED_hide">       
+    <div class="pop_box">
+        <div class="pop_tittle">
+          <h3 id="UED_layer_h3_v31">选择撤销原因</h3>
+          <a href="javascript:void 0" onclick="$.LAYER.close();" class="close"></a>
+        </div>
+        <div class="pop_mainbox">
+       		<div class="side_icon">
+            	撤销原因：
+            </div>
+            <div class="right_main">
+            	<form action="?question/my_comRevoke" method="post" name="revokeForm">
+            		{loop $revokeResaon $v}
+            			<input type="radio" name="revokeReason" value="{$v['reason_id']}" onclick="clickRadio(1)"/> {$v['content']}<br/>
+            		{/loop}
+            		<input type="radio" name="revokeReason" value="0" id="other" onclick="clickRadio(2)"/> 其他原因<br/>
+            		<span id="radioHidden" style="display:none;">
+            		  	<textarea name="otherReason" cols="25" rows="4"></textarea>
+            		</span>
+            	</form>
+                <p style="margin-top:15px;">
+	                <a href="javascript:void 0" class="btnlink_b_small" onclick="revokeSubmit();">
+	                	<span>提交</span>
+	                </a>
+                </p>
+             </div>
+        </div>
+    </div>
+    </div>
+<!--{template footer}-->
+{if $complainReasonSwitch==1}
+<script type="text/javascript" src="{SITE_URL}js/revoke.js"></script>
+{else}
+<script type="text/javascript"> 
+function revoke(id,author){
+	if(confirm("你确认要撤销该投诉么?")){
+		document.location.href='?question/my_revokeNoReason/'+id+'/'+author+'/my_complain';
+	}
+}
+</script>
+{/if}
+<script type="text/javascript">
+$(".data_table tr").hover(function(){
+    if( $(this).find(".norecord_w").length <=0 ){
+        $(this).addClass("hov");
+    }
+},function(){
+    $(this).removeClass("hov");
+});
+</script>

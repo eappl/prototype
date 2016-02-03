@@ -1,0 +1,339 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;首页栏目维护</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+<!--  常见问答配置  -->
+<form method="post" action="index.php?admin_config/part_common_add{$setting['seo_suffix']}" name="common_question" onsubmit="return common_submit();">
+<table width="100%" cellpadding="4" cellspacing="1"  id='common_table' class="tableborder">
+    <caption>常见问答配置<a style="display:block;text-align:right;" href="index.php?admin_config/part_common_display{$setting['seo_suffix']}">更新到首页</a></caption>
+	     <tr class="header"><td>序号</td><td>问题url</td><td>问题标题</td><td>操作</td></tr>  
+         <!--{if isset($common_list)} {loop $common_list $common}-->
+         <tr>
+             <td class="alt2">{$common['number']}</td>
+             <td class="alt2"><input type="text" value="{$common['url']}" size="60" class="bannerSize"></td>
+             <td class="alt2"><input type="text" value="{$common['title']}" size="80" class="bannerSize"></td>
+             <td class="alt2"> <a href="index.php?admin_config/part_common_modify/{$common['id']}{$setting['seo_suffix']}">编辑</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="onremove($common['id']);">删除</a></td>
+         </tr>
+         <tr>
+         <!--{/loop}-->
+         <!--{/if}-->
+			 <td colspan='4' class="alt2">
+				 <!--{if !isset($add_flag)}-->
+				 <a onclick="addQuest(this)" id="common" href="javascript:;">[+]</a>
+				 <!--{/if}-->
+				  序号		 <input type="text" size="20" value="{$common_info['number']}" name="common_number[]" size='5'/>&nbsp;&nbsp;
+				  问题url 	 <input type="text" value="{$common_info['url']}" size='50' name="common_url[]" />&nbsp;&nbsp; 
+				  问题标题	 <input type="text" value="{$common_info['title']}" size='70' name="common_title[]" maxlength="32"/> 
+							<input type="hidden" value="{$common_info['id']}" name="id"/>                            
+			  </td>
+         </tr>
+         <tr>
+			<td class="alt2" colspan='4' style="text-align:right"><input name="common_add"  class="btn" type="submit" value="确定"></td>
+		 </tr>
+</table>
+</form>
+<!-- Banner配置 -->
+<form method="post" action="#" name="banner_form">
+<table width="100%" cellpadding="4" cellspacing="1" id="banner_table" >
+	<caption>Banner配置<a style="display:block;text-align:right;border-style:none;" href="index.php?admin_config/part_banner_display">更新到首页</a></caption>
+       <tr class="altbg1">
+            <td colspan='4'>
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(1);" value="添加banner">&nbsp;&nbsp;&nbsp;
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(2);" value="添加banner子数据">&nbsp;&nbsp;&nbsp;
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(3);" value="编辑">&nbsp;&nbsp;&nbsp;
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(4);" value="删除">&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr>
+        <tr><td colspan='4' style="text-align:right"></td></tr>
+        <tr class="header">
+            <td>选择</td>
+            <td>标题</td>   
+            <td>链接地址</td> 
+            <td>序号</td>
+        </tr>
+        <!--{if isset($banner_list)} {loop $banner_list $banner}-->
+        <tr><label for="{$banner['id']}">
+            <td class="define">
+                <input class="radio" type="radio" value="{$banner['id']}" name="bannerid" id="{$banner['id']}"><input type="hidden" id='pid' value="{$banner['pid']}"/>
+            </td> </label>
+            <td class="define"><input id="title{$banner['id']}" type="text" value="{$banner['title']}" size="30" class="bannerSize"></td>
+            <td class="define"><input id="url{$banner['id']}" type="text" value="{$banner['url']}" class="bannerSize" size="90"></td>
+            <td class="define" id="number{$banner['id']}">{$banner['number']}</td>
+        </tr>
+	        <!--{if !empty($banner['child'])}-->
+	        <!--{loop $banner['child'] $banner}-->
+		        <tr> <label for="{$banner['id']}">
+	            <td class="alt2">
+	                <input class="radio" type="radio" value="{$banner['id']}" name="bannerid" id="{$banner['id']}"><input type="hidden" id='pid' value="{$banner['pid']}"/>
+	            </td> 
+	            <td class="alt2"><input id="title{$banner['id']}" type="text" value="{$banner['title']}" size="30" class="bannerSize"></td>
+            	<td class="alt2"><input id="url{$banner['id']}" type="text" value="{$banner['url']}" size="90" class="bannerSize"></td>
+            	<td class="alt2" id="number{$banner['id']}">{$banner['number']}</td>
+	      	   </tr>
+            <!--{/loop}-->
+        	<!--{/if}-->  
+        <!--{/loop}-->
+        <!--{/if}-->     
+    </table>
+</form>
+<br/>
+<form method="post" action="index.php?admin_config/part_hot_questionAdd" name="hotQue_form" onsubmit="return hotQue_submit();">
+<table width="100%" cellpadding="4" cellspacing="1">
+	<caption>热门问题配置</caption>
+       <tr>
+            <td class="alt2">1、&nbsp;<input type="text" name= "one" value="{$hotQuestion[0]}" size="10" /></td>
+            <td class="alt2">2、&nbsp;<input type="text" name= "two" value="{$hotQuestion[1]}" size="10" /></td>
+            <td class="alt2">3、 &nbsp;<input type="text" name= "three" value="{$hotQuestion[2]}" size="10" /></td>
+            <td class="alt2">4、 &nbsp;<input type="text" name= "four" value="{$hotQuestion[3]}" size="10" /></td>
+            <td class="alt2">5、 &nbsp;<input type="text" name= "five" value="{$hotQuestion[4]}" size="10" /></td>
+        </tr>
+         <tr>
+            <td class="alt2">6、&nbsp;<input type="text" name= "six" value="{$hotQuestion[5]}" size="10" /></td>
+            <td class="alt2">7、 &nbsp;<input type="text" name= "seven" value="{$hotQuestion[6]}" size="10" /></td>
+            <td class="alt2">8、 &nbsp;<input type="text" name= "eight" value="{$hotQuestion[7]}" size="10" /></td>
+            <td class="alt2">9、 &nbsp;<input type="text" name= "nine" value="{$hotQuestion[8]}" size="10" /></td>
+            <td class="alt2">10、<input type="text" name= "ten" value="{$hotQuestion[9]}" size="10" /></td>
+        </tr>
+          <tr>
+            <td class="alt2">11、<input type="text" name= "eleven" value="{$hotQuestion[10]}" size="10" /></td>
+            <td class="alt2">12、<input type="text" name= "twelve" value="{$hotQuestion[11]}" size="10" /></td>
+            <td class="alt2">13、<input type="text" name= "thirteen" value="{$hotQuestion[12]}" size="10" /></td>
+            <td class="alt2">14、<input type="text" name= "fourteen" value="{$hotQuestion[13]}" size="10" /></td>
+            <td class="alt2">15、<input type="text" name= "fifteen" value="{$hotQuestion[14]}" size="10" /></td>
+        </tr>
+         <tr>
+            <td class="alt2">16、<input type="text" name= "sixteen" value="{$hotQuestion[15]}" size="10" /></td>
+            <td class="alt2">17、<input type="text" name= "seventeen" value="{$hotQuestion[16]}" size="10" /></td>
+            <td class="alt2">18、<input type="text" name= "eighteen" value="{$hotQuestion[17]}" size="10" /></td>
+            <td class="alt2">19、<input type="text" name= "nineteen" value="{$hotQuestion[18]}" size="10" /></td>
+            <td class="alt2">20、<input type="text" name= "twenty" value="{$hotQuestion[19]}" size="10" /></td>
+        </tr>
+        <tr><td class="alt2" colspan='5' style="text-align:right"><input name="hotQue"  class="btn" type="submit" value="确定"></td></tr>
+    </table>
+</form>
+<!--{template footer,admin}-->
+<script type="text/javascript">
+//banner js
+function buttoncontrol(num){
+       if($("input[name='bannerid']:checked").length==0){
+       	if(num == 1){
+       	  $.post("index.php?admin_config/banner_bannerid{$setting['seo_suffix']}",
+       			  function(data){
+             		if(data >= 4){
+             		    alert("已经存在四个banner,不能再添加banner！");
+             		}else{
+             			$.dialog({
+                            id:'selecttopic1',
+                            position:'center',
+                            align:'center',
+                            fixed:1,
+                            width:400,
+                            height:100,
+                            title:'添加banner标题',
+                            fnOk:function(){
+                            	document.addtobannerForm.submit();$.dialog.close('selecttopic1')
+                            },
+                            fnCancel:function(){$.dialog.close('selecttopic1')},
+                            content:'<div class="mainbox"><form name="addtobannerForm"  action="index.php?admin_config/part_banner_add{$setting['seo_suffix']}" method="post" >　　banner标题：<input type="text" name="title" size="50" value="" maxlength="100"/><br/>banner链接地址： <input type="text" name="url" size="50" value="" /><br/>　　　　　序号：  <input type="text" name="number" value="" size="50"/></form></div>'
+                        });  
+             		}
+       	  });
+       	}else{
+       		alert('你没有选择任何banner！');
+            return false;
+       	}         
+       }else{
+           switch(num){
+           	case 1:
+           	 $.post("index.php?admin_config/banner_bannerid{$setting['seo_suffix']}",
+          			  function(data){
+                		if(data >= 4){
+                		    alert("已经存在四个banner,不能再添加banner！");
+                		}else{
+                			$.dialog({
+                               id:'selecttopic1',
+                               position:'center',
+                               align:'center',
+                               fixed:1,
+                               width:400,
+                               height:100,
+                               title:'添加banner标题',
+                               fnOk:function(){
+                               	   document.addtobannerForm.submit();$.dialog.close('selecttopic1')
+                               },
+                               fnCancel:function(){$.dialog.close('selecttopic1')},
+                               content:'<div class="mainbox"><form name="addtobannerForm"  action="index.php?admin_config/part_banner_add{$setting['seo_suffix']}" method="post">   　　banner标题：<input type="text" name="title" size="50" value=""  maxlength="100"/><br/>banner链接地址： <input type="text" name="url" size="50" value="" /><br/>　　　　　序号：  <input type="text" name="number" value="" size="50"/></form></div>'
+                           });  
+                		}
+          	  });
+		            break;
+               case 2:
+               	   var bannerid = $("input[name='bannerid']:checked").val();
+                   var pid = $("input[name='bannerid']:checked").next().val();
+                   if(pid != 0){
+                      alert("对不起，不能再添加banner子数据！");
+                   }else{
+                	   $.post("index.php?admin_config/banner_pid{$setting['seo_suffix']}", {bannerid:bannerid},
+                   			  function(data){
+ 	                    		if(data >= 4){
+ 	                    		    alert("已经存在四个子问题,不能再添加！");
+ 	                    		}else{
+ 	                                     $.dialog({
+ 	                                      id:'selecttopic3',
+ 	                                      position:'center',
+ 	                                      align:'center',
+ 	                                      fixed:1,
+ 	                                      width:400,
+ 	                                      height:100,
+ 	                                      title:'添加banner子数据',
+ 	                                      fnOk:function(){
+ 	               	                        document.addtobannerForm2.submit();$.dialog.close('selecttopic3')
+ 	                                      },
+ 	                                      fnCancel:function(){$.dialog.close('selecttopic3')},
+ 	                                      content:'<div class="mainbox"><form name="addtobannerForm2"  action="index.php?admin_config/part_banner_add{$setting['seo_suffix']}" method="post" ><input type="hidden" name="pid"  value="'+bannerid+'" />　　标题：<input type="text" name="title" size="50" value=""  maxlength="100"/><br/>链接地址：<input type="text" name="url" size="50" value="" /><br/>　　序号：<input type="text" name="number" value="" size="50"/></form></div>'
+ 	                                      });
+ 	                    		}
+                   	 });
+                   }
+                  break;                      
+               case 3:
+               	var bannerid = $("input[name='bannerid']:checked").val();
+                var title = $("#title"+bannerid).val().replace(/[(&nbsp;)-]/g, '');      
+                var url = $("#url"+bannerid).val();
+                var number = $("#number"+bannerid).html();
+               	$.dialog({
+                       id:'selecttopic4',
+                       position:'center',
+                       align:'center',
+                       fixed:1,
+                       width:400,
+                       height:100,
+                       title:'编辑banner数据',
+                       fnOk:function(){document.modifytobannerForm.submit();$.dialog.close('selecttopic4')},
+                       fnCancel:function(){$.dialog.close('selecttopic4')},
+                       content:'<div class="mainbox"><form name="modifytobannerForm"  action="index.php?admin_config/part_banner_modify{$setting['seo_suffix']}" method="post" ><input type="hidden" name="bannerid" size="50" value="'+bannerid+'" />　　标题：<input type="text" name="title" size="50" value="'+title+'" /><br/>连接地址：<input type="text" name="url"  size="50" value="'+url+'" /><br/>　　序号：<input type="text" name="number" size="50" value="'+number+'" /></form></div>'
+                       });                  
+                   break;           
+               case 4:
+               	if(confirm('确定删除此banner？该操作不可返回！')==false){
+                       return false;
+                   }else{
+                   	var bannerid = $("input[name='bannerid']:checked").val();
+                   	$.post("index.php?admin_config/ajaxbanner_pid{$setting['seo_suffix']}", {bannerid:bannerid},
+                  			  function(data){
+	                    			if(data == 1){
+	                    		    	 alert("当前问题下存在子问题，无法删除！");
+	                    		    }else{
+	                    		    	 document.banner_form.action="index.php?admin_config/part_banner_remove{$setting['seo_suffix']}";
+	                                     document.banner_form.submit();
+	                    		    }
+                  			  });
+                   }
+                   break;
+               default:
+                   alert("非法操作！");
+                   break;	
+           }         
+       }
+   } 
+// common js
+function common_submit(){  
+    var submit = true;
+    $("input[name='common_number[]']").each(function(){
+         if(!(/^\d+$/.test($.trim($(this).val())))){
+             alert("您输入的序号不是数字！");
+             submit = false;
+             return false;
+         }  
+     });
+
+    $("input[name='common_url[]']").each(function(){
+         if($(this).val() == '' || $.trim($(this).val()) == ''){
+             alert("问题url不能为空！");
+             submit = false;
+             return false;
+         }  
+    });
+
+    $("input[name='common_title[]']").each(function(){
+         if($(this).val() == '' || $.trim($(this).val()) == ''){
+             alert("问题标题不能为空！");
+             submit = false;
+             return false;
+         }  
+    });    
+    if(submit === true){
+          return true;
+    }else{
+          return false;   
+    }
+} 
+
+function onremove(id){
+    if(confirm("确认要删除吗？"))
+        location.href = "index.php?admin_config/part_common_remove/"+id+"{$setting['seo_suffix']}";
+}
+function hotQue_submit(){
+	var s='';
+	var count=0;
+	var hotQue = document.forms['hotQue_form'];	
+	for(var i=0;i<hotQue.length-1;i++){
+		var v =  hotQue.elements[i].value;
+		var v5 = v.replace(/^\s*|\s*$/g, "")
+		if(v != '' && !(/^\d+$/.test(v5))){
+			s = s+(i+1)+', ';
+		}
+		if(v == ''){
+			count ++;
+		}
+	}
+	
+	if(s != ''){
+		alert(s+'不是数字');
+		return false;
+	}
+	if(count==20){
+		alert('请输入问题ID');
+		return false;
+	}
+	return true;
+}     
+/*
+ *  增加一个问题
+ */
+function addQuest(obj)
+{
+    var src  = obj.parentNode.parentNode;
+    var tableId = 'common_table';
+    var idx  = src.rowIndex;
+    var tbl  = document.getElementById(tableId);
+    var row  = tbl.insertRow(idx + 1);
+    var cell = row.insertCell(-1);
+    cell.setAttribute('colspan',4);
+    cell.innerHTML = src.cells[0].innerHTML.replace(/(.*)(addQuest)(.*)(\[)(\+)/i, "$1removeQuest$3$4-");
+}
+/*
+ *  删除一个问题
+ */
+function removeQuest(obj)
+{ 
+    var row = obj.parentNode.parentNode.rowIndex;
+    var tableId = 'common_table';
+    var tbl = document.getElementById(tableId);
+    tbl.deleteRow(row);
+}
+</script>

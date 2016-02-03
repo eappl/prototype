@@ -1,0 +1,106 @@
+<!--{template header}-->
+<div class="box1000 m_t_10 clearfix" id="content">
+	<div class="zx_location">您的位置：<a href="./">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>{$title}</span></div>
+    
+    <div class="service_left" id="J_wdwtCpage">
+    	<ul>
+        	<li onclick="location.href='{url question/my_ask}'"><ins class="tiwen"></ins><span>我的咨询<ins>（{eval echo $MyServiceLog['logCount']['ask']>99?'99+':$MyServiceLog['logCount']['ask']}）</ins></span><s></s></li>
+            <li onclick="location.href='{url question/my_complain}'"><ins class="tousu"></ins><span>我的投诉<ins>（{eval echo $MyServiceLog['logCount']['complain']>99?'99+':$MyServiceLog['logCount']['complain']}）</ins></span><s></s></li>
+            <li onclick="location.href='{url question/my_suggest}'"><ins class="jianyi"></ins><span>我的建议<ins>（{eval echo $MyServiceLog['logCount']['suggest']>99?'99+':$MyServiceLog['logCount']['suggest']}）</ins></span><s></s></li>
+            <li class="on" onclick="location.href='{url question/my_selfAuthor}'"><ins class="jianyi"></ins><span>专属客服<ins>（{eval echo $MyServiceLog['logCount']['selfAuthor']>99?'99+':$MyServiceLog['logCount']['selfAuthor']}）</ins></span><s></s></li>
+            <li onclick="location.href='{url question/my_dustbin}'"><ins class="laji"></ins><span>垃圾箱<ins>（{eval echo $MyServiceLog['logCount']['dustbin']>99?'99+':$MyServiceLog['logCount']['dustbin']}）</ins></span><s></s></li>
+        </ul>
+    </div>
+    
+   <div class="service_right">
+       <form name="my_ask" action="{url question/my_selfAuthor}" method="post">
+        <span class="question_time">提问时间：
+        	<select name="ask_time" onchange="change(1)"> 
+        		<option value="0" {if $ask_time==0}selected{/if}>全部</option>
+        		<option value="1" {if $ask_time==1}selected{/if}>最近一周</option>
+        		<option value="2" {if $ask_time==2}selected{/if}>最近一个月</option>
+        		<option value="3" {if $ask_time==3}selected{/if}>最近3个月</option>
+        	</select>状态：
+        	<select  name="ask_status" onchange="change()">
+	        	<option value="-1" {if $ask_status==-1}selected{/if}>全部</option>
+	        	<option value="1"  {if $ask_status==1}selected{/if}>回复</option>
+	        	<option value="0"  {if $ask_status==0}selected{/if}>未回复</option>
+        	</select>
+        </span>
+       </form>
+           <table class="data_table">
+            <tr>
+                <th class="w_380 ques">问题</th>
+                <th class="w_110">提问时间</th>
+                <th class="w_80">回复状态</th>
+                <th class="w_110">回复时间</th>
+                <th class="w_60">操作</th>
+            </tr>
+            <!-- {if !empty($MyServiceLog['question_list'])} -->
+            <!-- {loop $MyServiceLog['question_list'] $Q} -->
+            <tr class="subItem">
+                <td class="w_380" >
+	                <a href="#" class="question_f14"><s {if !empty($Q['child'])}class="up"{else}class="down"{/if}></s></a>
+	                <a href="{$Q['QuestionUrl']}" onclick=remove_id({$Q['id']},1) target="_blank" class="question_f14">{eval echo cutstr({$Q['description']},20,'...')}</a>
+	            </td>
+                <td class="w_110">{$Q['time']}</td>
+                <td class="w_80">{if $Q['status']==1}<span class="noreply"></span>{else}<span class="reply"></span>{/if}</td>
+                <td class="w_110">{$Q['Atime']}</td>
+                <td class="w_60"><a href="{$Q['QuestionUrl']}" onclick=remove_id({$Q['id']},1) target="_blank">查看</a></td>
+            </tr>
+              <!-- {if !empty($Q['child'])} -->
+            <tr class="subBox">
+                <td colspan="5" class="unfold">
+                    <table>
+                     <!-- {loop $Q['child'] $Qchild} -->
+                        <tr>
+                            <td class="w_400">
+	                            <i></i>
+	                            <a href="{$Qchild['QuestionUrl']}" onclick=remove_id({$Qchild['id']},1) target="_blank" class="question_f14">{eval echo cutstr({$Qchild['description']},20,'...')}</a>
+                            </td>
+                            <td class="w_110">{$Qchild['time']}</td>
+                            <td class="w_80">{if $Qchild['status']==1}<span class="noreply"></span>{else}<span class="reply"></span>{/if}</td>
+                            <td class="w_110">{$Qchild['Atime']}</td>
+                            <td class="w_60"><a href="{$Qchild['QuestionUrl']}"  onclick=remove_id({$Qchild['id']},1) target="_blank">查看</a></td>
+                        </tr>
+                      <!-- {/loop} -->
+                    </table>
+                </td>
+            </tr>
+              <!-- {/if} -->
+            <!-- {/loop} -->
+            <!-- {else} -->
+             <tr>
+          	  <td colspan="5">
+                	<div class="norecord_w">
+                        {if $loginName=='游客'}
+                        	 <span></span>
+                       		 <p style="font-size:12px;"> <strong>Hi，您还没有绑定专属客服吧~</strong> <a href="{url question/choiceMyselfAuthor}">马上去绑定</a></p>
+                        {else}
+                        	{if empty($operatorInfo)}
+                        		 <span></span>
+                       		 	 <p style="font-size:12px;"> <strong>Hi，您还没有绑定专属客服吧~</strong> <a href="{url question/choiceMyselfAuthor}">马上去绑定</a></p>
+                        	{else}
+                        		<span></span>
+                       			<p style="font-size:12px;"> <strong>您还没有向专属客服提问哦~~</strong></p>	
+                        	{/if}
+                        {/if}
+                    </div>
+              </td>
+             </tr>
+            <!-- {/if} -->
+        </table>
+        <div class="pagination">{$MyServiceLog['questr']}</div>
+	</div>
+</div>
+<a href="http://bar.5173.com/showtopic-811345.aspx" id="entrance" class="entrance" style="position: fixed; left: 50%; top: 258px; margin-left: 0px; "></a>
+<!--{template footer}-->
+<script type="text/javascript">
+$(".data_table tr").hover(function(){
+    if( $(this).find(".norecord_w").length <=0 ){
+        $(this).addClass("hov");
+    }
+},function(){
+    $(this).removeClass("hov");
+});
+</script>

@@ -1,0 +1,103 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    {eval $user=$this->user; $setting=$this->setting;$ask_login_name=$this->ask_login_name;}
+    <head>
+		<title>客服一体化后台管理系统</title>
+		<meta http-equiv="content-type" content="text/html; charset={tipask_charset}" />
+		<link href="css/admin/admin_m.css" type="text/css" rel="stylesheet">
+    </head>
+    <body style="height: 100%" scroll="yes">
+    <script src="js/jquery.js" type="text/javascript"></script>
+	
+	<table height="100%" cellspacing=0 cellpadding=0 width="100%" border=0>
+		<tbody>
+			<tr>
+				<td valign="top" colspan="2" height="45">
+					<div id="header">
+						<div class="logo fl">
+							<div class="png"><img height="43" alt="5173问答系统 " src="css/common/logo.jpg" width="160"></div>
+						</div>
+						<!--大导航 class="navon" -->
+						<ul class="nav">
+						<!-- {loop $menuList $key $menu} -->
+							<!-- {if $i == 0} -->
+							{eval $i++;}
+							    <li class="navon" onclick="settab({$menu['menu_id']},'{$menu['name']}',this)"><em><a href="javascript:void(0)">{$menu['name']}</a></em></li>
+							<!-- {else} -->
+							    <li onclick="settab({$menu['menu_id']},'{$menu['name']}',this)"><em><a href="javascript:void(0)">{$menu['name']}</a></em></li>
+							<!-- {/if} -->
+						<!-- {/loop} -->
+						
+							<li style="float:right;font-size:12px;">忙碌状态：<input type="checkbox" name="isbusy" id="isbusy" value="1" {if $operator_info['isbusy'] == 1} checked="checked" {/if}  onClick="busy_setting();"/>忙碌
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;欢迎您 {$ask_login_name} 当前时间：<span id="time"><span></li>
+						</ul>  
+						
+					</div>
+				</td>
+			</tr>
+			<!--小导航 -->
+			<tr>
+				<td id="main-fl" valign="top">
+					<div id="left">
+						<div>
+							<h1 id="menuName">{$menuName}</h1>
+							<div class="cc"></div>
+							<ul id="subMenu">
+							    <!-- {if !empty($subMenu)} -->
+										<!-- {loop $subMenu $menuList} -->
+											<li><a href="?{$menuList['link']}" target="main">{$menuList['name']}</a> </li>
+										<!-- {/loop} -->
+								<!-- {/if} -->
+							</ul>
+						</div>
+					</div><!--end left-->
+				</td>
+				<td id="mainright" style="height: 94%" valign="top">
+					<iframe style="overflow: visible" name="main" src="index.php?admin_main/stat{$setting['seo_suffix']}" frameborder=0 width="100%" scrolling="yes" height="100%"></iframe>
+				</td>
+			</tr>
+		</tbody>
+	 </table>
+    </body>
+	<script type="text/javascript">
+	function settab(menu_id,menuName,obj) {
+			$("li").removeClass('navon');
+			$(obj).toggleClass('navon');
+			// 点击时，获取父级菜单名称
+			$("#menuName").html(menuName);
+			// ajax获取子级菜单
+			$.get("?admin_main/getSubMenu", {menu_id:menu_id} ,function(data){
+			     if(data['return']){
+					$("#subMenu").html(data['data']);
+				 } else {
+					alert(data['comment']);
+				 }
+			} ,'json');
+		}
+// 当前时间跑秒
+    	document.getElementById('time').innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());
+		setInterval("document.getElementById('time').innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);
+	</script>
+	<script type="text/javascript">
+	function busy_setting()
+	{
+		  $.ajax({
+			   type: "POST",
+			   url: "{url admin_setting/handle_busy_status}",
+			   success: function(data)
+			   {
+				   if(data != 1)
+					{
+						$("#isbusy").attr("checked",false);	
+					}
+					else
+					{
+						$("#isbusy").attr("checked",true);	
+					}															   
+			   }
+		   });
+	}
+	</script>
+	
+	
+	
+</html>

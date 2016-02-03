@@ -1,0 +1,98 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;个人设置</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+<!--<form method="post"  name="userform"  enctype="multipart/form-data" >-->
+    <table width="100%"  cellspacing="0" cellpadding="4" align="center" class="tableborder">
+        <tbody>
+         <caption>我的设置</caption>
+
+           <!-- {if !empty($user_setting['photo'])} --> 
+           	<tr><td></td><td rowspan='4'><img src="{$user_setting['photo']}" width='150' height='130'/></td></tr>
+           <!-- {else} -->
+          	<tr><td></td><td rowspan='4'><img src="http://img01.5173cdn.com/zixun_center/build/1.00/images/default_kf.png" width='150' height='130'/></td></tr>
+           <!-- {/if} -->                      
+            <tr><td>我的Vadmin账号: <input type="text"  disabled="true" value="{$user_setting['Vadmin']}"  size="30" name='Vadmin' maxlength='100'/></td></tr>
+	        <tr><td>我的照片路径: <input type="text" disabled="true" size='60' name='photo' value="{$user_setting['photo']}"/></td></tr>
+	        <tr><td>我的昵称: <input type="text" disabled="true" value="{$user_setting['name']}"  size="30" name='name' maxlength='50'/></td></tr>
+	        <tr><td>我的真实姓名: <input type="text" disabled="true" value="{$user_setting['cno']}"  size="30" name='cno' maxlength='50'/></td><td></td></tr>
+	        <tr><td>我的QQ: <input type="text" disabled="true" value="{$user_setting['QQ']}"  size="30" name='QQ' maxlength='30'/></td><td></td></tr>
+			<tr><td>我的手机号: <input type="text" disabled="true" value="{$user_setting['mobile']}"  size="30" name='mobile' maxlength='30'/></td><td></td></tr>
+			<tr><td>我的微信号: <input type="text" disabled="true" value="{$user_setting['weixin']}"  size="30" name='weixin' maxlength='30'/></td><td></td></tr>
+			<tr><td>我的微信二维码图片路径: <input type="text" disabled="true" value="{$user_setting['weixinPicUrl']}"  size="30" name='weixin' maxlength='30'/></td><td></td></tr>
+			<tr><td>我的电话: <input type="text" disabled="true" value="{$user_setting['tel']}"  size="30" name='tel' maxlength='30'/></td><td></td></tr>
+			
+           <!-- {if !empty($user_setting['photo_officer'])} --> 
+           	<tr><td></td><td rowspan='4'><img src="{$user_setting['photo_officer']}" width='150' height='130'/></td></tr>
+           <!-- {else} -->
+          	<tr><td></td><td rowspan='4'><img src="http://img01.5173cdn.com/zixun_center/build/1.00/images/default_kf.png" width='150' height='130'/></td></tr>
+           <!-- {/if} -->                      
+	        <tr><td>上级照片路径: <input type="text" disabled="true" size='60' name='photo_officer' value="{$user_setting['photo_officer']}"/></td></tr>
+	        <tr><td>上级昵称: <input type="text" disabled="true" value="{$user_setting['name_officer']}"  size="30" name='name_officer' maxlength='50'/></td></tr>
+	        <tr><td>上级真实姓名: <input type="text" disabled="true" value="{$user_setting['cno_officer']}"  size="30" name='cno_officer' maxlength='50'/></td></tr>
+	        <tr><td>上级QQ: <input type="text" disabled="true" value="{$user_setting['QQ_officer']}"  size="30" name='QQ_officer' maxlength='30'/></td><td></td></tr>
+			<tr><td>上级手机号: <input type="text" disabled="true" value="{$user_setting['mobile_officer']}"  size="30" name='mobile_officer' maxlength='30'/></td><td></td></tr>
+			<tr><td>上级微信号: <input type="text" disabled="true" value="{$user_setting['weixin_officer']}"  size="30" name='weixin_officer' maxlength='30'/></td><td></td></tr>
+			<tr><td>上级微信二维码图片路径: <input type="text" disabled="true" value="{$user_setting['weixinPicUrl_officer']}"  size="30" name='weixin' maxlength='30'/></td><td></td></tr>
+			<tr><td>上级电话: <input type="text" disabled="true" value="{$user_setting['tel_officer']}"  size="30" name='tel_officer' maxlength='30'/></td><td></td></tr>
+
+	        <tr><td><input type='hidden' name='login_name' value="{$user_setting['login_name']}"/></td><td></td></tr>
+	        <tr><td cospan="2"><button class="btn" onclick="on_rebuild();">同步主站个人设置数据<td></td></tr>
+	        <!--<tr><td cospan="2"><button class="btn" onclick="return submitform();">保存</tr>-->    
+        </tbody>
+    </table> 
+<!--</form>-->
+<!--{template footer,admin}-->
+<script type="text/javascript">
+       function on_rebuild(){
+	  $.get("index.php?admin_setting/view_rebuild_operator",{},function(data){	
+			alert(data['comment']);
+			window.location.href = url;
+		},'json');
+   }
+function submitform(){
+ 	/* var number = document.forms['userform'].elements['jobnumber'];
+	var qq = document.forms['userform'].elements['QQ'].value;
+	var mobile = document.forms['userform'].elements['mobile'].value;
+	var weixin = document.forms['userform'].elements['weixin'].value;
+	
+	if(number.value != '' && !(/^\d+$/).test(number.value))
+	{
+		alert('工号必须位数字');
+		return false;
+	} 
+	if(qq != '' && !(/^[1-9][0-9]{4,11}$/).test(qq))
+	{
+		alert("QQ号必须为5-12位纯数字");
+		return false;
+	}
+	if(mobile != "" && !((/^13[0-9]{1}[0-9]{8}$|15[02189]{1}[0-9]{8}$|18[0-9]{9}$/)).test(mobile))
+	{
+		alert('手机号码必须为11位数字');
+		return false;
+	}
+	
+	if(qq == '' || mobile=='' || weixin=='')
+	{
+		alert("QQ号，手机号，微信号 必须填写");
+		return false;
+	} */
+	
+ 	document.userform.action="index.php?admin_setting/setting_update";
+    document.userform.submit(); 
+} 
+</script>

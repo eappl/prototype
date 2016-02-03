@@ -1,0 +1,712 @@
+<!--{template header}-->
+<link rel="stylesheet" type="text/css" href="http://img01.5173cdn.com/fed/build/2.00/css/upload_img_v1.css" />
+<style type="text/css">
+.logo_zixun a:hover{color:#0066CC;text-decoration:none;}
+</style>
+<!--日期选择-->
+<link rel="stylesheet" type="text/css" href="http://img01.5173cdn.com/zixun_center/build/1.00/css/calendar_v1.css"/>
+<div id="J_wytsCpage" class="box1000 m_t_10 clearfix">
+   <div class="box1000 m_t_10 clearfix">
+	<div class="zx_location">您的位置：<a href="./">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+		<a href="http://sc.5173.com/index.php?question/ask_skip.html">选择问题类型</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+		<a href="http://sc.5173.com/index.php?question/ask_run/{$question_type}.html">选择{$question_type_list[$question_type]}类型</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{$url}
+		<span>{$question_type_list[$question_type]}详情</span>
+	</div>
+	 <!-- {if $ask_front_name == '游客'} -->
+        <div class="unlogin-tips p_top"><span class="fedtips-b-1"><s class="ico_info_1"></s>建议您先&nbsp;<a href="{$login_url}" class="underline">登录</a>&nbsp;，登录后提交的投诉将记录在“我的服务记录”中，以便您查看投诉回复进度。</span></div>
+     <!-- {/if} -->
+	{if $qtypeName['complain']['manager_name'] != ""}
+	<div class="service_manager">
+	    	<div class="l_img">
+	    	    {if $qtypeName['complain']['icon'] == ''}
+	    	     <img src="http://img01.5173cdn.com/zixun_center/build/1.00/images/default_kf.png">
+	    	    {else}
+	    	   	 <img src="{$qtypeName['complain']['icon']}">
+	    	    {/if}
+	    	 </div>
+	         <div class="r_txt"><b>◆</b>您好，您是 <strong> {$qtypeName['name']} </strong>第<span style="color:#f60">{$questionsToday}</span>位来{$question_type_list[$question_type]}的用户，我是负责人<strong>{$qtypeName['complain']['manager_name']}</strong>，请告诉我您遇到的问题，我来帮您解决。</div> 
+	 </div>
+	 {/if}
+</div>
+<form action="{url question/complain}" name="complain_form" id="complain_form" method="post" enctype="multipart/form-data">
+     <div class="service_content">
+        <dl class="update_service clearfix">
+        	<dt class="heit30">我是：<s>*</s></dt>
+            <dd class="contact_num">
+	            <span class="radio"><input onclick="ts_change(12)" type="radio" name="ts_type_id" value="12" {$buyChecked}><label>{$side['buyer']}</label></span>
+	             <span class="radio"><input onclick="ts_change(13)" type="radio" name="ts_type_id" value="13" $sellChecked><label>{$side['seller']}</label></span>
+	            <span class="fed_formtips_error" style="display:none" id="buySellError"><s class="ico_error_1"></s>请选择您的身份</span>
+            </dd>
+        </dl>
+        
+        <dl class="update_service clearfix">
+    	   <dt class="heit30">{$question_type_list[$question_type]}类型：</dt>
+           <dd>
+             <div id="J_cpt_ts" class="f_left like_select">
+                  <span class="text">{$qtypeName['name']}</span>
+                  <input type="hidden" value="{$qtypeName['trading']['sellerOrderUrl']}" name="sellerOrderUrl" id="sellerOrderUrl"/>
+				  <input type="hidden" value="{$qtypeName['trading']['buyerOrderUrl']}" name="buyerOrderUrl" id="buyerOrderUrl"/>
+				  <input type="hidden" value="{$qtypeId}" name="qtypeId" id="qtypeId"/>
+                  <input type="hidden" value="{$cid1}" name="cid1"/>
+              </div>
+            </dd>
+        </dl>
+        
+        <dl class="update_service clearfix">
+            <dt>{$question_type_list[$question_type]}内容：<s>*</s></dt>
+            <dd>
+            <div class="write_ques">
+	            		<textarea class="ques_t J_relation" id="complaints" name="description" placeholder="请详细描述您的诉求内容以及填写您的订单号 ，为确保您的个人信息安全 ，请勿在问题内容中填写帐号、密码、联系方式等信息">{$add_text}</textarea>            <ul class="operate">
+                <li id="J_sctp"><s class="sctp"></s><span>上传图片</span></li>
+            </ul>
+            <ul class="upload_img">
+                <li class="loadimgbox">
+                <!--上传图片HTML结构开始 uploadbtn-->
+                    <div class="single_up" style="float: none;">
+                        <div class="initial">
+                            <div id="uploadbtn_box" class="pic">
+                                <p class="num">&nbsp;</p>
+
+                                <p>暂无图片</p>
+                            </div>
+                        </div>
+                        <div>
+                            <input id="uploadbtn" type="button" value="上传新图片" class="uploadheight up_btn_1" class="uploadheight" />
+                            <input id="uploadbtn_imgpath" type="hidden" name="imgpath" value="" />
+                        </div>
+                    </div>
+                    <!--上传图片HTML结构结束 uploadbtn-->            
+                </li>             
+            </ul>
+            </div>
+
+	        	<span class="fed_formtips_error detail_error" id="askDesrptNull" style="display:none"><s class="ico_error_1"></s>请输入{$question_type_list[$question_type]}内容</span>
+	        	<span class="fed_formtips_error detail_error" id="askDesrptShort" style="display:none"><s class="ico_error_1"></s>{$question_type_list[$question_type]}内容不少于5个汉字</span>
+            </dd>
+        </dl>
+        <!--选卖家投诉时显示-->
+        <dl id="seller_ts_dl" class="update_service clearfix"  {if !$sellShow}style="display:none;"{/if}>
+           <dt class="heit30">我的{$question_type_list[$question_type]}订单:</dt>
+            <dd>
+	            <input type="text" id="order_num" name="order_num" value="{$order_num}" class="tousu_text"  placeholder="订单编号">
+	            <input type="text" id="commodity_num" name="commodity_num" value="{$seller_good}" class="tousu_text m_left" placeholder="商品编号">
+	            <span id="seller_ts"></span> <span id="seller_ts_msg_error" class="fed_show_msg no-pad-top"></span>
+	            <span id="s_loading" style="display:none;"><img src="css/common/loading.gif"></span>
+	            <div class="small_select">
+	            	<a href="#" id="J_cpt_ddsp">选择您的订单或商品</a>
+	            </div>
+            </dd>
+        </dl>
+        <!--选买家投诉时显示-->      
+        <dl id="buyer_ts_dl" class="update_service clearfix" {if !$buyerShow}style="display:none;"{/if}>
+            <dt class="heit30">我的{$question_type_list[$question_type]}订单:</dt>
+            <dd>
+	            <input type="text" id="buyer_order_num" name="buyer_order_num" value="{$buyer_order_num}" class="tousu_text"  placeholder="订单编号">
+	            <input type="hidden" id="buyer_commodity_num" name="buyer_commodity_num" value="{$buyer_good}" class="tousu_text m_left selected" placeholder="商品编号">
+	             <span id="buyer_ts"></span><span id="buyer_ts_msg_error" class="fed_show_msg no-pad-top"></span>
+	             <span id="b_loading" style="display:none;"><img src="css/common/loading.gif"></span>
+	            <div class="small_select">
+		            <a href="#" id="J_cpt_dd">选择您的订单</a>
+                </div>
+            </dd>
+        </dl>
+         <dl class="update_service clearfix" id="ResolvError">
+        	<dt>我的解决方案：</dt>
+            <dd>
+	            <div class="write_ques" >
+	        		<textarea class="ques_t" id="resolve" name="resolve" value="{$resolve} "placeholder="请告诉我们您的解决方案，以便我们参考，谢谢 ，为确保您的个人信息安全 ，请勿在问题内容中填写帐号、密码、联系方式等信息" >{$resolve}</textarea>
+	       		</div>
+        	</dd>
+        </dl>
+        {if $loginName == '游客'}
+        <dl class="update_service clearfix">
+        	<dt class="heit30">我的用户名：<s>*</s></dt>
+            <dd class="contact_num">
+	            <input type="text" placeholder="请输入您的5173登录用户名" id="user_txt" name="author" class="long_2 holderfont" value="{$author}">
+	            <span class="fed_formtips_error" style="display:none" id="userError"><s class="ico_error_1"></s>请输入用户名</span>
+	            <span class="fed_formtips_error" style="display:none" id="userTypeError"><s class="ico_error_1"></s>请输正确格式的5173登陆用户名</span>
+            </dd>
+        </dl>
+        {/if}
+         <dl class="update_service clearfix">
+        	<dt class="heit30">我的联系方式：</dt>
+            <dd class="contact_num">
+            	<ul class="contact_txt">
+                	<li>
+                		<input type="text" class="long_2 holderfont" placeholder="请输入与用户名绑定的手机号" id="moblephone" value="{$comment['contact']['mobile']}" name="contact[mobile]"/>
+                		<s class="must">*</s>
+                	</li>
+                    <li><input type="text" class="long_2 holderfont" placeholder="QQ号" id="qqNumber" value="{$comment['contact']['qq']}" name="contact[qq]"　value="{$comment['contact']['qq']}"><s class="must">*</s></li>
+                    <li><input type="text" class="long_2 holderfont" placeholder="微信号" id="weixin" value="{$comment['contact']['weixin']}" name="contact[weixin]"　value="{$comment['contact']['weixin']}"></li>
+                </ul>
+            </dd>
+        </dl>
+		        <dl>
+            <dd>
+                <div style="padding-left:100px;">
+                        <span class="fed_formtips_error detail_error" style="display:none" id="moblephoneError"><s class="ico_error_1"></s>请输入正确格式的手机号</span>
+                        <span class="fed_formtips_error detail_error" style="display:none" id="moblephoneNull"><s class="ico_error_1"></s>请输入手机号</span>
+                        <span class="fed_formtips_error detail_error" style="display:none" id="qqNumberNull"><s class="ico_error_1"></s>请输入QQ号</span>
+						<span class="fed_formtips_error detail_error" style="display:none" id="qqNumberError"><s class="ico_error_1"></s>请输入正确格式的QQ号</span>
+                        <span class="fed_formtips_error detail_error" style="display:none" id="weixinError"><s class="ico_error_1"></s>请输入正确格式的微信号</span>
+                        <span class="fed_formtips_error detail_error" style="display:none" id="allError"><s class="ico_error_1"></s>手机号或微信号或QQ号格式不正确</span>
+                </div>
+            </dd>
+        </dl>
+          {if $ask_front_name == '游客'}
+        <dl class="update_service clearfix">
+        	<dt class="heit30">验证码：</dt>
+            <dd class="upcode">
+	            <input type="text" id="J_code" name="J_code" value="{$J_code}" class="code" maxlength="4" />
+	            <img src="{url question/get_code}" id="yzm_img" onclick="javascript:this.src=src='?question/get_code/'+Math.random();" style="cursor:pointer"/>
+	            <span class="exchange_a" style="cursor:pointer;font-size: 12px;" 
+	            onclick="javascript:document.getElementById('yzm_img').src='?question/get_code/'+Math.random();">看不清，换一张
+	            </span>	            
+            </dd>
+            <span id="yzm_msg_error" ></span>
+        </dl>    
+        {/if} 
+        <div class="sumbit_loca">
+         	<input type="hidden" name="act" value="submit"/> 
+       		 <a class="submit_ques">提交{$question_type_list[$question_type]}</a>
+       		 <span  id="repeatSubmit" ></span>
+        </div>
+	<div class="box_qus box_loc3">
+            <div class="box_top box_bg">
+                <strong>为您找到相关问题10个</strong>
+            </div>
+            <div class="box_content">
+                <ul>
+
+
+                </ul>
+            </div>
+            <div class="box_bottom box_bg"></div>
+        </div>
+    </div>
+    </form>
+</div>
+<a href="http://bar.5173.com/showtopic-811345.aspx" id="entrance" class="entrance" target="_blank"></a>
+ <div id="daiyanbao_com_content" closerate="4" playrate="-2" style="position: fixed;_position: absolute;text-align: left;overflow: visible;bottom :0;right:0;display:block; z-index:999;"> <script src="//res.daiyanbao.com/client/20150506/www.5173.com.js"></script> </div>
+<div id="layer_order" class="UED_hide big_pop">
+    <div class="pop_box">
+        <div class="pop_tittle">
+            <h3 id="UED_layer_h3_v31">选择订单</h3>
+            <a href="javascript:void 0" onclick="J_close(0);" class="close"></a>
+        </div>
+        <div class="pop_mainbox">
+            <h5 class="order_title"><s></s>我购买的 {$qtypeName['name']}</h5>
+            <div class="order_time">
+            <ins>订单时间：</ins>
+            <div class="datebody"><input id="ord02_start" value="{eval echo date('Y-n-j',strtotime('-7 days'))}" type="text" class="text_t"/></div>
+            <ins>&nbsp;至&nbsp;</ins>
+            <div class="datebody"><input id="ord02_end" value="{eval echo date('Y-n-j')}" type="text" class="text_t" /></div>   
+			<input type="hidden" id="buyer_jy_select" name="buyer_jy_select" value="{$qtypeId}"/>
+                <a href="#" class="btnlink_b_s_small" onclick="search_order(1,1);"><span>搜索</span></a>
+            </div>
+            <div id="o_list_1"></div>
+            
+            <ul class="order_list" > 	            
+                <li style="border:none;">
+                    <div id="loading_div_1" align="center" style="display:none;"><img src="css/common/loading.gif"></div>                   
+                </li>                
+            </ul>            
+      </div>
+   </div>
+</div>
+
+<div id="layer_order2" class="UED_hide big_pop">
+    <div class="pop_box">
+        <div class="pop_tittle">
+            <h3 id="UED_layer_h3_v31">选择订单或商品</h3>
+            <a href="javascript:void 0" onclick="J_close(0);" class="close"></a>
+        </div>
+        <div id="order_tabs" class="pop_mainbox">
+            <ul class="order_tab">
+                <li class="current"><a href="#order_tabs-1" onclick="search_order(2,1);">我的 {$qtypeName['name']}</a></li>
+				<input type="hidden" id="seller_jy_select" name="seller_jy_select" value="{$qtypeId}"/>
+				<!-- {if {$qtypeName['trading']['sellingOrderUrl']} != ''} -->
+                <li><a href="#order_tabs-2" onclick="search_order(3,1);">出售中的 {$qtypeName['name']}</a></li>
+				<!-- {/if} -->
+            </ul>
+
+            <div id="order_tabs-1">
+
+                <span class="order_time2">
+                <ins>订单时间：</ins>
+                <div class="datebody"><input name="ord01_start" id="ord01_start" value="{eval echo date('Y-n-j',strtotime('-7 days'))}" type="text" class="text_t" /></div>
+                <ins>&nbsp;至&nbsp;</ins>    
+                <div class="datebody"><input name="ord01_end" id="ord01_end" value="{eval echo date('Y-n-j')}" type="text"  class="text_t" /></div>
+				<input type="hidden" id="buyer_jy_select" name="buyer_jy_select" value="{$qtypeId}"/>
+
+				<a href="#" class="btnlink_b_s_small" onclick="search_order(2,1);"><span>搜索</span></a>
+                </span>
+                
+                <div id="o_list_2"></div>
+	            <ul class="order_list sp_list"> 	            
+	                <li style="border:none;">
+	                    <div id="loading_div_2" align="center" style="display:none;"><img src="css/common/loading.gif"></div>                   
+	                </li>                
+	            </ul> 
+            </div>
+            <div id="order_tabs-2" style="display:none">
+                <span class="added_time">
+                <ins>上架时间：</ins>
+                <div class="datebody"><input id="ord03_start" value="{eval echo date('Y-n-j',strtotime('-7 days'))}" type="text" class="text_t" /></div>
+                <ins>&nbsp;至&nbsp;</ins>
+                <div class="datebody"><input id="ord03_end" value="{eval echo date('Y-n-j')}" type="text" class="text_t" /></div>
+                <a href="#" class="btnlink_b_s_small" onclick="search_order(3,1);"><span>搜索</span></a></span>
+                <div id="o_list_3"></div>
+            
+	            <ul class="order_list sp_list"> 	            
+	                <li style="border:none;">
+	                    <div id="loading_div_3" align="center" style="display:none;"><img src="css/common/loading.gif"></div>                   
+	                </li>                
+	            </ul>             
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="UED_SHUCOVER_V1" class="UED_SHUCOVER_V1 UED_hide"><iframe src="about:blank" id="UED_SHUCOVER_IFRAME_V1" class="UED_SHUCOVER_IFRAME_V1"></iframe></div>
+
+
+<!--{template footer}-->
+<script type="text/javascript" type="text/javascript" src="http://img01.5173cdn.com/zixun_center/build/1.00/js/calendar_v1.js" charset="utf-8"></script>
+<script type="text/javascript" type="text/javascript" src="http://img01.5173cdn.com/zixun_center/build/1.00/js/date_ts.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var layer_kg = 0;
+    var thisPage = {name : "complaint"};
+    var submitFlg = 0;//防重复提交
+    var postMobile = '{$comment['contact']['mobile']}';
+    var author = '{$loginName}'; 
+    $(function(){
+        $("#user_txt").fedPlaceHoder("holderfont");
+    	$("#complaints").fedPlaceHoder("holderfont"); // 投诉内容
+    	$("#order_num").fedPlaceHoder("holderfont");
+    	$("#commodity_num").fedPlaceHoder("holderfont");
+    	$("#resolve").fedPlaceHoder("holderfont");
+    	$("#buyer_order_num").fedPlaceHoder("holderfont");
+    	$("#buyer_commodity_num").fedPlaceHoder("holderfont");
+    	$("#moblephone").fedPlaceHoder("holderfont");
+    	$("#qqNumber").fedPlaceHoder("holderfont");
+    	$("#weixin").fedPlaceHoder("holderfont");
+        $.fed.tabs("#order_tabs",{event:"click",currindex:0,interval:0});
+        $.famsg.floatdiv("#entrance",{top:258,offset:0});       
+        
+        $(".order_list li").live("mouseover",
+        		function(){
+        	        $(".order_list li").removeClass("orderHov");$(this).addClass("orderHov")
+        	    });
+        
+        $("#layer_order .order_numbg").live("click",
+                function() {
+                    $(this).find("input").attr("checked", !0);
+                    $(".order_list li").removeClass("orderCurr");
+                    $(this).parents("li").addClass("orderCurr");
+                    $(".J_orderList_ok").attr("class", "btnlink_b_small unhover c9 J_orderList_ok");
+                    $(".tousu_text").eq(2).val($(this).find(".ddbh").text());
+                    $("#other_order_num").length > 0 && $("#other_order_num").val($(this).find(".ddbh").text());
+                });
+        $("#layer_order2 .order_numbg").live("click",
+                function() {
+                    $(this).find("input").attr("checked", !0);
+                    $(".order_list li").removeClass("orderCurr");
+                    $(this).parents("li").addClass("orderCurr");
+                    $(".J_orderList_ok").attr("class", "btnlink_b_small unhover c9 J_orderList_ok");
+                    $("#order_num").val($(this).find(".ddbh").text());
+                    $("#commodity_num").val($(this).find(".spbh").text());
+                    $("#other_order_num").length > 0 && $("#other_order_num").val($(this).find(".ddbh").text());
+                    $("#other_commodity_num").length > 0 && $("#other_commodity_num").val($(this).find(".spbh").text());
+                });
+        $(".J_orderList_close").live("click",
+        		function(){
+        	        $(".tousu_text").eq(2).attr("value",'');
+        	        $("#layer_order,#layer_order2").hide();
+		    		$("#UED_SHUCOVER_V1").hide();
+        	        layer_kg = 0;
+        	    });
+        $(".J_orderList_ok").live("click",
+        		function(){
+        	        $("#layer_order,#layer_order2").hide();
+		    		$("#UED_SHUCOVER_V1").hide();
+        	        layer_kg = 0;
+        	    });
+    });
+    $("#moblephone").focus(function(){
+    	var contact = $.trim($(this).val());
+    	var result = contact.search(/^\d{3}\*{4}\d{4}$/g);
+    	if(result != -1){
+    		$(this).attr('value','');
+    	}
+    }); 
+   	$('.submit_ques').bind('click', function() {
+   	    var submit_flag = true; 
+   		var description = $.trim($("#complaints").val());	// 投诉内容
+   		var mobileValue = $.trim($("#moblephone").val());
+ 	    var qqValue = $.trim($("#qqNumber").val());
+ 	    var weixinValue = $.trim($("#weixin").val());
+ 	    var userValue = $.trim($("#user_txt").val())
+ 	    var threeCount  = 0;
+ 	   // 身份类型
+ 	    if($("input[name='ts_type_id']:checked").length == 0)
+ 	    {
+ 	    	submit_flag = false;
+   			$("#buySellError").show();
+ 	    }
+ 	    else
+ 	    {
+ 	    	$("#buySellError").hide();
+ 	    }
+   		// 咨询内容验证
+   		if(description == "请详细描述您的诉求内容以及填写您的订单号 ，为确保您的个人信息安全 ，请勿在问题内容中填写帐号、密码、联系方式等信息")
+   		{	
+   			submit_flag = false;
+   			$("#askDesrptNull").show();
+   		}
+   		else
+   		{
+   			$("#askDesrptNull").hide();
+   		}
+   		if(description != "请详细描述您的诉求内容以及填写您的订单号 ，为确保您的个人信息安全 ，请勿在问题内容中填写帐号、密码、联系方式等信息" &&　description.length<5)
+   		{
+   			submit_flag = false;
+   			$("#askDesrptShort").show();
+   		}
+   		else
+   		{
+   			$("#askDesrptShort").hide();
+   		}
+   		// 我的用户名
+   		if(userValue == "请输入您的5173登录用户名")
+   		{
+   			submit_flag = false;
+   			$("#userError").show();
+   			$("#userTypeError").hide();
+   		}
+   		else
+   		{
+   			if(userValue.length>20)
+   			{
+   				submit_flag = false;
+   	   			$("#userTypeError").show();
+   			}
+   			else
+   			{
+   				$("#userError").hide();
+   				$("#userTypeError").hide();
+   			}
+   		}
+ 	   // 手机号
+   		var mobileReg = /^13[0-9]{1}[0-9]{8}$|15[0-9]{9}$|18[0-9]{9}$|14[0-9]{9}$|17[0-9]{9}$/;
+   		var qqReg = /^[1-9][0-9]{4,11}$/;
+   		
+   		// 联系方式
+   		if(mobileValue == '请输入与用户名绑定的手机号')
+		{
+ 			submit_flag = false;
+ 			$("#moblephoneNull").show();
+ 			$("#moblephoneError").hide();
+ 		}
+ 	 	else
+ 	 	{
+ 	 		$("#moblephoneNull").hide();
+ 	 	}
+   		
+ 	    if( mobileValue != '请输入与用户名绑定的手机号' )
+		{
+ 	 		if(mobileValue == postMobile)
+ 	 		{
+ 	 		}
+ 	 		else if(!mobileReg.test(mobileValue))
+ 	   		{
+ 	 			submit_flag = false;
+ 	 			threeCount ++;
+ 	 			$("#moblephoneError").show();
+ 	   		}
+ 	 		else
+ 	 		{
+ 	 			$("#moblephoneError").hide();
+ 	 		}
+ 		}
+ 	 
+   		  // qq号
+   		if(qqValue != 'QQ号')
+   		{
+   			if(!qqReg.test(qqValue))
+   			{
+   				submit_flag = false;
+   				threeCount ++;
+   				$("#qqNumberError").show();
+   			}
+   			else
+   			{
+   				$("#qqNumberError").hide();
+   			}
+   		}
+   		else
+   		{
+   			submit_flag = false;
+			$("#qqNumberNull").show();
+   		}
+   		  // 微信号
+   		if(mobileValue != '请输入与用户名绑定的手机号' && weixinValue != '微信号')
+   		{
+   			if(weixinValue.length >20 || weixinValue.length<4 || /[\*]/.test(weixinValue))
+   			{
+   				submit_flag = false;
+   				threeCount ++;
+   				$("#weixinError").show();		
+   			}
+   			else
+   			{
+   				$("#weixinError").hide();			
+   			}
+   		}
+   		else
+   		{
+   			$("#weixinError").hide();
+   		} 
+   		if(mobileValue !='请输入与用户名绑定的手机号' && threeCount>=2)
+   		{
+   			submit_flag = false;
+   			$("#moblephoneError").hide();
+   			$("#qqNumberError").hide();
+   			$("#weixinError").hide();	
+   			$("#allError").show();		
+   		}
+   		else
+   		{
+   			$("#allError").hide();		
+   		} 
+   	    if($("#buyer_ts_dl:visible").length > 0)
+   	    {
+     	    var buyer_order_num = $.trim($("#buyer_order_num").val());
+			if(buyer_order_num == '' || buyer_order_num == '订单编号')
+			{
+				 $("#buyer_ts").showMsg({msg:"<span class='fed_formtips_error'><s class='ico_error_1'></s>请输入订单编号</span>",msgId:"#buyer_ts_msg_error"});
+				 submit_flag = false;
+			}
+			else
+			{
+				$("#buyer_ts").showMsg({msg:"",msgId:"#buyer_ts_msg_error"});
+			}    		
+	    } 
+	   if($("#seller_ts_dl:visible").length > 0)
+	   	{
+				var order_num = $.trim($("#order_num").val());
+				var commodity_num = $.trim($("#commodity_num").val());
+				if((order_num == '' && commodity_num == '') ||
+					(order_num == '' && commodity_num == '商品编号') ||
+					(order_num == '订单编号' && commodity_num == '') ||
+					(order_num == '订单编号' && commodity_num == '商品编号') 
+						)
+				{
+					 $("#seller_ts").showMsg({msg:"<span class='fed_formtips_error'><s class='ico_error_1'></s>请输入订单编号或商品编号</span>",msgId:"#seller_ts_msg_error"});
+					 submit_flag = false;
+				}
+				else
+				{
+					$("#seller_ts").showMsg({msg:"",msgId:"#seller_ts_msg_error"});
+				}      			
+		} 
+	// 验证码验证
+  		if($("#J_code").length > 0)
+  		{
+      		if($.trim($("#J_code").val()) == '')
+      		{
+      			$("#yzm_msg_error").html("<span class='fed_formtips_error'><s class='ico_error_1'></s>请输入验证码。</span>");
+      			submit_flag = false;
+      		}
+      		else
+      		{
+      			$("#yzm_msg_error").html("");
+      		}
+      	}
+   		if(submit_flag)
+   		{
+   			submit('complain_form');
+   		}        		      	
+    });
+   	
+   	function submit(form_id) {
+    	if (submitFlg == 0) {  		
+    		submitFlg = 1;
+    		$("#repeatSubmit").html("");
+    		$('#'+form_id).submit();
+    	}else{
+   			$("#repeatSubmit").html("<span class='fed_formtips_error'><s class='ico_error_1'></s>亲，问题提交一次就OK，不用重复提交哦！</span>");
+    	}
+    }
+   	
+   	function ts_change(id){
+   	 if( author != '游客')
+   	 {
+   		$("#seller_ts_dl").hide();   	
+        $("#buyer_ts_dl").hide();    
+        if(id == 13){
+			$("#buyer_ts_dl").hide();			
+			if($.trim($("#sellerOrderUrl").val()) != '')
+			{
+				$("#seller_ts_dl").show();
+			}
+        }else if(id == 12){
+			if($.trim($("#buyerOrderUrl").val()) != '')
+			{
+				$("#buyer_ts_dl").show();
+			}
+			$("#seller_ts_dl").hide();
+			
+        }/*
+    	$.ajax({
+	         type: "POST",
+	         url: "{url question/ajaxpt_jy}",
+	         data: "ts_id="+id,
+	         global:false,
+	         success: function(data){
+	             $("#J_cpt_jy .like_option").html(data);             
+	         }
+	     });
+        */
+   	 }
+    }
+   	// 买家订单
+   	  	$('#J_cpt_dd').bind('click', function() {
+   		if(layer_kg == 0){
+   			$("#layer_order").show();
+			$("#UED_SHUCOVER_V1").show();
+			layer_kg = 1;
+		}
+   		search_order(1,1); //我购买的商品    		      	
+    });
+    
+   	// 卖家订单
+   	   	$('#J_cpt_ddsp').bind('click', function() {
+   		if(layer_kg == 0){
+   			$("#layer_order2").show();
+			$("#UED_SHUCOVER_V1").show();
+			search_order(2,1); //我的订单	
+			layer_kg = 1;
+		}  			      	
+    });
+   	// 订单搜索
+   	function search_order(type,page){
+   		$('#loading_div_'+type).ajaxStart(function(){
+			$(this).show();
+	    });
+	    $('#loading_div_'+type).ajaxStop(function(){
+			$(this).hide();
+	    });
+   		if(type == 1){//我购买的商品
+   			var ord02_start = $.trim($("#ord02_start").val());
+   			var ord02_end   = $.trim($("#ord02_end").val());  			
+   			var jy_select = $.trim($("#buyer_jy_select").val());
+            var dd_select = '';
+            $('#o_list_1').empty();
+   			$.ajax({
+   	         type: "POST",
+   	         url: "{url question/ajaxorders}",
+   	         data: "start="+ord02_start+"&end="+ord02_end+"&jy="+jy_select+"&dd="+dd_select+"&type="+type+"&page="+page,
+   	         success: function(data){
+   	        	$("#o_list_1").html(data);  	        	
+   	         }
+   	       });   			
+   		}else if(type == 2){//我的订单
+   			var ord01_start = $.trim($("#ord01_start").val());
+   			var ord01_end   = $.trim($("#ord01_end").val());
+   			var jy_select = $.trim($("#seller_jy_select").val());
+   			var dd_select_2 = '';
+            $('#o_list_2').empty();
+   			$.ajax({
+   	         type: "POST",
+   	         url: "{url question/ajaxorders}",
+   	         data: "start="+ord01_start+"&end="+ord01_end+"&jy="+jy_select+"&dd="+dd_select_2+"&type="+type+"&page="+page,
+   	         success: function(data){
+   	        	$("#o_list_2").html(data); 	        	  	        	
+   	         }
+   			});   
+   		}else if(type == 3){//出售中的商品
+   			var ord03_start = $.trim($("#ord03_start").val());
+   			var ord03_end   = $.trim($("#ord03_end").val());
+   			var jy_select = $.trim($("#seller_jy_select").val());
+
+            $('#o_list_3').empty();
+   			$.ajax({
+   	         type: "POST",
+   	         url: "{url question/ajaxorders}",
+   	         data: "start="+ord03_start+"&end="+ord03_end+"&jy="+jy_select+"&type="+type+"&page="+page,
+   	         success: function(data){
+   	        	$("#o_list_3").html(data);	        	 	        	
+   	         }
+   			});
+   		}
+   	}
+   	
+   	function show_fw(obj,sh,dk,order_id){
+   		if(dk == 1){
+   			if($(".J_orderList_ok").length > 0){
+   				$(".J_orderList_ok").attr("class","btnlink_g_small unhover c9");
+   			}
+   			$.ajax({
+      	         type: "POST",
+      	         url: "{url question/ajaxzc}",
+      	         data: "order_id="+order_id,
+      	         global:false,
+      	         success: function(data){
+      	        	$('.tips_zc').hide();
+      	        	if(data == 'True'){      	        		     	        		
+           	   			$(obj).closest('li').find('.tips_zc').show();
+      	        	}else{
+      	        		$(obj).closest('li').find('.tips_zc').hide();
+      	        		$(".unhover").addClass("J_orderList_ok");
+      	        		$(".J_orderList_ok").attr("class", "btnlink_b_small unhover c9 J_orderList_ok");
+      	        	}     	        	
+      	         }
+      			});
+   		}else{
+   			$('.tips_sh').hide();
+   			 $(".tips_zc").each(function(){
+   				$(this).hide();
+   			}); 
+   			$(".unhover").addClass("J_orderList_ok");
+      		$(".J_orderList_ok").attr("class", "btnlink_b_small unhover c9 J_orderList_ok");
+   			if(sh == 1){  				
+   	   			$(obj).closest('li').find('.tips_sh').show();
+   			}  			
+   		}
+   	}
+   	
+   	function reloadlayer(layer){
+		if(parseInt($("#"+layer).css("margin-top")) < 0 && Math.abs(parseInt($("#"+layer).css("margin-top"))) > parseInt($("#"+layer).css("top"))){
+			var layertop = Math.abs(parseInt($("#"+layer).css("margin-top"))) - parseInt($("#"+layer).css("top"))+"px";
+			$("#"+layer).css("margin-top","0px");
+			$("#"+layer).css("top",layertop)
+		}	
+	}
+   	
+   	function removelayer(layerId){
+		if($(window).height() > $("#"+layerId).height()){
+			var _top = parseInt(($(window).height() - $("#"+layerId).height())/2);
+			$("#"+layerId).css("top",_top);
+			$("#"+layerId).css("margin-top","0px")
+		}
+			
+	}
+   // 关闭弹窗
+      	function J_close(type){
+   		if(type == 0){
+   			$(".tousu_text").eq(2).attr("value",'');
+   	       /*  $("#order_num").attr("value",'');
+   	        $("#commodity_num").attr("value",'');
+   	        $("#other_order_num").attr("value",''); 
+   	        $("#other_commodity_num").attr("value",'');
+   	        */
+   		}
+   		$("#layer_order,#layer_order2").hide();
+		$("#UED_SHUCOVER_V1").hide();
+        //$.LAYER.close();
+        layer_kg = 0;
+   	}
+   //onchange="alert(this.value);"
+</script>
+

@@ -1,0 +1,52 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+<div id="wait_handle_question"></div> 
+<!--{template footer,admin}-->
+<script type="text/javascript">
+    on_reload();   
+    function on_show_question(id){
+    	document.cookie  = "ask_question_id="+id;
+       	if(getCookie('t_answer_template') != null){
+    		delCookie('t_answer_template');
+    	}   	
+    	if($(window.parent.frames["waitanswer"].frames["waithandle"]).length == 0){
+    		window.parent.frames["waitanswer"].location.href = "index.php?admin_question/handle_answer{$setting['seo_suffix']}";
+    	}   	
+    	window.parent.frames["waitanswer"].location.reload();
+    }
+    
+    function on_reload(){
+    	$.ajax({
+            type: "POST",
+            url: "{url admin_question/ajaxhandle_wait_question}",
+            success: function(data){
+                if(data != ''){
+                	$("#wait_handle_question").html(data);
+                }
+            }
+        });   	
+    }
+    setInterval("on_reload();",5000);
+    
+    function SetCookie(name,value)//设置cookie
+	{
+	    var Days = 30; //此 cookie 将被保存 30 天
+	    var exp  = new Date(); 
+	    exp.setTime(exp.getTime() + Days*24*60*60*1000);
+	    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+	}
+	function getCookie(name)//读取cookie        
+	{
+	    var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+	    if(arr != null) return unescape(arr[2]); return null;		
+	}
+	function delCookie(name)//删除cookie
+	{
+	    var exp = new Date();
+	    exp.setTime(exp.getTime() - 1);
+	    var cval=getCookie(name);
+	    if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+	}
+</script>

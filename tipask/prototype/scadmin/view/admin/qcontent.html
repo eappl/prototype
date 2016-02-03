@@ -1,0 +1,127 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+
+<div id="append"></div>
+<div
+	style="width: 100%; height: 15px; color: #000; margin: 0px 0px 10px;">
+	<div style="float: left;">
+		<a href="index.php?admin_main/stat" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;快速回复管理
+	</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center"
+	class="tableborder">
+	<tr>
+		<td class="{$type}">{$message}</td>
+	</tr>
+</table>
+<!--{/if}-->
+<form action="index.php?admin_qcontent/qcontent_add" method="post"
+	onsubmit="return oncheck();" enctype="multipart/form-data">
+	<table width="100%" cellspacing="0" cellpadding="4" align="center"
+		class="tableborder">
+		<tbody>
+			<tr class="header">
+				<td colspan="3">{if ($Qcontent_info['id']>0)}快速回复修改{else}快速回复添加{/if}</td>
+			</tr>
+			<tr>
+				<td width="200" class="altbg2">快速回复:<textarea name="content" id="content" rows="4" cols="50">{if isset($Qcontent_info)}$Qcontent_info['content']{/if}</textarea>
+					<input class="txt" type="hidden" name="id"
+					value="{if isset($Qcontent_info)}$Qcontent_info['id']{/if}">
+				</td>
+				<td width="200" class="altbg2">上级分类ID: <select name="pid">
+						<!--{if isset($Qcontent_list)}-->
+						<option value="0" {if 0==$Qcontent_info['pid']}selected{/if}>无</option>
+						<!-- {loop $Qcontent_list $qid $qcontentInfo} -->
+						<!--{if $qcontentInfo['pid']==0 && $qcontentInfo['id']!=$Qcontent_info['id']}-->
+						<option value="{$qcontentInfo['id']}"
+							{if $qcontentInfo['id'] ==$Qcontent_info['pid']}selected{/if}>{$qcontentInfo['content']}</option>
+						<!--{/if}-->
+						<!-- {/loop} -->
+						<!--{/if}-->
+				</select>
+				{if ($Qcontent_info['id']>0)}
+				<td width="200" class="altbg2" >排序:<input class="txt" type="text"
+					name="displayOrder" value="{$Qcontent_info['displayOrder']}"></td>
+					{else}<td width="200" class="altbg2" ></td>{/if}
+
+			</tr>
+			<tr>
+				<td width="200" class="altbg2"  colspan="3"><input class="btn" type="submit"
+					name="submit_add" value="保存"></td>
+			</tr>
+
+		</tbody>
+	</table>
+</form>
+
+
+<table width="100%" border="0" cellpadding="4" cellspacing="1"
+	class="tableborder">
+	<tr class="header">
+		<td colspan="2" align='center'>通用</td>
+		<td rowspan="2">排序</td>
+		<td rowspan="2">操作</td>
+	</tr>
+	<tr class="header">
+		<td width="50%">快速回复内容</td>
+		<td width="10%">上级分类</td>
+	</tr>
+	<!--{if isset($Qcontent_list)}-->
+	<!-- {loop $Qcontent_list $qid $qcontent} -->
+	<!--{if $qcontent['pid']==0}-->
+	<tr>
+		<td class="altbg2">{$qcontent['content']}</td>
+		<td class="altbg2">{$qcontent['parentName']}</td>
+		<td class="altbg2">{$qcontent['displayOrder']}</td>
+		<td class="altbg2"><a
+			href="index.php?admin_qcontent/qcontent/{$qcontent['id']}">修改</a> | <a
+			href="index.php?admin_qcontent/qcontent_del/{$qcontent['id']}">删除</a> | <a href="javascript:;" onclick="replace($qcontent['id'],'up')">上移</a> | <a href="javascript:;" onclick="replace($qcontent['id'],'down')">下移</a>
+		</td>
+	</tr>
+	<!-- {loop $Qcontent_list $qid_s $qcontent_s} -->
+	<!--{if $qcontent_s['pid']==$qcontent['id']}-->
+	<tr>
+		<td class="altbg2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┠ {$qcontent_s['content']}</td>
+		<td class="altbg2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┠ {$qcontent_s['parentName']}</td>
+		<td class="altbg2">{$qcontent_s['displayOrder']}</td>
+		<td class="altbg2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┠ <a
+			href="index.php?admin_qcontent/qcontent/{$qcontent_s['id']}">修改</a> | <a
+			href="index.php?admin_qcontent/qcontent_del/{$qcontent_s['id']}">删除</a> | <a href="javascript:;" onclick="replace($qcontent_s['id'],'up')">上移</a> | <a href="javascript:;" onclick="replace($qcontent_s['id'],'down')">下移</a>
+		</td>
+	</tr>
+	<!--{/if}-->
+	<!-- {/loop} -->
+
+	<!--{/if}-->
+	<!-- {/loop} -->
+	<!--{/if}-->
+</table>
+<div class="pages">
+	<div class="scott" style="float: right;">{$departstr}</div>
+</div>
+<!--{template footer,admin}-->
+<script type="text/javascript">
+	function oncheck() {
+		if ($.trim($("textarea[name='content']").val()) == '') {
+			alert("快捷回复不能为空！");
+			return false;
+		}
+
+		return true;
+	}
+function replace(id,act) {
+	var confirm = window.confirm("确认移动？");
+	if (confirm) {
+		$.get("index.php?admin_qcontent/replace",{id:id,act:act},function(data) {
+			alert(data['comment']);
+			window.location.href="?admin_qcontent/qcontent";
+		},'json');
+	} else {
+		return false;
+	}
+}
+</script>

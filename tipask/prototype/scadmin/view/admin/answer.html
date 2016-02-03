@@ -1,0 +1,649 @@
+<!--{template header,admin}-->
+<link href="{SITE_URL}css/default/ask.css" rel="stylesheet" type="text/css" />
+{eval $toolbars="'".str_replace(",", "','", $setting['editor_toolbars'])."'";}
+
+
+<script type="text/javascript" src="{SITE_URL}js/jquery.js"></script>
+<script type="text/javascript" src="{SITE_URL}js/dialog.js"></script>
+<script type="text/javascript" src="{SITE_URL}js/common.js"></script>
+<script type="text/javascript">
+   var g_site_url='{SITE_URL}';g_prefix='{$setting['seo_prefix']}';g_suffix='{$setting['seo_suffix']}';editor_options={toolbars:[[{$toolbars}]],wordCount:{$setting['editor_wordcount']},elementPathEnabled:{$setting['editor_elementpath']}};messcode='{$setting['code_message']}';</script>
+<script type="text/javascript" src="{SITE_URL}js/ueditor/editor_config.js"></script>
+<script type="text/javascript">
+    g_site_url='{SITE_URL}';g_prefix='{$setting['seo_prefix']}';g_suffix='{$setting['seo_suffix']}';editor_options={toolbars:[[{$toolbars}]],wordCount:{$setting['editor_wordcount']},elementPathEnabled:{$setting['editor_elementpath']}};messcode='{$setting['code_message']}';</script>
+<script type="text/javascript" src="{SITE_URL}js/ueditor/editor_all.js"></script>
+<script type="text/javascript" src="{SITE_URL}js/ueditor/third-party/SyntaxHighlighter/shCore.js"></script>
+<link rel="stylesheet" href="{SITE_URL}js/ueditor/themes/default/ueditor.css"/>
+<link rel="stylesheet" href="{SITE_URL}js/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css"/>
+<link rel="stylesheet" type="text/css" href="http://img01.5173cdn.com/fed/build/3.00/css/game_select/game_select.css"/>
+<script type="text/javascript" src="http://img01.5173cdn.com/fed/build/3.00/js/game_select/gameselect.js"></script>
+<style type="text/css">
+  .sortli {color: red;};
+</style>
+
+<table style="width:100%;">
+    <tr>     
+        <td><iframe src="index.php?admin_question/handle_answer_content/{$question_id}" name="waithandle" id="waithandle" width="100%" height="440px;" frameborder="0"></iframe></td>                                
+
+	</tr>            
+    <tr>   
+
+	            <td colspan="9">
+	                <input name="ctrlcase"  type="button" onClick="buttoncontrol(1);" value="选择分类">&nbsp;&nbsp;&nbsp;
+	                <input name="ctrlcase"  type="button" onClick="buttoncontrol(14);" value="选择游戏">&nbsp;&nbsp;&nbsp;
+	                <input name="ctrlcase"  type="button" onClick="buttoncontrol(4);" value="协助处理">&nbsp;&nbsp;&nbsp;
+	                <input name="ctrlcase"  type="button" id="ycl" onClick="has_mange(1,this);" value="已处理" style="{if isset($q_status) && $q_status['q_handle_status'] == 1}display:none;{/if}">
+	                <input name="ctrlcase"  type="button" id="wcl" onClick="has_mange(0,this);" value="未处理" style="{if isset($q_status) && $q_status['q_handle_status'] == 0}display:none;{/if}">&nbsp;&nbsp;&nbsp;
+					
+	                <input name="ctrlcase"  type="button" id="marked" onClick="has_marked(2,this);" value="已标记" style="{if $question_info['mark'] == 0}display:none;{/if}">
+	                <input name="ctrlcase"  type="button" id="unmarked" onClick="has_marked(1,this);" value="未标记" style="{if $question_info['mark'] == 1}display:none;{/if}"> &nbsp;&nbsp;&nbsp;
+					
+	                <input name="ctrlcase"  type="button" id="comm_status_ok" onClick="buttoncontrol(13);" value="联系畅通" style="{if $question_info['Comm_status'] != 1}display:none;{/if}">
+	                <input name="ctrlcase"  type="button" id="comm_status_bad" onClick="buttoncontrol(13);" value="联系不上" style="{if $question_info['Comm_status'] != 2}display:none;{/if}">
+					<input name="ctrlcase"  type="button" id="comm_status_none" onClick="buttoncontrol(13);" value="尚未联系" style="{if $question_info['Comm_status'] != 0}display:none;{/if}">
+                	                               
+	                <input name="ctrlcase" id="close_question" type="button" onClick="buttoncontrol(7);" value="撤销问题" style="{if isset($question_info) && $question_info['revocation'] == 1}display:none;{/if}">
+	                <input name="ctrlcase" id="start_question" type="button" onClick="buttoncontrol(8);" value="开启问题" style="{if isset($question_info) && $question_info['revocation'] == 0}display:none;{/if}">&nbsp;&nbsp;	               
+	                <input name="ctrlcase" type="button" onClick="buttoncontrol(12);" value="问题编辑">&nbsp;&nbsp;&nbsp;
+	                <input name="ctrlcase" type="button" onClick="buttoncontrol(9);" value="显示完整记录">&nbsp;&nbsp;&nbsp;	                
+	                <input name="ctrlcase" type="button" onClick="buttoncontrol(10);" value="历史提问">&nbsp;&nbsp;&nbsp;
+					<input name="ComplainType" type="hidden"  value={$ComplainType}>&nbsp;&nbsp;&nbsp;
+	                <!-- <input name="ctrlcase" type="button" onClick="buttoncontrol(11);" value="协助处理记录">&nbsp;&nbsp;&nbsp; -->              
+	            </td>
+	           </tr>
+	         <tr>
+	            <td colspan="9">	               	        
+	              <form name="answerForm" action="" method="post">
+	                    <script type="text/plain" id="mydescription" name="description"></script>                 
+	                    <div class="zjplbr">
+	                        <input type="button" align="absmiddle" class="subanswer"  name="mybutton" onclick="on_answer();"/>
+	                    </div>
+	              </form>      		                
+	            </td>
+	        </tr>    
+ 
+</table>
+
+<!--{template footer,admin}-->
+<script type="text/javascript">  
+    var mycontent = new baidu.editor.ui.Editor(editor_options); 
+    mycontent.render("mydescription");   	 
+    function buttoncontrol(num){
+    	switch(num){
+    	   case 1: 		                                       
+               $.ajax({
+                   type: "POST",
+                   url: "{url admin_question/ajaxhandle_answer_sort_cid}",
+                   data: "cid=0",
+                   success: function(question_cid){
+					 
+					   
+
+                       $.dialog({
+                           id:'selecttopic1',
+                           position:'center',
+                           align:'left',
+                           fixed:1,
+                           width:260,
+                           //height:200,
+                           title:'选择分类',
+                           fnOk:function(){
+
+							  
+                        	   if($("#cid").val()==''){
+                        		   alert("请选择分类");
+                        		   return false;
+                        	   }
+                        	   if($("#cid1_div").html()!='' && $("#cid1").val()=='' ){
+                        		   alert("请选择子分类");
+                        		   return false;
+                        	   }
+							   /*
+                        	   if($("#cid2_div").html()!='' && $("#cid2").val()==''){
+                        		   alert("请选择子分类");
+                        		   return false;
+                        	   }
+                        	   if($("#cid3_div").html()!='' && $("#cid3").val()==''){
+                        		   alert("请选择子分类");
+                        		   return false;
+                        	   }
+                        	   if($("#cid4_div").html()!='' && $("#cid4").val()==''){
+                        		   alert("请选择子分类");
+                        		   return false;
+                        	   }
+
+*/
+
+                        	   $.ajax({
+                                   type: "POST",
+                                   url: "{url admin_question/handle_answer_sort}",
+                                   data: "cid="+$("#cid").val()+"&cid1="+$("#cid1").val()+"&cid2="+$("#cid2").val()+"&cid3="+$("#cid3").val()+"&cid4="+$("#cid4").val()+"&transform_reason="+$("#transform_reason").val(),
+                                   success: function(data){
+                                	     if(data == 1){
+                                	    	 window.frames["waithandle"].location.reload();
+                                	     }else if(data == 0){
+                                	    	 alert("选择分类失败！");
+                                	     }else if(data == 2){
+                                	    	 alert("请开启对投诉后台传输数据开关!");
+                                	     }else if(data == 3){
+                                      	   alert("对不起，您没有 选择分类 权限！");
+                                         }else if(data == 4){
+                                        	alert("成功转为投诉单！");
+                                         }else if(data == 5){
+                                        	alert("转为投诉但失败，请刷新页面重试！");
+                                         }
+										 else if(data == 6){
+                                        	alert("转单请求已记录，请联系主管审批！");
+                                         }
+										 else if(data == 7){
+                                        	alert("不能对投诉单再进行处理！");
+                                         }
+										 else if(data == 8){
+                                        	alert("请填写转单理由！");
+                                         }
+										 else if(data == 9){
+                                        	alert("此单尚有审核中的转单，不可继续申请！");
+                                         }
+                                	     window.frames["waithandle"].location.reload();
+                                   }
+                        	   });
+                        	   $.dialog.close('selecttopic1');},                       	                        	                          	   
+                           fnCancel:function(){$.dialog.close('selecttopic1')},
+                           content:'<div class="mainbox" style="overflow-y:auto;width:550px;"><form name="sortForm"  action="" method="post" >'+
+						    '<div id="transform_reason_box" style="display:none;">'+
+							 '<br>转单处理原因：<br>'+
+                             '<textarea name="transform_reason" id="transform_reason"  size="60" cols="100" rows="3"></textarea>'+
+							 '</div>'+
+								'<div style="margin-top:10px">'+
+									'<div id="cid_div" style="border:1px gray solid;float:left;">'+question_cid+'</div>'+
+								  '<div id="cid1_div" style="border:1px gray solid;float:left;"></div>'+
+								  '<div id="cid2_div" style="border:1px gray solid;float:left;"></div>'+
+								  '<div id="cid3_div" style="border:1px gray solid;float:left;"></div>'+
+								  '<div id="cid4_div" style="border:1px gray solid;float:left;"></div>'+
+								'</div>'+
+                              '<input type="hidden" name="cid" id="cid" value="">'+
+                              '<input type="hidden" name="cid1" id="cid1" value="">'+
+                              '<input type="hidden" name="cid2" id="cid2" value="">'+
+                              '<input type="hidden" name="cid3" id="cid3" value="">'+
+                              '<input type="hidden" name="cid4" id="cid4" value=""></form></div>'
+							
+                              
+                       });
+                   }
+               }); 		    		   
+              break;        	   
+           case 4:      	          	   
+        	   $.ajax({
+                   type: "POST",
+                   url: "{url admin_question/ajaxhandle_answer_cat}",
+                   success: function(data){
+                        if(data == 1){
+                        	 $.ajax({
+                                type: "POST",
+                                url: "{url admin_question/ajaxhandle_answer_help}",
+                                success: function(optionstr){
+                                    $.dialog({
+                                        id:'selecttopic4',
+                                        position:'center',
+                                        align:'left',
+                                        fixed:1,
+                                        width:500,
+                                        height:150,
+                                        title:'协助处理',
+                                        fnOk:function(){
+                                        	  var did = $("#dep_list option:selected").val();
+                                              var aid_id = $("#d_user option:selected").val();
+                                              var aid = $("#d_user option:selected").text();
+                                              var aid_content = $("textarea[name='aid_content']").val();
+                                        	 if(aid_id ==0){
+                                       		    alert("该部门没有协助处理人员,请重新选择！");
+                                      		    return false;
+                                         	 }
+                                        	 if('' == $("textarea[name='aid_content']").val()){
+                                       		   alert("请输入协助处理原因！");
+                                       		   return false;
+                                       	   }
+                                       	   $.ajax({
+                                                  type: "POST",
+                                                  url: "{url admin_question/handle_answer_aid}",
+                                                  data: 'did='+did+'&aid_content='+aid_content+'&aid_id='+aid_id+'&aid='+aid,
+                                                  success: function(data){
+                                                       if(data == 1){
+                                                    	   alert("协助处理成功！");
+                                                       	   window.frames["waithandle"].location.reload();
+                                                       }else if(data == 0){
+                                                    	   alert("协助处理失败,请选择部门与协助人！");
+                                                       }else if(data == 2){
+                                                    	   alert("该问题已提交协助处理！");
+                                                       }else if(data==3){
+                                                    	   alert("该问题没分单，不能协助处理！");
+                                                       }else if(data == 4){
+                                                    	   alert("该问题已被撤销，不能协助处理！");
+                                                       }else if(data == 5){
+                                                    	   alert("对不起，该问题没找到！");
+                                                       }else if(data == 6){
+                                                    	   alert("协助处理失败，请重新协助！");
+                                                       }else if(data == 7){
+														   alert("对不起，您没有 协助处理 权限！");
+													   }else if(data == 8){
+														   alert("请先回复后再进行协助操作！");
+													   }else if(data == 9){
+														   alert("如要转给接手客服本人请按撤销按钮！！");
+													   }else if(data == 10){
+														   alert("该问题已回答,不可请求协助！！");
+													   }else if(data == 11){
+														   alert("被协助人不在班或者不可接单！！");
+													   }
+                                                  }
+                                              });
+                                     	  $.dialog.close('selecttopic4');},
+                                        fnCancel:function(){$.dialog.close('selecttopic4')},
+                                        content:'<div class="mainbox">'+
+                                        '<select name="dep_list" id="dep_list" onchange="get_did(this)"><option>选择</option>'+optionstr+'</select>&nbsp;&nbsp;'+
+                                        '<select name="d_user" id="d_user" style="display:none"><option value="0">无</option></select><br/>协助处理原因：'+
+                                        '<textarea name="aid_content" size="60" cols="100" rows="3"></textarea></div>'
+                                    });
+                                }
+                            }); 
+                        }else if(data == 0){
+                        	alert("请先选择问题分类才可请求协助！");
+                        }
+                   }
+               });      	           	   
+   	    	   break;     
+           case 7:
+        	   if(confirm("您确定要撤销该问题，请谨慎操作!")){
+        		   $.ajax({
+                       type: "POST",
+                       url: "{url admin_question/handle_answer_revocation}",
+                       success: function(data){
+                            if(data == 0){
+                            	alert("撤销问题失败！");
+                            }else if(data == 1){
+                                  	alert("撤销问题成功！");
+                                  	$("#close_question").hide();
+                                  	$("#start_question").show();
+                            }else if(data == 2){
+                           	   alert("对不起，协助处理状态的问题不能被撤销！");
+                            }else if(data == 3){
+                         	   alert("对不起，您没有 撤销问题 权限！");
+                            }else if(data == 4){
+                               alert("该问题已经被撤销！");
+                            }else if(data == 5){
+                            	alert("撤销失败,请重新操作！");
+                            }
+                       }
+                   });
+        	   }       	     	    	
+   	    	   break;
+           case 8:
+        	   $.ajax({
+                   type: "POST",
+                   url: "{url admin_question/handle_answer_use}",
+                   success: function(data){
+                	   if(data == 0){
+                       	 alert("开启问题失败！");
+                       }else if(data == 1){
+                        	alert("开启问题成功！");
+                        	$("#close_question").show();
+                        	$("#start_question").hide();
+                        } else if(data == 2){
+                        	alert("该问题已经开启，无需再开启！");
+                        }else if(data == 3){
+                     	   alert("对不起，您没有 开启问题 权限！");
+                        }
+                   }
+               });
+   	    	   break;
+           case 9:
+        	   window.parent.frames["waitanswer"].location.href="index.php?admin_question/handle_answer_all{$setting['seo_suffix']}";
+      	       break;
+           case 10:
+        	   window.parent.frames["waitanswer"].location.href="index.php?admin_question/handle_answer_history{$setting['seo_suffix']}";
+      	       break;
+           case 11:
+        	   window.parent.frames["waitanswer"].location.href="index.php?admin_question/handle_answer_aid_record{$setting['seo_suffix']}";
+      	       break;    	       
+           case 12:
+        	   var q_id = window.frames["waithandle"].document.getElementById('q_id').value;
+        	   var q_title = window.frames["waithandle"].document.getElementById('q_title').innerHTML;
+        	   var q_description = window.frames["waithandle"].document.getElementById('q_description').innerHTML;
+               $.dialog({
+                   id:'selecttopic12',
+                   position:'center',
+                   align:'left',
+                   fixed:1,
+                   width:400,
+                   height:100,
+                   title:'问题编辑',
+                   fnOk:function(){
+                	   if($("#q_description").val() == ''){
+                		   alert("请输入描述");
+                		   return;
+                	   }
+                	  var q_description = $("#q_description").val();
+               		  var q_id = $("#q_id").val();
+                	   $.ajax({
+                           type: "POST",
+                           url: "{url admin_question/handle_question_edit}",
+                           data: "&q_description="+q_description+"&q_id="+q_id,
+                           success: function(data){
+                        	   if(data == 0)
+							   {
+                           	       alert("修改失败！");
+                               }
+							   else if(data == 2)
+							   {
+								   alert("你没有 问题编辑 权限");
+							   }
+							   else
+							   {
+                            	   window.frames["waithandle"].location.reload();
+                               }
+                           }
+                       });     
+                	  $.dialog.close('selecttopic12');},
+                   fnCancel:function(){$.dialog.close('selecttopic12')},
+                   content:'<div class="mainbox">描述：<textarea name="q_description" id="q_description" cols="50" rows="3">'+q_description+'</textarea><input type="hidden" id="q_id" value="'+q_id+'"></div>'
+               });
+   	    	   break;
+			case 13:
+        	   $.ajax({
+                   type: "POST",
+                   url: "{url admin_question/ajaxhandle_comm_status}",
+                   success: function(optionstr){
+                       $.dialog({
+                           id:'selecttopic13',
+                           position:'center',
+                           align:'center',
+                           fixed:1,
+                           width:200,
+                           height:100,
+                           title:'联系状态',
+                           fnOk:function(){
+
+							comm_status = $("#comm_status").val();
+							  $.ajax({
+                                   type: "POST",
+                                   url: "{url admin_question/handle_comm_status}",
+                                   data: "comm_status="+comm_status,
+								   success: function(data){
+                                	   if(data == 1){
+										   alert("联系状态更新成功！"); 
+											if(comm_status==1)
+											{
+												$("#comm_status_ok").show();
+												$("#comm_status_none").hide();
+												$("#comm_status_bad").hide();											
+											}
+											else if(comm_status==2)
+											{
+												$("#comm_status_ok").hide();
+												$("#comm_status_none").hide();
+												$("#comm_status_bad").show();
+											}
+											else if(comm_status==0)
+											{
+												$("#comm_status_ok").hide();
+												$("#comm_status_none").show();
+												$("#comm_status_bad").hide();
+											}											
+                                       }
+									   else if(data == -1)
+									   {
+                                    	   alert("你没有 更新联系状态 权限！");
+                                       }
+									   else
+									   {
+                                    	   alert("联系状态更新失败！");
+                                       }
+                                   }
+                               });
+                        	   $.dialog.close('selecttopic13');},
+                           fnCancel:function(){$.dialog.close('selecttopic13')},
+                           content:'<div class="mainbox"><form name="commStatusForm"  action="" method="post" >'+optionstr+'</form></div>'
+                       });
+                   }
+               });
+   	    	   break;
+			case 14:
+        	   $.ajax({
+                   type: "POST",
+                   url: "{url admin_question/ajaxhandle_answer_game_list}",
+                   success: function(optionstr){
+                	   if(optionstr == 0){
+                		   alert("对不起,寄售，担保，账号发布页来源的游戏您不能修改！");
+                		   return;
+                	   }
+                       $.dialog({
+                           id:'selecttopic2',
+                           position:'center',
+                           align:'left',
+                           fixed:1,
+                           width:300,
+                           height:100,
+                           title:'选择游戏-区-服',
+                           fnOk:function(){
+								var qid = $("#id").val();
+								var gs_game = $("#gs_game").text();
+								var gs_operator = $("#gs_operator").text();
+								var gs_area = $("#gs_area").text();
+								var gs_server = $("#gs_server").text();
+								
+								var hide_game = $("#hide_game").val();
+								var hide_operator = $("#hide_operator").val();
+								var hide_area = $("#hide_area").val();
+								var hide_server = $("#hide_server").val();
+                        	   $.ajax({
+                                   type: "POST",
+									data: "qid="+qid+"&gs_game="+gs_game+"&gs_operator="+gs_operator+"&gs_area="+gs_area+"&gs_server="+gs_server+"&hide_game="+hide_game+"&hide_operator="+hide_operator+"&hide_area="+hide_area+"&hide_server="+hide_server,				
+									url: "{url admin_question/ajax_game_update}",
+                                   success: function(data){
+                                	   if(data == 1)
+										{
+										   alert("游戏区服更新成功！");
+										}
+										else
+										{
+											alert("游戏区服更新失败！");
+										}										
+									   window.frames["waithandle"].location.reload();
+                                   }
+                               });                     	   
+                        	   $.dialog.close('selecttopic2');},
+                           fnCancel:function(){$.dialog.close('selecttopic2')},
+                           content:'<div class="mainbox"><form name="gameForm"  action="" method="post" >'+optionstr+'</form></div>'
+                       });
+                   }
+               });
+   	    	   break;
+    	}
+    }
+	
+
+    
+    function getCid(cid){
+        
+		
+
+    	var closest_div = $("#li_a"+cid).closest("div");
+    	
+    	closest_div.find('a').each(function(){
+    		   this.className = '';
+        });
+    	
+    	$("#li_a"+cid).toggleClass("sortli");
+    	$.ajax({
+            type: "POST",
+            url: "{url admin_question/ajaxhandle_answer_sort_cid}",
+            data: "cid="+cid,
+            success: function(question_cid){
+                if(closest_div.attr("id") == 'cid_div'){                	
+                	$("#cid").attr("value",cid);                	
+                	$("#cid1_div").html(question_cid);
+                	$("#cid2_div").html('');
+                	$("#cid3_div").html('');
+                	$("#cid4_div").html('');
+
+		if ( cid == $('input[name=ComplainType]').val() ){
+			$('#transform_reason_box').show();
+		} else {
+			$('#transform_reason_box').hide();
+		}
+
+                }else if(closest_div.attr("id") == 'cid1_div'){
+                	$("#cid2_div").html(question_cid);
+                	$("#cid1").attr("value",cid);
+                	$("#cid3_div").html('');
+                	$("#cid4_div").html('');
+                }else if(closest_div.attr("id") == 'cid2_div'){
+                	$("#cid3_div").html(question_cid);
+                	$("#cid2").attr("value",cid);
+                	$("#cid4_div").html('');
+                }else if(closest_div.attr("id") == 'cid3_div'){
+                	$("#cid4_div").html(question_cid);
+                	$("#cid3").attr("value",cid);
+                }else if(closest_div.attr("id") == 'cid4_div'){
+                	$("#cid4").attr("value",cid);
+                }
+            }
+        });
+    }
+    
+    function on_answer(){
+    	mycontent.sync();
+        var content=mycontent.getContentTxt();
+       /*  var answer_template_value= window.frames['waithandle'].document.getElementById("txtvalue").innerText;
+        alert(answer_template_value);
+       	if(answer_template_value==content){
+       	 	alert('请修改默认语句');
+         	return;
+       	} */
+        if(bytes(content)<=10){
+            alert('回答内容不能少于10个字！');
+            return;
+        }
+   	    content = $("#baidu_editor_0").contents().find("body").html();
+        $.ajax({
+            type: "POST",
+            url: "{url admin_question/handle_answer_submit}",
+            data: "content="+encodeURIComponent(content),
+            success: function(data){
+         	  if(data == 1){        		  
+         		  alert("回答问题成功！");
+         		  window.frames["waithandle"].location.reload();              
+              }else if(data == 2){
+            	   alert("此问题不是您接手，如需修改请点击“修改”按钮！");
+              }else if(data == 3){
+            	   alert("对不起，您没有 修改问题 权限！");
+              }else if(data == 4){
+            	   alert("该问题已被撤销！");
+              }else if(data == 5){
+            	   document.cookie  = "t_answer_template="+encodeURIComponent(content);
+            	   alert("对不起，请先选择问题分类！");
+              }else if(data == 6){	           	   
+	        	   alert("修改问题成功！");
+	        	   window.frames["waithandle"].location.reload();
+	          }else if(data == 7){	           	   
+	        	   alert("对不起，请先选择问题标签！");
+	          }else if(data == 8){	           	   
+	        	   alert("首次回答必须是接手此问题的客服！");
+	          }else if(data == 9){	           	   
+	        	   alert("此问题还没有被分单 ，您暂时不能回复！");
+	          }else if(data == 10){
+	        	  alert("无该协助处理单或该协助处理单不是你的！");
+	          }else if(data == 11){
+	        	  alert("更新失败，请重新回复！");
+	          }else if(data == 12){
+	        	  alert("无此问题！");
+	          }else if(data == 13){
+	        	  alert("请处理联系状态！");
+	          }
+           }
+       });
+                           	   
+    }
+    
+    function game_search(value){
+    	$("#game option").each(function(){  		
+   		   if($(this).html().indexOf(value) == -1){  			   
+   			   $(this).remove();
+   		   }
+   		 });
+    }
+    
+    function all_game(){
+    	var all_game = $("#all_game").html();
+    	$("#game").html(all_game);
+    }
+    function get_did(st){
+    	var did = st.options[st.selectedIndex].value;
+    	$.ajax({
+            type: "POST",
+            data:"did="+did,
+            url: "{url admin_question/ajaxhandle_get_did}",
+            success: function(data){
+            	if(data ==0){
+            		alert('非法操作');
+            	}else{
+            		$("#d_user").html(data);
+                	$("#d_user").show();
+            	}
+            }
+        }); 
+    }
+    // 已处理未处理,只针对父问题
+    function has_mange(num,obj){
+    	var qid = window.frames["waithandle"].document.getElementById('q_id').value;
+    	if(num==1){
+    		$.ajax({
+                type: "POST",
+                data:"qid="+qid+"&type=1",
+                url: "{url admin_question/handle_has_manage}",
+				success: function(data){
+					if(data ==3){
+						alert('你没有 已处理 权限');
+					}else{
+						obj.style.display='none';
+						document.getElementById('wcl').style.display='';
+					}
+				}
+            }); 
+    	}else{
+			$.ajax({
+				type: "POST",
+				data:"qid="+qid+"&type=0",
+				url: "{url admin_question/handle_has_manage}",
+				success: function(data){
+					if(data ==3){
+						alert('你没有 未处理 权限');
+					}else{
+						obj.style.display='none';
+						document.getElementById('ycl').style.display='';
+					}
+				}
+			}); 
+    	}
+    }
+    function has_marked(num,obj){
+    	var qid = window.frames["waithandle"].document.getElementById('q_id').value;
+    		$.ajax({
+                type: "POST",
+                data:"question_id="+qid+"&type="+num,
+                url: "{url admin_question/ajaxmark}",
+				success: function(data){
+					if(data ==2)
+					{
+						obj.style.display='none';
+						document.getElementById('unmarked').style.display='';
+					}
+					else
+					{
+						obj.style.display='none';
+						document.getElementById('marked').style.display='';					
+					}
+				}
+            }); 
+    }
+
+</script>

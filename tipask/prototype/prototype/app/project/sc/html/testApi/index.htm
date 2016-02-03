@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>接口测试</title>
+<script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+</head>
+<div id="tianjia"></div><br /><br />
+<form action="test.php" method="post" id="theform">
+接口地址:<input type="text" name="ApiAddress" size="50"/><br /><br />
+接口CTL:<input type="text" name="ApiCtl"/><br /><br />
+接口Ac:<input type="text" name="ApiAc"/><br /><br />
+接口Key:<input type="text" name="ApiKey"/><br /><br />
+<div id="neirong"></div>
+<input type="button" name="button" id="subbutton" value="提交" /><br /><br />
+</form>
+<input type="button" id="addapi" value="添加变量" />
+<body>
+<script type="text/javascript">
+var i=0;
+$("#addapi").click(function(){
+    $("#tianjia").append("<div id='div_"+i+"'>变量名:<input type='text' class='blname' id='name_"+i+"' key='"+i+"' />变量值:<input type='text' class='blvalue' id='value_"+i+"' key='"+i+"' />使用方法:<input type='text' class='blfunction' id='function_"+i+"' key='"+i+"' /></div><br />");
+    $("#neirong").append("<input type='hidden' name='blname[]' id='sname_"+i+"' /><input type='hidden' name='blvalue[]' id='svalue_"+i+"' /><input type='hidden' name='blfunction[]' id='sfunction_"+i+"' /><br />");      
+    $(".blname").bind('blur',function(){
+        var key = $(this).attr("key");
+        $("#sname_"+key).val($("#name_"+key).val());
+        $("#svalue_"+key).val($("#value_"+key).val());
+    });
+    
+    $(".blvalue").bind('blur',function(){
+        var key = $(this).attr("key");
+        $("#svalue_"+key).val($("#value_"+key).val());
+    });
+    
+    $(".blfunction").bind('blur',function(){
+        var key = $(this).attr("key");
+        $("#sfunction_"+key).val($("#function_"+key).val());
+    });    
+    
+    i++;
+});
+
+$("#subbutton").click(function(){
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "test.php",
+        data: $("#theform").serialize(),
+        success: function(msg){
+            $("#returnmsg").html(msg['testsign']+"<br />"+msg['url']);
+        }
+    }); 
+});
+</script>
+<div id="returnmsg"></div>
+</body>
+</html>

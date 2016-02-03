@@ -1,0 +1,57 @@
+
+<div class="header header_inside">
+    <div class="header_box clearfix">
+        <!-- 四级联动游戏选择 -->
+        <div class="game_select game_select_main clearfix" id="gameSelectV2">
+            <form id="gsForm1" method="get" class="clearfix">
+                <div class="game_select_box" id="gameSelectBox">
+                    <div class="tab_box clearfix" id="multipleSearch">
+                        <div class="left_bg"></div>
+                        <!-- 游戏选择菜单 -->
+                        <ul class="gs_menu" id="gsMenu">
+                            <li id="gs_game" class="gs_name arrow" title="选择游戏名称">游戏名称</li>
+							<li id="gs_operator" class="gs_operator arrow" title="选择运营商" style="display: none;">运营商</li>
+							<li id="gs_area"  class="gs_area arrow" title="选择游戏区">游戏区</li>
+                            <li id="gs_server"  class="gs_server arrow" title="选择游戏服务器">游戏服务器</li>
+                            <li class="hide1">
+                                <input type="hidden" id="id" value={$q_info[id]} />
+								<input type="hidden" id="hide_game" value="" />
+                                <input type="hidden" id="hide_operator" name="op" value="" />
+                                <input type="hidden" id="hide_area" name="ga" value="" />
+                                <input type="hidden" id="hide_server" name="gs" value="" />
+                                <input type="hidden" id="hide_type" name="cate" value=""/>
+                                <input type="hidden" id="gsKeyword" name="keyword" value=""  />
+                            </li>
+                        </ul>
+                        <div class="right_bg"></div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- 游戏选择列表 -->
+            <div class="gs_box" id="gsBox"></div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+   $(function(){
+     //页面数据初始化
+    var serachBarData={
+
+        {$select_game}{$select_operator}{$select_area}{$select_server}
+    };
+
+    $.searchbarv2.initBar(serachBarData, {
+        left:"-380px" //浮层位置变化
+    });
+
+
+   })
+</script>
+

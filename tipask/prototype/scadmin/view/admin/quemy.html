@@ -1,0 +1,266 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+<script src="js/calendar.js" type="text/javascript"></script>
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;查看我的问题</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+<form action="index.php?admin_question/my" method="post" onsubmit="return check_submit()" name="quemy_submit">
+    <table width="100%" cellspacing="0" cellpadding="6" align="center" class="tableborder">
+        <tbody>
+            <tr class="header" ><td colspan="6">5173咨询中心问题搜索</td></tr>
+            <tr>
+                <td  class="alt2"　width="10%">按提问时间：</td>
+                <td  class="alt2" width="20%">提问时间从:<input class="txt" onclick="showcalendar();" name="ask_start_time" value="{eval echo date('Y-m-d',$ask_start_time_search)}"></td>
+                <td  class="alt2">　结束至:<input class="txt" onclick="showcalendar();" name="ask_end_time" value="{eval echo date('Y-m-d',$ask_end_time_search)}"></td>
+                <td  class="alt2">用户已等待:<input class="txt" name="wait_start_time" size="3" value="{$wait_start_time_search}">到<input class="txt" name="wait_end_time" size="3" value="{$wait_end_time_search}">分钟</td>
+                <td  class="alt2"></td>
+                <td  class="alt2"></td>
+                
+            </tr>
+            <tr>
+                <td  class="alt2" width="10%">按回答时间：</td>
+                <td  class="alt2">回答时间从:<input class="txt" onclick="showcalendar();" name="answer_start_time" value="{eval echo date('Y-m-d',$answer_start_time_search)}"></td>
+                <td  class="alt2">　结束至:<input class="txt" onclick="showcalendar();" name="answer_end_time" value="{eval echo date('Y-m-d',$answer_end_time_search)}"></td>
+                <td  class="alt2">　在提问后:<input class="txt" name="question_start_time" size="3" value="{$question_start_time_search}">到<input class="txt" name="question_end_time" size="3" value="{$question_end_time_search}">分钟</td>
+                <td  class="alt2"></td>
+                <td  class="alt2"></td>
+                
+            </tr>
+            <tr>
+                <td  class="alt2">按问题状态：</td>
+                <td  class="alt2">撤销状态:					
+                    <select name="revocation">
+                        <option value="-1">全部</option>
+                        <!-- {loop $revocation_status $key $revocation} -->
+                        <option value="{$key}" {if isset($revocation_search) && $revocation_search==$key}selected{/if}>{$revocation}</option>
+                        <!-- {/loop} -->                     
+                    </select>
+                </td>
+                <td  class="alt2">处理状态:					
+                    <select name="que_status">
+                        <option value="-1">全部</option>
+                        <!-- {loop $que_status $key $que} -->
+                        <option value="{$key}" {if isset($que_status_search) && $que_status_search==$key}selected{/if}>{$que}</option>
+                        <!-- {/loop} -->                     
+                    </select>
+                </td>
+                <td  class="alt2">　问题状态:					
+                    <select name="question">
+                        <option value="-1">全部</option>
+                        <!-- {loop $question_status $key $question} -->
+                        <option value="{$key}" {if isset($question_search) && $question_search==$key}selected{/if}>{$question}</option>
+                        <!-- {/loop} -->                     
+                    </select>
+                </td>
+                <td  class="alt2">用户评价:					
+                    <select name="assess">
+                        <option value="-1">全部</option>
+                        <!-- {loop $assess_status $key $assess} -->
+                        <option value="{$key}" {if isset($assess_search) && $assess_search==$key}selected{/if}>{$assess}</option>
+                        <!-- {/loop} -->                     
+                    </select>
+                </td>
+                <td  class="alt2">协助处理:
+                <select name="help_status">
+                        <option value="-1">全部</option>
+                        <!-- {loop $help_status $key $v} -->
+                        <option value="{$key}" {if isset($help_search) && $help_search==$key}selected{/if}>{$v}</option>
+                        <!-- {/loop} -->                     
+                    </select>
+                </td>
+                
+            </tr>
+            <tr>
+                <td  class="alt2">按关键字搜：</td>
+                <td  class="alt2">问题ID:<input class="txt" name="qid" value="{$qid_search}"></td>
+                <td  class="alt2">接手客服:<input class="txt" name="operator" disabled="disabled" value="{eval echo $this->ask_login_name}">
+                <input class="txt" type="hidden" name="operator" value="{eval echo $this->ask_login_name}">
+                <input name="all_kf" value="1"  {if $all_kf == 1}checked{/if} class="checkbox" type="checkbox">追加回复</td>
+                </td>
+                <td  class="alt2">提问用户名:<input class="txt" name="user_name" value="{$user_name_search}"></td>
+                <!-- <td  class="alt2">问题标题:<input class="txt" name="question_title" value="{$question_title_search}"></td> -->
+                <td  class="alt2">来源站点:
+                <select name="r_site">
+                        <option value="-1">全部</option>
+                        <option value="1" {if isset($r_site) && $r_site==1}selected{/if}>寄售</option>
+                        <option value="2" {if isset($r_site) && $r_site==2}selected{/if}>担保</option>
+                        <option value="3" {if isset($r_site) && $r_site==3}selected{/if}>账号</option>                   
+                </select>
+                </td>
+                
+            </tr>
+            <tr>
+                <td  class="alt2"></td>                       
+                <td  class="alt2"></td>
+                <td  class="alt2"></td>
+                <td  class="alt2"></td>
+                <td  class="alt2"></td>
+                <td  class="alt2"><input class="btn" type="submit" value="搜索">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="btn" type="button" value="导出" onclick="on_export();"></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+<table width="100%" cellspacing="0" cellpadding="4" align="center" class="tableborder">
+    <tbody>
+        <tr class="header">
+         <td  colspan="6" class="alt2">分类选择:					
+                <select name="category" id="category" onchange="on_category();">
+                    <option value="-1">全部</option>{$category_option}</select>
+                		排序方式:					
+                <select name="order" id="order" onchange="on_order();">
+                    <option value="1" {if $order_search==1}selected{/if}>提问时间</option>
+                    <option value="2" {if $order_search==2}selected{/if}>浏览量</option>                    
+                </select>
+            </td>
+        </tr>
+        <tr ><td colspan="6">共有<span stype="clour:red;">{$rownum}</span>项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="index.php?admin_question/my/$ask_start_time_search/$ask_end_time_search/$wait_start_time_search/$wait_end_time_search/$answer_start_time_search/$answer_end_time_search/$question_start_time_search/$question_end_time_search/$revocation_search/$que_status_search/$question_search/$assess_search/$qid_search/$operator_search/$user_name_search/$question_title_search/1/$category_search/$order_search/$help_search/$all_kf/$r_site">显示所有问题</a>--
+        <a href="index.php?admin_question/my/$ask_start_time_search/$ask_end_time_search/$wait_start_time_search/$wait_end_time_search/$answer_start_time_search/$answer_end_time_search/$question_start_time_search/$question_end_time_search/$revocation_search/$que_status_search/$question_search/$assess_search/$qid_search/$operator_search/$user_name_search/$question_title_search/2/$category_search/$order_search/$help_search/$all_kf/$r_site">主子问题合并显示</a>--
+        <a href="index.php?admin_question/my/$ask_start_time_search/$ask_end_time_search/$wait_start_time_search/$wait_end_time_search/$answer_start_time_search/$answer_end_time_search/$question_start_time_search/$question_end_time_search/$revocation_search/$que_status_search/$question_search/$assess_search/$qid_search/$operator_search/$user_name_search/$question_title_search/3/$category_search/$order_search/$help_search/$all_kf/$r_site">显示仅标记问题</a></td></tr>
+        <!-- {if isset($question_list)} {loop $question_list $question}-->
+        <tr>
+            <td width="5%"  class="alt2">
+            <img src="css/admin/question_img/xing1.gif" id="mark_1_{$question['id']}" alt="Big Boat" onclick="on_mark({$question['id']},1);" style="display:none;">
+            <img src="css/admin/question_img/xing2.gif" id="mark_2_{$question['id']}" alt="Big Boat" onclick="on_mark({$question['id']},2);" style="display:none;">
+            <!-- {if $question['mark'] == 0} -->
+            <img src="css/admin/question_img/xing1.gif" id="mark_img_{$question['id']}" alt="Big Boat" onclick="on_mark({$question['id']},1);">
+            <!-- {else} -->
+            <img src="css/admin/question_img/xing2.gif" id="mark_img_{$question['id']}" alt="Big Boat" onclick="on_mark({$question['id']},2);">
+            <!-- {/if} -->
+            </td>
+            <td  width="15%" class="alt2">
+            <!-- {if $question['status'] == 1} -->
+            <img src="css/admin/question_img/t2.gif" alt="Big Boat">
+            <!-- {elseif $question['status'] == 2} -->
+            <img src="css/admin/question_img/t3.gif" alt="Big Boat">
+            <!-- {elseif $question['status'] == 3} -->
+            <img src="css/admin/question_img/t4.gif" alt="Big Boat">
+            <!-- {/if} -->
+
+            {$question['id']}
+            </td>
+            <td  width="30%" class="alt2">{$question['description']}</td>
+            <td  width="10%" class="alt2">{$assess_status[$question['a_isasses']]}</td>
+            <td  width="15%" class="alt2">{eval echo date('Y-m-d H:i:s',$question['time'])}</td>
+            <td  width="5%" class="alt2"><a href="javascript:;" onclick="on_view_question({$question['id']})" target="main">查看</a></td>
+        </tr>
+        <!-- {/loop} -->
+        <!-- {/if} -->
+        <tr><td colspan="6">共有<span stype="clour:red;">{$rownum}</span>项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="index.php?admin_question/my/$ask_start_time_search/$ask_end_time_search/$wait_start_time_search/$wait_end_time_search/$answer_start_time_search/$answer_end_time_search/$question_start_time_search/$question_end_time_search/$revocation_search/$que_status_search/$question_search/$assess_search/$qid_search/$operator_search/$user_name_search/$question_title_search/1/$category_search/$order_search/$help_search/$all_kf/$r_site">显示所有问题</a>--
+        <a href="index.php?admin_question/my/$ask_start_time_search/$ask_end_time_search/$wait_start_time_search/$wait_end_time_search/$answer_start_time_search/$answer_end_time_search/$question_start_time_search/$question_end_time_search/$revocation_search/$que_status_search/$question_search/$assess_search/$qid_search/$operator_search/$user_name_search/$question_title_search/2/$category_search/$order_search/$help_search/$all_kf/$r_site">主子问题合并显示</a>--
+        <a href="index.php?admin_question/my/$ask_start_time_search/$ask_end_time_search/$wait_start_time_search/$wait_end_time_search/$answer_start_time_search/$answer_end_time_search/$question_start_time_search/$question_end_time_search/$revocation_search/$que_status_search/$question_search/$assess_search/$qid_search/$operator_search/$user_name_search/$question_title_search/3/$category_search/$order_search/$help_search/$all_kf/$r_site">显示仅标记问题</a></td></tr>
+        
+    </tbody>
+</table>
+<div class="pages"><div class="scott" style="float:right;">{$departstr}</div></div>
+</form>
+<!--{template footer,admin}-->
+<script type="text/javascript">
+   function on_export(){
+	   location.href="index.php?admin_question/my_export";
+   }
+   
+   function on_order(){
+	   var order = $("#order").val();
+	   location.href="index.php?admin_question/my/$ask_start_time_search/$ask_end_time_search/$wait_start_time_search/$wait_end_time_search/$answer_start_time_search/$answer_end_time_search/$question_start_time_search/$question_end_time_search/$revocation_search/$que_status_search/$question_search/$assess_search/$qid_search/$operator_search/$user_name_search/$question_title_search/1/$category_search/"+order+"/$help_search/$all_kf/$r_site";
+   }
+   
+   function on_category(){
+	   var category = $("#category").val();
+	   location.href="index.php?admin_question/my/$ask_start_time_search/$ask_end_time_search/$wait_start_time_search/$wait_end_time_search/$answer_start_time_search/$answer_end_time_search/$question_start_time_search/$question_end_time_search/$revocation_search/$que_status_search/$question_search/$assess_search/$qid_search/$operator_search/$user_name_search/$question_title_search/1/"+category+"/$order_search/$help_search/$all_kf/$r_site";
+   }
+   
+   function on_view_question(id){
+	   document.cookie  = "view_question_id="+id;
+	   delCookie('t_answer_template');
+   	   location.href = "index.php?admin_question/handle/"+id+"{$setting['seo_suffix']}";
+   }
+   
+   function check_submit(){
+	   var reg = /^\d*$/;
+	   var wait_start_time = document.forms['quemy_submit'].elements['wait_start_time'].value;
+	   if(wait_start_time !='' && !reg.test(wait_start_time)){
+		   alert('时间必须为整数,且不能有空格');
+		   return false;
+	   }
+	   var wait_end_time = document.forms['quemy_submit'].elements['wait_end_time'].value;
+	   if(wait_end_time !='' && !reg.test(wait_end_time)){
+		   alert('时间必须为整数,且不能有空格');
+		   return false;
+	   }
+	   var question_start_time = document.forms['quemy_submit'].elements['question_start_time'].value;
+	   if(question_start_time !='' && !reg.test(question_start_time)){
+		   alert('时间必须为整数,且不能有空格');
+		   return false;
+	   }
+	   var question_end_time = document.forms['quemy_submit'].elements['question_end_time'].value;
+	   if(question_end_time !='' && !reg.test(question_end_time)){
+		   alert('时间必须为整数,且不能有空格');
+		   return false;
+	   }
+	   var qid = document.forms['quemy_submit'].elements['qid'].value;
+	   if(qid !='' && !reg.test(qid)){
+		   alert('问题id必须为整数,且不能有空格');
+		   return false;
+	   }	   
+   }
+   
+   function on_mark(id,type){
+	   $.ajax({
+           type: "POST",
+           url: "{url admin_question/ajaxmark}",
+           data: "question_id="+id+"&type="+type,
+           success: function(data){
+        	   if(data == 0){
+               	   alert("标注失败！");
+               }else if(data == 1){
+               	   alert("标注问题成功！");
+               	   $("#mark_1_"+id).hide();
+               	   $("#mark_img_"+id).hide();
+               	   $("#mark_2_"+id).show();
+               }else if(data == 2){
+            	   alert("取消标注成功！");
+            	   $("#mark_2_"+id).hide();
+            	   $("#mark_img_"+id).hide();
+              	   $("#mark_1_"+id).show();
+               }else if(data == 3){
+            	   alert("对不起，您没有权限！");
+               }
+           }
+       });
+   }
+   
+   function SetCookie(name,value)//设置cookie
+	{
+	    var Days = 30; //此 cookie 将被保存 30 天
+	    var exp  = new Date(); 
+	    exp.setTime(exp.getTime() + Days*24*60*60*1000);
+	    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+	}
+	function getCookie(name)//读取cookie        
+	{
+	    var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+	    if(arr != null) return unescape(arr[2]); return null;		
+	}
+	function delCookie(name)//删除cookie
+	{
+	    var exp = new Date();
+	    exp.setTime(exp.getTime() - 1);
+	    var cval=getCookie(name);
+	    if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+	}
+</script>

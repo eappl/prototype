@@ -1,0 +1,39 @@
+<!--JQ基础类库-->
+<script type="text/javascript" src="http://img01.5173cdn.com/common/build/2.00/js/lib/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="http://img01.5173cdn.com/common/build/2.00/js/lib/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="http://img01.5173cdn.com/fed/build/1.00/js/fed.upload.js"></script>
+<script type="text/javascript" src="http://img01.5173cdn.com/fed/build/2.00/js/fed-min.js"></script>
+<script type="text/javascript" src="http://img01.5173cdn.com/zixun_center/build/1.00/js/zixun.js"></script>
+<script type="text/javascript" src="http://img01.5173cdn.com/zixun_center/build/1.00/js/index.js"></script>
+<script type="text/javascript" src="http://img01.5173cdn.com/zixun_center/build/1.00/js/zskf_list2013.js"></script>
+<script type="text/javascript" src="http://img01.5173cdn.com/fed/build/1.00/js/art_template.js"></script>
+<script type="text/javascript" src="http://img01.5173cdn.com/zixun_center/build/1.00/js/bind_zskf.js"></script>
+<script type="text/javascript">
+$(function(){
+   		$("input[name='qtype']").change(function(){
+   			var type = $("input[name='qtype']:checked").val();
+   			 if(type==1){
+   				// var href = location.href;
+    			 //document.location.href = "?question/ask.html";
+   				 window.location.replace("?question/ask.html")
+    		}else if(type==3){
+    			//document.location.href = "?question/complain.html";
+    			 window.location.replace("?question/complain.html")
+    		}else{
+    			//document.location.href = "?question/suggest.html";
+    			 window.location.replace("?question/suggest.html")
+    		}
+   		});
+		$.fedupload.singleUpload( "#uploadbtn" , {
+            small_width : 77 , small_height : 77 , maxsize : "1024K" ,  //必选
+            uploader : 'http://sc.5173.com/api/upload.php' , //必选
+			//uploader : 'http://pd.5173.com/upload/uploadify.php' , //必选
+            postdata : {"type" : "idcard"}  //可选
+        } );
+   	})
+</script>
+
+</body>
+
+</div>
+</html>

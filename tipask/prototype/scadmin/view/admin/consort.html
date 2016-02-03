@@ -1,0 +1,331 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;分类维护</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+
+    <table width="100%" cellspacing="0" cellpadding="4" align="center" class="tableborder">
+        <tbody><caption>分类维护</caption>
+          <tr class="altbg1">
+            <td>
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(1);" value="添加一级分类">&nbsp;&nbsp;&nbsp;
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(2);" value="添加子分类">&nbsp;&nbsp;&nbsp;
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(3);" value="修改分类">&nbsp;&nbsp;&nbsp;
+                <input name="ctrlcase" class="btn" type="button" onClick="buttoncontrol(4);" value="删除分类">&nbsp;&nbsp;&nbsp;
+            </td>
+         </tr>
+         <tr class="altbg1">
+         	<td>
+         	  <select name="cid" onchange="getCid(this)">
+		            <option value="-1">全部</option>{$op_cid}			            
+          	   </select>
+          	</td>
+         </tr>
+        </tbody>
+    </table> 
+    <table width="100%" border="0" cellpadding="4" cellspacing="1" class="tableborder">
+        <tr class="header">
+            <td  width="5%">选择</td>
+            <td  width="15%">分类名称</td>
+            <td  width="20%">对应分类说明</td>
+            <td  width="20%">分类等级</td>       
+            <td  width="20%">分类问题数</td>
+            <td  width="20%">今日分类问题数</td> 
+        </tr>
+        <!--{if isset($categorylist)} {loop $categorylist $category}-->
+        <tr>
+            <td class="alt2">
+                <input class="radio" type="radio" value="{$category['id']}" name="cid" >
+            </td>         
+            <td class="alt2" id="name{$category['id']}">{$category['name']}</td>
+            <td class="alt2" id="name{$category['id']}">{$category['comment']}</td>
+            <td class="alt2" id="grade{$category['id']}">{$category['grade']}</td> 
+            <td class="alt2">{$category['questions']}</td>
+            <td class="alt2">{$category['questions_today']}</td>
+        </tr>
+
+        <!--{if !empty($category['child'])}-->
+        <!--{loop $category['child'] $category}-->
+            <tr>
+                <td class="alt2">
+                    <input class="radio" type="radio" value="{$category['id']}" name="cid" >
+                </td>         
+                <td class="alt2" id="name{$category['id']}">{$category['name']}</td>
+                <td class="alt2" id="name{$category['id']}">{$category['comment']}</td>
+                <td class="alt2" id="grade{$category['id']}">{$category['grade']}</td> 
+                <td class="alt2">{$category['questions']}</td>
+                <td class="alt2">{$category['questions_today']}</td>
+            </tr>
+
+            <!--{if !empty($category['child'])}-->
+            <!--{loop $category['child'] $category}-->
+                <tr>
+                    <td class="alt2">
+                        <input class="radio" type="radio" value="{$category['id']}" name="cid" >
+                    </td>         
+                    <td class="alt2" id="name{$category['id']}">{$category['name']}</td>
+                    <td class="alt2" id="name{$category['id']}">{$category['comment']}</td>
+                    <td class="alt2" id="grade{$category['id']}">{$category['grade']}</td> 
+                    <td class="alt2">{$category['questions']}</td>
+                    <td class="alt2">{$category['questions_today']}</td>
+                </tr>
+
+                <!--{if !empty($category['child'])}-->
+                <!--{loop $category['child'] $category}-->
+                    <tr>
+                        <td class="alt2">
+                            <input class="radio" type="radio" value="{$category['id']}" name="cid" >
+                        </td>         
+                        <td class="alt2" id="name{$category['id']}">{$category['name']}</td>
+                        <td class="alt2" id="name{$category['id']}">{$category['comment']}</td>
+                        <td class="alt2" id="grade{$category['id']}">{$category['grade']}</td> 
+                        <td class="alt2">{$category['questions']}</td>
+                        <td class="alt2">{$category['questions_today']}</td>
+                    </tr>
+
+                    <!--{if !empty($category['child'])}-->
+                    <!--{loop $category['child'] $category}-->
+                        <tr>
+                            <td class="alt2">
+                                <input class="radio" type="radio" value="{$category['id']}" name="cid" >
+                            </td>         
+                            <td class="alt2" id="name{$category['id']}">{$category['name']}</td>
+                            <td class="alt2" id="name{$category['id']}">{$category['comment']}</td>
+                            <td class="alt2" id="grade{$category['id']}">{$category['grade']}</td> 
+                            <td class="alt2">{$category['questions']}</td>
+                            <td class="alt2">{$category['questions_today']}</td>
+                        </tr>
+
+                    <!--{/loop}-->
+                    <!--{/if}-->
+
+                <!--{/loop}-->
+                <!--{/if}-->
+
+            <!--{/loop}-->
+            <!--{/if}-->
+
+        <!--{/loop}-->
+        <!--{/if}-->
+
+        <!--{/loop}-->
+        <!--{/if}-->     
+    </table>
+<!--{template footer,admin}-->
+<script type="text/javascript">
+    function buttoncontrol(num)
+    {
+    	var qtypeOptionManage = "";
+    	
+
+        if($("input[name='cid']:checked").length==0)
+        {
+        	if(num == 1){ 
+         	    $.ajax({type:"POST",
+    			url:"index.php?admin_config/getCheckedQuestionType",
+    		    data:{id:0},
+    		    async:false,
+    		    success:function(data){
+    		    questionTypeOptionManage = data;
+    			}
+    	        });
+        		$.dialog({
+                    id:'selecttopic1',
+                    position:'center',
+                    align:'center',
+                    fixed:1,
+                    width:300,
+                    height:100,
+                    title:'输入一级分类名称',
+                    fnOk:function(){document.addtocategoryForm.submit();$.dialog.close('selecttopic1')},
+                    fnCancel:function(){$.dialog.close('selecttopic1')},
+                    content:'<div class="mainbox"><form name="addtocategoryForm"  action="index.php?admin_config/sort_add{$setting['seo_suffix']}" method="post" ><input type="hidden" name="pcid" value="-1" /><input type="text" name="name" value="" maxlength="10" size="30"/><br/><span style="color:#900">最多输入10个中文字符</span><br/><select name="quetsion_type">'+questionTypeOptionManage+'</select><br/></form></div>'
+                });
+        	}else{
+        		alert('你没有选择任何分类！');
+                return false;
+        	}         
+        }else{
+            switch(num){
+	            case 1:
+	            	$.dialog({
+	                    id:'selecttopic2',
+	                    position:'center',
+	                    align:'center',
+	                    fixed:1,
+	                    width:300,
+	                    height:100,
+	                    title:'输入一级分类名称',
+	                    fnOk:function(){document.addtocategoryForm1.submit();$.dialog.close('selecttopic2')},
+	                    fnCancel:function(){$.dialog.close('selecttopic2')},
+	                    content:'<div class="mainbox"><form name="addtocategoryForm1"  action="index.php?admin_config/sort_add{$setting['seo_suffix']}" method="post" ><input type="hidden" name="pcid" value="-1" /><input type="text" name="name" value="" maxlength="10" size="30"/><br/><span style="color:#900">最多输入10个中文字符</span></form></div>'
+	                });
+	               break;  
+                case 2:
+                	var cid = $("input[name='cid']:checked").val();
+                    var grade = $.trim($("#grade"+cid).html());
+                    var pcid = $("select option:selected").val();
+
+                    if(grade == 5)
+                    {
+                       alert("对不起，五级分类不能再添加子分类");
+                    }
+                    else{
+                       if(grade == 1)
+                       {
+                    	    $.ajax({type:"POST",
+                			url:"index.php?admin_config/getCheckedQtype",
+                		    data:{id:0},
+                		    async:false,
+                		    success:function(data){
+                		    qtypeOptionManage = data;
+                			}
+                	        });
+                          $.dialog({
+                            id:'selecttopic3',
+                            position:'center',
+                            align:'center',
+                            fixed:1,
+                            width:300,
+                            height:100,
+                            title:'输入子分类名称',
+                            fnOk:function(){document.addtocategoryForm2.submit();$.dialog.close('selecttopic3')},
+                            fnCancel:function(){$.dialog.close('selecttopic3')},
+                            content:'<div class="mainbox"><form name="addtocategoryForm2"  action="index.php?admin_config/sort_add{$setting['seo_suffix']}" method="post" ><input type="hidden" name="cid" value="'+cid+'" /><input type="hidden" name="pcid" value="'+pcid+'" /><input type="text" name="name" value="" maxlength="10" size="30"/><br/><span style="color:#900">最多输入10个中文字符</span><br/><select name="qtype">'+qtypeOptionManage+'</select><br/></form></div>'
+                            });
+                       }
+                       else
+                       {
+                          $.dialog({
+                            id:'selecttopic3',
+                            position:'center',
+                            align:'center',
+                            fixed:1,
+                            width:300,
+                            height:100,
+                            title:'输入子分类名称',
+                            fnOk:function(){document.addtocategoryForm2.submit();$.dialog.close('selecttopic3')},
+                            fnCancel:function(){$.dialog.close('selecttopic3')},
+                            content:'<div class="mainbox"><form name="addtocategoryForm2"  action="index.php?admin_config/sort_add{$setting['seo_suffix']}" method="post" ><input type="hidden" name="cid" value="'+cid+'" /><input type="hidden" name="pcid" value="'+pcid+'" /><input type="text" name="name" value="" maxlength="10" size="30"/><br/><span style="color:#900">最多输入10个中文字符</span></form></div>'
+                            });
+                       }
+                        
+                      
+                    }
+                   break;                      
+                case 3:
+                	var cid = $("input[name='cid']:checked").val();
+                    var name = $("#name"+cid).html().replace(/-/g, '');  
+                    var pcid = $("select option:selected").val();
+                    var grade = $.trim($("#grade"+cid).html());
+                    if(grade == 1)
+                    {
+                 	    $.ajax({type:"POST",
+            			url:"index.php?admin_config/getCheckedQuestionType",
+            		    data:{id:cid},
+            		    async:false,
+            		    success:function(data){
+            		    questionTypeOptionManage = data;
+            			}
+            	        });
+                    	$.dialog({
+                            id:'selecttopic4',
+                            position:'center',
+                            align:'center',
+                            fixed:1,
+                            width:300,
+                            height:100,
+                            title:'输入分类名称',
+                            fnOk:function(){document.modifytocategoryForm.submit();$.dialog.close('selecttopic4')},
+                            fnCancel:function(){$.dialog.close('selecttopic4')},
+                            content:'<div class="mainbox"><form name="modifytocategoryForm"  action="index.php?admin_config/sort_modify{$setting['seo_suffix']}" method="post" ><input type="hidden" name="cid" value="'+cid+'" /><input type="hidden" name="pcid" value="'+pcid+'" /><input type="text" name="name" value="'+name+'" maxlength="10" size="30"/><br/><span style="color:#900">最多输入10个中文字符</span><br/><select name="question_type">'+questionTypeOptionManage+'</select><br/></form></div>'
+                            });   
+                    }
+                    else
+                    {
+                        if(grade == 2)
+                        {
+                     	    $.ajax({type:"POST",
+                			url:"index.php?admin_config/getCheckedQtype",
+                		    data:{id:cid},
+                		    async:false,
+                		    success:function(data){
+                				qtypeOptionManage = data;
+                			}
+                	        }); 
+                        	$.dialog({
+                                id:'selecttopic4',
+                                position:'center',
+                                align:'center',
+                                fixed:1,
+                                width:300,
+                                height:100,
+                                title:'输入分类名称',
+                                fnOk:function(){document.modifytocategoryForm.submit();$.dialog.close('selecttopic4')},
+                                fnCancel:function(){$.dialog.close('selecttopic4')},
+                                content:'<div class="mainbox"><form name="modifytocategoryForm"  action="index.php?admin_config/sort_modify{$setting['seo_suffix']}" method="post" ><input type="hidden" name="cid" value="'+cid+'" /><input type="hidden" name="pcid" value="'+pcid+'" /><input type="text" name="name" value="'+name+'" maxlength="10" size="30"/><br/><span style="color:#900">最多输入10个中文字符</span><br/><select name="qtype">'+qtypeOptionManage+'</select><br/></form></div>'
+                                });   
+                        }
+                        else
+                        {
+                        	$.dialog({
+                                id:'selecttopic4',
+                                position:'center',
+                                align:'center',
+                                fixed:1,
+                                width:300,
+                                height:100,
+                                title:'输入分类名称',
+                                fnOk:function(){document.modifytocategoryForm.submit();$.dialog.close('selecttopic4')},
+                                fnCancel:function(){$.dialog.close('selecttopic4')},
+                                content:'<div class="mainbox"><form name="modifytocategoryForm"  action="index.php?admin_config/sort_modify{$setting['seo_suffix']}" method="post" ><input type="hidden" name="cid" value="'+cid+'" /><input type="hidden" name="pcid" value="'+pcid+'" /><input type="text" name="name" value="'+name+'" maxlength="10" size="30"/><br/><span style="color:#900">最多输入10个中文字符</span></form></div>'
+                                });                           
+                        }                        
+                    }
+                    
+               
+                    break;           
+                case 4:
+                	if(confirm('确定删除此职位？该操作不可返回！')==false){
+                        return false;
+                    }else{
+                    	var cid = $("input[name='cid']:checked").val();
+                    	var pcid = $("select option:selected").val();
+                    	$.post("index.php?admin_config/sort_remove", {cid: cid},
+                   			  function(data){
+                   			      if(data == 1){
+                   			    	  alert("当前分类下存在子分类，无法删除！");
+                   			      }else if(data == 2){
+                   			    	alert("分类删除成功！");
+                   			    	location.href = "index.php?admin_config/sort/"+pcid;
+                   			      }else if( data == 3){
+									alert("你没有删除分类权限！");
+                   			    	location.href = "index.php?admin_config/sort";
+								  }
+                   			  });
+                    }
+                    break;
+                default:
+                    alert("非法操作！");
+                    break;	
+            }         
+        }
+    } 
+    function getCid(obj){
+    	var cid = obj.options[obj.selectedIndex].value;
+    	location.href = "index.php?admin_config/sort/"+cid;
+    }
+</script>
+

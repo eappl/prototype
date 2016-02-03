@@ -1,0 +1,228 @@
+<!--{template header,admin}-->
+<link rel="stylesheet" href="js/jqueryui/jquery-ui.css" />
+<script src="js/jquery-1.8.3.js" type="text/javascript"></script>
+<script src="js/jquery-ui.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+
+    <style>
+        .wrapBox2015310 {
+            margin-top: 20px;
+            height: 320px;
+            overflow-y: scroll;
+        }
+        .border-triangle {
+            margin-right: 5px;
+            border-color: #ccc #fff #fff #fff;
+            border-style: solid;
+            border-width: 10px 6px 0 6px;
+            height: 0;
+            width: 0;
+            display: inline-block;
+            -webkit-transform: rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+
+            /* IE8+ - must be on one line, unfortunately */
+            -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=3.061616997868383e-16, M12=1, M21=-1, M22=3.061616997868383e-16, SizingMethod='auto expand')";
+
+            /* IE6 and 7 */
+            filter: progid:DXImageTransform.Microsoft.Matrix(
+                    M11=3.061616997868383e-16,
+                    M12=1,
+                    M21=-1,
+                    M22=3.061616997868383e-16,
+                    SizingMethod='auto expand');
+
+        }
+        .wrapBox2015310 .mCss3 {
+            -webkit-transition: -webkit-transform 2000ms;
+            -webkit-transform: rotate(0deg);
+            -moz-transition: -moz-transform 2000ms;
+            -moz-transform: rotate(0deg);
+            transition: transition 2000ms;
+            /* IE8+ - must be on one line, unfortunately */
+            -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=1, M12=0, M21=0, M22=1, SizingMethod='auto expand')";
+
+            /* IE6 and 7 */
+            filter: progid:DXImageTransform.Microsoft.Matrix(
+                    M11=1,
+                    M12=0,
+                    M21=0,
+                    M22=1,
+                    SizingMethod='auto expand');
+
+
+        }
+        .wrapBox2015310 .itemBox {
+            margin-top: 10px;
+        }
+        .wrapBox2015310 .til {
+            margin-bottom: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333333;
+        }
+        .wrapBox2015310 .inbox {
+            display: none;
+        }
+        .wrapBox2015310 .item {
+            line-height: 18px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        #accordion {
+            height: 318px;
+            overflow-y: scroll;
+        }
+    </style>
+<script>
+$(function() {
+    $( "#accordion" ).accordion();
+});
+</script>
+<script>
+$(function() {
+    //$( "#accordion" ).accordion();
+    $('.wrapBox2015310 .til' ).bind('click', function(){
+        var span = $(this ).find('span' );
+        $('.wrapBox2015310 .inbox' ).hide();
+        if ( span.hasClass('mCss3') ){
+            span.removeClass('mCss3');
+            $(this ).next('.inbox' ).hide();
+        } else {
+            $('.wrapBox2015310 span').removeClass('mCss3');
+            span.addClass('mCss3');
+            $(this ).next('.inbox' ).show();
+        }
+    });
+    // 选择的元素内容事件
+    $('.wrapBox2015310 .item' ).bind('click', function(){
+//        alert( ( $.trim($(this ).text()) ) );
+		insertText($("#baidu_editor_0",window.parent.frames["waitanswer"].document),$.trim($(this ).text()))	
+    })
+});
+</script>
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+        	<td colspan="4" style="color:#555;">快捷回复 <a style="display:inline-block;color:#666;float:right; "href="index.php?admin_question/handle_quick_setting{$setting['seo_suffix']}" target="main">设置</a></td>
+        </tr>
+         <tr>
+        <td>
+		<div id="accordion">
+		<!-- {if isset($quick_list)} {loop $quick_list $quick}-->
+		    <span>{$quick['title']}</span>
+		    <div style="padding:0px;margin:0px;">
+		    <!-- {if !empty($quick['child'])} {loop $quick['child'] $child}-->
+		        <span style="display:block;border-bottom:1px #555 solid;padding:3px 5px;">
+		        	<a href="javascript:;" onclick="go_answer(this.title);" title="{$child['alt']}">{$child['content']}</a>
+		        </span>
+		         <!-- {/loop} -->
+		    <!-- {/if} -->
+		    </div>
+		    <!-- {/loop} -->
+		 <!-- {/if} -->   
+		</div>
+        </td>
+    </tr>
+       <tr>
+            <td>
+                <div class="wrapBox2015310">
+	<!-- {loop $Qcontent_list $qid $qcontent} -->
+	<!-- {if $qcontent['pid']==0} -->
+                        <div class="itemBox">
+                            <div class="til"><span class="border-triangle"></span>{$qcontent['content']}</div>
+                           <div class="inbox">		
+		<!-- {loop $Qcontent_list $qid_s $qcontent_s} -->
+		<!-- {if $qcontent_s['pid']==$qcontent['id']} -->
+                               <div class="item">
+                                   {$qcontent_s['content']}
+                               </div>		
+		
+		<!-- {/if} -->
+		<!-- {/loop} -->
+		                           </div>
+                        </div>
+	<!-- {/if} -->
+	<!-- {/loop} -->
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table> 
+<!--{template footer,admin}-->
+<script type="text/javascript">
+function insertText(obj,str) {
+	obj.focus();
+	if (window.parent.frames["waitanswer"].document.selection) {
+		var sel = window.parent.frames["waitanswer"].document.selection.createRange();
+		sel.text = str;
+	} else if (typeof obj.selectionStart == 'number' && typeof obj.selectionEnd == 'number') {
+		alert(window.parent.frames["waitanswer"].document);
+		var startPos = obj.selectionStart,
+		endPos = obj.selectionEnd,
+		cursorPos = startPos,
+		tmpStr = obj.value;
+		obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
+		cursorPos += str.length;
+		obj.selectionStart = obj.selectionEnd = cursorPos;
+	} else {
+		obj.value += str;
+	}
+}
+function moveEnd(obj){
+	obj.focus();
+	var len = obj.value.length;
+	if (window.parent.frames["waitanswer"].document.selection) {
+		var sel = obj.createTextRange();
+		sel.moveStart('character',len);
+		sel.collapse();
+		sel.select();
+	} else if (typeof obj.selectionStart == 'number' && typeof obj.selectionEnd == 'number') {
+		obj.selectionStart = obj.selectionEnd = len;
+	}
+}
+   function go_answer(title){
+	  //var answer_content = $("#baidu_editor_0",window.parent.frames["waitanswer"].document).contents().find("body");
+	  //answer_content.append(title.replace(/\n/g,'<br>')); 
+	  insertText($("#baidu_editor_0",window.parent.frames["waitanswer"].document),title)
+	  //$("#baidu_editor_0",window.parent.frames["waitanswer"].document).contents().find("body").focus();
+   }
+</script>
+<script type="text/javascript">
+function insertText(obj,str) {
+obj.focus();
+if (window.parent.frames["waitanswer"].document.selection) {
+var sel = window.parent.frames["waitanswer"].document.selection.createRange();
+sel.text = str;
+} else if (typeof obj.selectionStart == 'number' && typeof obj.selectionEnd == 'number') {
+alert(window.parent.frames["waitanswer"].document);
+var startPos = obj.selectionStart,
+endPos = obj.selectionEnd,
+cursorPos = startPos,
+tmpStr = obj.value;
+obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
+cursorPos += str.length;
+obj.selectionStart = obj.selectionEnd = cursorPos;
+} else {
+obj.value += str;
+}
+}
+function moveEnd(obj){
+obj.focus();
+var len = obj.value.length;
+if (window.parent.frames["waitanswer"].document.selection) {
+var sel = obj.createTextRange();
+sel.moveStart('character',len);
+sel.collapse();
+sel.select();
+} else if (typeof obj.selectionStart == 'number' && typeof obj.selectionEnd == 'number') {
+obj.selectionStart = obj.selectionEnd = len;
+}
+}
+   function go_answer(title){
+  //var answer_content = $("#baidu_editor_0",window.parent.frames["waitanswer"].document).contents().find("body");
+  //answer_content.append(title.replace(/\n/g,'<br>')); 
+  insertText($("#baidu_editor_0",window.parent.frames["waitanswer"].document),title)
+  //$("#baidu_editor_0",window.parent.frames["waitanswer"].document).contents().find("body").focus();
+   }
+</script>

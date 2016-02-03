@@ -1,0 +1,175 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+<script src="js/calendar.js" type="text/javascript"></script>
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;查看协助处理</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+<form method="post"  name="searchform">
+    <table width="100%"  cellspacing="0" cellpadding="1" align="center" class="tableborder">
+         <caption>搜索协助处理单</caption>
+            <tr class="altbg2">
+	            <td width='20%'>
+	              	开始日期: <input type="text" value="{eval echo date("Y-m-d",$start);}"  name="start_time" onfocus="this.value=''" onclick="showcalendar();"/>    
+	            </td>
+	            <td width='20%'>
+	           		 结束日期: <input type="text" value="{eval echo date("Y-m-d",$end_time);}"  name="end_time" onfocus="this.value=''" onclick="showcalendar();"/>
+	            </td>
+	            <td>协助状态:    
+		           <select name="status">
+			            <option value="-1">全部</option>
+			            <!-- {loop $helpStatus $k $v} -->
+			            <option value="{$k}" {if $status==$k}selected{/if}>{$v}</option>
+			            <!-- {/loop} -->
+	          	   </select>
+          	   </td>
+	        </tr>
+            <tr class="altbg2">
+            	<td>　
+            		问题ID: <input type="text" value="{if isset($qid) && $qid !=-1}$qid{/if}"   name="qid" />
+            	</td>
+            	<td>　　
+            		部门: <select name="department"><option value="-1">全部</option>
+            			<!-- {if isset($department_select)} -->
+            				{$department_select}
+            			<!-- {/if} -->
+            			</select>
+            	</td>
+            	<td>　
+            		协助人: <select name="aid"><option value="-1">全部</option>
+           			           <!-- {loop $help_aid $key $helpaid} -->
+          						<option value="{$key}" {if isset($aid_id) && $aid_id == $key}selected{/if}>{$helpaid}</option>
+         				       <!-- {/loop} -->
+           				  </select>
+           	    </td>
+            </tr>
+            <tr class="altbg2">
+           		<td>　申请人: <input type="text" value="{$applicant}" name="applicant"/></td>
+            	<td>　　
+            		逾期: <select name="overdue">
+            		<option value="-1">全部</option>
+            		<option value="1"{if $overdue==1}selected{/if}>已逾期</option>
+            		<option value="0" {if $overdue==0}selected{/if}>未逾期</option>
+            		</select>
+                </td>
+            	<td style="text-align:center">
+            		<button class="btn" onclick="return search_submit();">搜索</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            		<input class="btn" type="button" value="导出" onclick="help_export();">
+                </td>
+            </tr>
+    </table> 
+</form>
+<table width="100%" cellpadding="4" cellspacing="1">
+	   <caption>查看协助处理单</caption>
+       <tr class="header" >
+            <td>问题ID</td>
+            <td>申请人</td>
+            <td>协助人</td>       
+            <td>状态</td>
+            <td>协助时间</td>   
+            <td>协助完成时间</td>  
+            <td>逾期</td>    
+            <td>操作</td>
+        </tr>  
+       <!-- {if isset($helplist)} {loop $helplist $key $value} -->
+       <tr class="altbg2">
+         <td>{$value['qid']}</td>     
+         <td>{$value['applicant']}</td>
+         <td>{$value['aid']}</td>    
+         <td>
+      	   <span style="color:{if $value['status'] == 1}green{elseif $value['status'] ==2}red{/if}">{$helpStatus[$value['status']]}</span>
+         </td>     
+         <td>{$value['start']}</td>   
+         <td>{$value['back_time']}</td> 
+         <td>
+         	<span id="hasOverDue{$key}" style="color:{if $value['overdue'] == 1}red{else}green{/if}">{$isOverdue[$value['overdue']]}</span>
+         </td> 
+         <td>
+         	<a href="javascript:;" onclick = "_open({$key},{$value['date']},500,150)">查看此单</a>
+         	  <!-- {if $value['status'] == 0 } -->
+	           	  <a href="javascript:onclick=_revoke({$key},{$value['qid']})">撤销</a>&nbsp;&nbsp;
+	          <!-- {/if} -->
+         </td>
+       </tr>  
+         <!-- {/loop} -->
+       <!-- {/if} -->
+</table>
+<div class="pages">
+	<div class="scott" style="float:right;">{$helpstr}</div>
+</div>
+<!--{template footer,admin}-->
+<script type="text/javascript">
+function help_export(){
+	   location.href="index.php?admin_question/help_export";
+}
+	/* 根据传入参数个数判断时间大小  */
+function compareTime(start_time,end_time)
+{
+		var arr = start_time.split("-");
+		var start_time = new Date(arr[0], arr[1]-1, arr[2]);
+		var arr2 = end_time.split("-");
+		var end_time = new Date(arr2[0], arr2[1]-1, arr2[2]);
+		return (start_time.valueOf() > end_time.valueOf()) ? true : false;
+}
+function search_submit(){
+		 var start_time = document.forms['searchform'].elements['start_time'].value;
+	 	 var end_time   = document.forms['searchform'].elements['end_time'].value;
+	 	 if((start_time != ''  && end_time == '') || (start_time == ''  && end_time != '') ){
+			  alert('开始与结束日期必须全填');
+			  return false;
+		  }
+		  if(start_time != '' && end_time != '' && compareTime(start_time,end_time)){
+			alert('开始日期不能大于结束日期');
+			return false;
+		  }
+	document.searchform.action="index.php?admin_question/help";
+	document.searchform.submit();
+} 
+function _open(key,date,width,height){
+	   var xposition=0; 
+	   var yposition=0;
+	   var xposition = (screen.width - width) / 2; 
+	   var yposition = (screen.height - height) / 2;   
+	   var features= "width=" + width + "," + "height=" + height + "," + "left=" + xposition + ","  + "top=" + yposition + ","  + "directories=no, location=no, menubar=no, resizable=yes,status=no, toolbar=no, titlebar=no"; 
+	   
+	   $.get('?admin_question/help_see/',function(data){
+	    if(data['return']){
+				window.open('index.php?admin_question/help_time/' + key + '/' + date ,'' ,features);
+		}else{
+			alert(data['comment']);
+		}
+	},'json');	  
+}
+function _revoke(hid,qid){
+	if(confirm('确认撤销？')){
+		$.ajax({
+            type: "POST",
+            data:"hid="+hid+"&qid="+qid,
+            url: "{url admin_question/help_revoke}",
+            success: function(data){
+            	if(data ==1){
+            		alert('撤销成功');
+            		window.location.href="index.php?admin_question/help";
+            	}else if(data ==2){
+            		alert('撤销失败');
+            	}else if(data ==3){
+            		alert('你没有 撤销协助处理 权限！');
+            	}else if(data==4){
+            		alert("协助单已经被回复或被他人撤销");
+            	}
+            }
+        }); 
+	}
+}
+</script>

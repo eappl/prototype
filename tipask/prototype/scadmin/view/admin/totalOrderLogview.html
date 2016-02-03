@@ -1,0 +1,88 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+<script src="js/calendar.js" type="text/javascript"></script>
+
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;{$hasOrderLogViewPrivilege[name]}</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+
+<form action="{$action}" method="post" onsubmit="return check_submit()" name="queviewSubmit">
+    <table width="100%" cellspacing="0" cellpadding="6" align="center" class="tableborder">
+        <tbody> 
+            <tr class="header" ><td colspan="6">报表管理</td></tr>
+            <tr>
+                <td  class="alt2" colspan = 8>起始时间：<input class="txt" onclick="showcalendar();" name="StartDate" value="{$ConditionList[StartDate]}">
+                &nbsp;&nbsp;结束时间：<input class="txt" onclick="showcalendar();" name="EndDate" value="{$ConditionList[EndDate]}">
+				&nbsp;&nbsp;用户帐号:<input class="txt" name="author" value="{$ConditionList[author]}">
+				&nbsp;&nbsp;客服账号:<input class="txt" name="operator_loginId" value="{$ConditionList[operator_loginId]}">			
+				<input type="hidden" name="bid" value=0>
+				<input type="hidden" name="ServiceType" value=0>
+					&nbsp;&nbsp;<input class="btn" type="submit" value="搜索">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$downloadstr}</td>				
+				</tr>
+				<tr>
+				</tr>
+            
+
+        </tbody>
+    </table>
+
+
+<table width="100%" cellspacing="0" cellpadding="4" align="center" class="tableborder">
+    <tbody>
+        <tr class="header"></tr>
+			<tr>
+				
+			</tr>
+			<tr class="header">
+				<td>客服账号</td>
+				<td>订单数量</td>
+				<td>订单总金额</td>
+				<td>佣金总金额</td>
+			</tr>
+			<!-- {if isset($OrderStatus['OrderStatus'])} {loop $OrderStatus['OrderStatus'] $orderInfo}-->
+        <tr>
+            <td  width="5%" class="alt2">{$orderInfo['login_name']}</td>
+			<td  width="5%" class="alt2">{$orderInfo['order_count']}</td>
+			
+			<td  width="5%" class="alt2">{$orderInfo['total_amount']}</td>
+			<td  width="5%" class="alt2">{$orderInfo['total_commission']}</td>
+            </td>
+        </tr>
+        <!-- {/loop} -->
+        <!-- {/if} -->
+			<tr class="header">
+				<td>总计</td>
+				<td>{$OrderStatus['total']['order_count']}</td>
+				<td>{$OrderStatus['total']['total_amount']}</td>
+				<td>{$OrderStatus['total']['total_commission']}</td>
+			</tr>
+    </tbody>
+</table>
+</form>
+<script type="text/javascript">
+function getSType(obj){
+	var sid = $(obj).find("option:selected").val();
+	$.ajax({
+        type: "POST",
+        url: "{url admin_complain/ajaxGetSType}",
+        data: "sid="+sid,
+        success: function(question_sid)
+		{			
+            $("select[name='jid']").find("option:gt(0)").remove();
+			$("select[name='jid']").append(question_sid);            			
+        }
+    });
+}
+</script>

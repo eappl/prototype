@@ -1,0 +1,569 @@
+<!--{template header}-->
+<div class="box1000 m_t_10 clearfix">
+		<div class="right730">
+		  <div class="zx_location">您的位置：<a href="http://sc.5173.com">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>{$cidInfo['name']}详情</span></div>
+			<div id="tabs3">
+			<div name="tabhead" class="zx_tab clearfix">
+				<ul class="tab_title">
+					<li class="current"><a href="#">大家正在问</a></li>
+					<li>
+						<a href="{$all_num[1]}" target="_blank" id="maopao">我的提问</a>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<div>
+				 <ul class="type_tabs">
+                        <li><a href="{url index/questionTypeDetail/$qtype['id']/new/0}}">最新</a></li>
+                        <li><a href="{url index/questionTypeDetail/$qtype['id']/hot/0}">热门</a></li>
+                        <li><a href="{url index/questionTypeDetail/$qtype['id']/ask/0}">咨询</a></li>
+                        <li><a href="{url index/questionTypeDetail/$qtype['id']/complain/0}">投诉</a></li>
+                        <li><a href="{url index/questionTypeDetail/$qtype['id']/suggest/0}">建议</a></li>
+                        <!-- <li><a href="{url index/questionTypeDetail/$qtype['id']/dustbin/0}">垃圾箱</a></li> -->
+                    </ul>
+		<div class="q_info">
+        	<h3 class="q_title">{eval echo cutstr($detail_question['title'],50,'');}</h3>
+            <p class="q_tongji"><span>浏览量：{$detail_question['views']}</span>
+            <span> 
+            <!-- {if $detail_question['author'] == '游客'} -->
+	            {$detail_question['author']}
+	        <!-- {else} -->	            
+	             <!-- {if $ask_front_name == $detail_question['author']} -->
+		            {$detail_question['author']}
+		            <!-- {else} -->
+		            {eval echo cutstr($detail_question['author'],2,'**');}
+	                <!-- {/if} -->
+	        <!-- {/if} -->	
+	        </span>
+	        <span>提问时间：{$detail_question['time']}</span>
+	        <span>分类：{$category}</span>
+	        <!-- {if $ask_front_name == $detail_question['author'] && $ask_front_name != "游客"} -->
+	        <span>{if !empty($detail_question['attach'])}附件信息：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{$detail_question['attach']}" target="_blank">附件</a>{/if}</span>
+	        <!-- {/if} -->
+	       </p>
+            <div class="q_infotxt">
+            	<p> {eval echo cutstr($detail_question['description'],500,'');}</p>
+            </div>
+        </div>
+        <div class="a_info">
+        	<h3><span>客服回复</span></h3>
+		<!-- {if intval($detail_question['status']) != 1} -->  
+            <div class="a_infobox">
+            
+                <!-- {if !empty($detail_question['answerModel'])} {loop $detail_question['answerModel'] $key $answer}-->
+            	<div class="headbox">
+                  <a href="{url question/selfHistoryQuestion/$answer['operatorModel']['login_name']}" class="head_link" target="_blank">
+                  	 <!--{if !empty($answer['operatorModel']['photo'])}--> 
+                   		 	<img src="{$answer['operatorModel']['photo']}" width="76px" height="76px"/>
+                  	 <!--{else}-->
+                   			<img src="http://img01.5173cdn.com/zixun_center/build/1.00/images/default_kf.png" width="76px" height="76px"/>
+                   	<!--{/if}-->
+                  </a>
+                  <a href="{url question/selfHistoryQuestion/$answer['operatorModel']['login_name']}" class="zs_link" target="_blank">{$answer['operatorModel']['name']}</a>
+                  <a class="btn-b-20" href="javascript:void(0)"  onclick="bindAuthor({$answer['operatorModel']['id']},'{$answer['operatorModel']['cno']}','{$answer['operatorModel']['name']}')"><span>立即绑定</span></a>
+                  <a href="{url question/choiceMyselfAuthor}" class="more_link">更多专属客服</a>
+                </div>
+                <div class="a_reply">
+	                <p class="a_huifu">回答时间：{$detail_question['distantTime']}</p>
+	                <div class="a_infotxt">
+	                			尊敬的用户：<br>
+								<p>您好！欢迎来到5173客服中心，
+									<span>
+										<a href="{url question/selfHistoryQuestion/$answer['operatorModel']['login_name']}" target="_blank">{$answer['operatorModel']['cno']}</a>
+									</span>&nbsp;很荣幸为您服务！<br/>您也可以通过下面任意一种方式跟我联系，24小时为您提供服务哦。<br/>
+								  	 <div class="zl_infotxt">
+				                        <dl>
+				                            <dt>我的手机：</dt>
+				                            <dd>{eval echo convertPhoneNum($answer['operatorModel']['mobile'])}</dd>
+				                        </dl>
+										<!--{if $telDisplay == 1}--> 
+				                        <dl>
+				                            <dt>我的电话：</dt>
+				                            <dd>{eval echo convertPhoneNum($answer['operatorModel']['tel'])}</dd>
+				                        </dl>
+										<!--{/if}-->
+				                        <dl>
+				                            <dt>我的微信：</dt>
+				                               <dd class="J_wxTip_box">
+				                                {$answer['operatorModel']['weixin']}
+				                                  {if !empty($answer['operatorModel']['weixinPicUrl'])}
+					                                <div class="J_wxTip_c">
+					                                    <span>加我为微信好友</span>
+					                                    <img width="70" height="70" src="{$answer['operatorModel']['weixinPicUrl']}">
+					                                </div>
+				                                 {/if}
+				                            </dd>
+				                        </dl>
+				                        <!-- {if $xnDisplay != 1} --> 
+										<dl>										
+										<dt>我的QQ：</dt>
+				                            <dd><a href="tencent://message/?uin={$answer['operatorModel']['QQ']}&Site=&Menu=yes" class="qq_online" alt="点击这里给我发消息" title="点击这里给我发消息" target="_blank">$answer['operatorModel']['QQ']</a></dd>
+										</dl>			                        
+										<!-- {else} -->
+										<dl>
+				                            <dt>直接联系：</dt>
+				                            <dd><span alt="点击这里给我发消息" title="点击这里给我发消息" onclick="NTKF.im_openInPageChat('{$xn_default_settingid}')"><u>点击这里联系我</u></span></dd>
+				                        </dl>
+										<!-- {/if} -->
+									</div>
+								</p>
+							<p>$answer['Acontent']</p>
+							<br/>  感谢您对5173的关注与支持，预祝您有一个愉快的5173之旅！ <br/>
+						  <a href="http://www.5173.com" target="_blank">http://www.5173.com</a>
+							<br/>
+	                </div>
+                </div>
+                 <span class="date_time date_time2"> </span>
+            <!-- {/loop} -->
+            <!-- {/if} -->  
+             <!-- {if isset($child_question) && !empty($child_question)} -->
+          	 <!-- {loop $child_question $value} -->    
+                <div class="a_asked">
+                	<div class="headbox">
+                		<span class="user_ask">追问：</span>
+                    </div>
+                    <div class="a_reply">
+                        <div class="a_infotxt">{$value['description']}</div>
+                    </div>
+                    <span class="date_time">{$value['time']}</span>
+                     <!-- {if $value['status'] == 1} -->
+				        	<div class="a_info">
+								<h3><span>客服回复</span></h3>
+								<div class="myquestion">
+									<s class="ico_help_5"></s><p>客户经理将尽快受理该{$cidInfo['name']}，请耐心等待。</p>
+								</div>
+							</div>
+				          <!-- {else} -->
+				      <!-- {if isset($value['answerModel']) && !empty($value['answerModel'])} {loop $value['answerModel'] $childanswer} -->
+				        <div class="a_asked_bg clearfix">
+				     		<a class="ld"  href="{url question/selfHistoryQuestion/$childanswer['operatorModel']['login_name']}" target="_blank">
+                               <!-- {if !empty($childanswer['operatorModel']['photo'])} --> 
+                              	<img  src="{$childanswer['operatorModel']['photo']}">
+                               <!-- {else} -->
+                                <img src="http://img01.5173cdn.com/zixun_center/build/1.00/images/default_kf.png"/>
+                               <!-- {/if} -->
+                            </a>
+                            <div class="rd">
+								<strong>
+               	   					<a href="{url question/selfHistoryQuestion/$childanswer['operatorModel']['login_name']}" target="_blank">{$childanswer['operatorModel']['name']}</a>
+               	   				</strong>
+								<span class="kefu">您好！我是
+									<span> 
+										<a href="{url question/selfHistoryQuestion/$childanswer['operatorModel']['login_name']}" target="_blank">{$childanswer['operatorModel']['cno']}</a> 
+									</span>很荣幸为您服务！<br>您也可以通过下面任意一种方式跟我联系，24小时为您提供服务哦。<br>
+									<!-- start 鼠标悬停微信号码，出现微信二维码的浮动层 by maiyan 2014-7-10 -->
+									<div class="zl_infotxt">
+										<dl>
+											<dt>我的手机：</dt>
+											<dd>{eval echo convertPhoneNum($childanswer['operatorModel']['mobile'])}</dd>
+										</dl>
+										<!--{if $telDisplay == 1}--> 
+				                        <dl>
+				                            <dt>我的电话：</dt>
+				                            <dd>{eval echo convertPhoneNum($answer['operatorModel']['tel'])}</dd>
+				                        </dl>
+										<!--{/if}-->
+										<dl>
+											<dt>我的微信：</dt>
+											<dd class="J_wxTip_box">
+												{$childanswer['operatorModel']['weixin']}
+												 {if !empty($answer['operatorModel']['weixinPicUrl'])}
+					                                <div class="J_wxTip_c">
+					                                    <span>加我为微信好友</span>
+					                                    <img width="70" height="70" src="{$childanswer['operatorModel']['weixinPicUrl']}">
+					                                </div>
+				                                 {/if}
+											</dd>
+										</dl>
+										<!-- {if $xnDisplay == 1} --> 
+										<dl>
+				                            <dt>直接联系：</dt>
+				                            <dd><span alt="点击这里给我发消息" title="点击这里给我发消息" onclick="NTKF.im_openInPageChat('{$xn_default_settingid}')"><u>点击这里联系我</u></span></dd>
+				                        </dl>
+										<!-- {else} -->										
+										<dl>
+											<dt>我的QQ：</dt>
+				                            <dd><a href="tencent://message/?uin={$childanswer['operatorModel']['QQ']}&Site=&Menu=yes" class="qq_online" alt="点击这里给我发消息" title="点击这里给我发消息" target="_blank">$childanswer['operatorModel']['QQ']</a></dd>
+										</dl>
+										<!-- {/if} -->
+									</div>
+									<!-- end 鼠标悬停微信号码，出现微信二维码的浮动层 by maiyan 2014-7-10 -->
+								<br>
+								<p>{$childanswer['Acontent']}</p>                    
+								<br>  感谢您对5173的关注与支持，预祝您有一个愉快的5173之旅！ <br>
+								<a href="http://www.5173.com" target="_blank">http://www.5173.com</a>
+							</span>
+						    <span class="date_time">回答时间：{$childanswer['Atime']}</span>
+						</div>
+                     </div>
+                    <!-- {/loop} -->
+               			 <!-- {/if} -->
+               		 <!-- {/if} -->
+                </div>
+             <!-- {/loop} -->
+             <!-- {/if} -->
+             
+         <!-- {if $pj &&  $detail_question['status'] != 1} -->
+      		 <div class="smallbox">
+             	<h5>是否满意（满意/不满意）</h5>
+                 <ul class="small-select clearfix">
+                   <!-- {if $detail_question['is_pj']==0} -->
+                 	   <li id="supportLi" class="current"><a href="javascript:;" class="a1" onclick="on_vote({$pid},1);">满意</a></li>
+                       <li id="againstLi" class="current"><a href="javascript:;" class="a2" onclick="on_vote({$pid},2);">不满意</a></li>
+                    <!-- {else} -->
+                    	<li id="supportLi" {if $detail_question['is_pj']==1}class="current"{/if}><a href="javascript:;" class="a1" onclick="on_vote({$pid},1);">满意</a></li>
+                        <li id="againstLi" {if $detail_question['is_pj']==2}class="current"{/if}><a href="javascript:;" class="a2" onclick="on_vote({$pid},2);">不满意</a></li>
+                  <!-- {/if} -->
+                 </ul>
+             </div><br/>
+          <!-- {/if} -->
+          
+           <!-- {if $detail_question['cid']!=$complain_type} -->
+           <form action="" name="ask_form" method="post">		                  
+              <div class="zhuiwen" {if $display_zhuiwen || $detail_question['history'] == 1} style="display:none;"{/if}>
+             	 <a href="javascript:;" class="zhuiwen-btn" onclick="on_zhuiwen();">追问</a>
+             	 <div id="zhuiwenbox">
+                 	<textarea name="input-title" id="input-title" noresize="noresize" onkeyup="check_title()"></textarea>
+                     <div>
+                     	<span class="input-tj">您还可以输入 <ins id="title_num" style="color:#f60;text-decoration:none;">500</ins> 个字</span>
+                     	<a class="btnlink_b_small" href="javascript:void(0);" onclick="on_ask();"><span> 提交 </span></a>		                           
+                     </div>
+                 </div>		                		                			                
+             </div>
+          </form>
+          <!-- {/if} -->
+          	 
+      </div>
+<!-- {else} -->
+	       <div class="myquestion">
+				<s class="ico_help_5"></s>
+			   <p>客户经理将尽快受理该{$cidInfo['name']}，请耐心等待。</p>
+		  </div>
+<!-- {/if} -->
+		</div>
+<!-- 		<div class="qa1_list">
+			<h2>相关问题</h2>
+			<ul class="clearfix">
+			{if !empty($related_question)}
+				{loop $related_question $v}
+				<li><a href="{url question/detail/$v['id']}">·{eval echo cutstr($v['title'],44,'...');}</a></li>
+				{/loop}
+			{/if}
+			</ul>
+		</div> 
+-->
+	</div>
+	</div>
+	</div>
+	</div>
+	<div class="left250">
+		<div class="menu">
+			<h2>问题分类</h2>
+			<div class="menu_list">
+				<dl>
+					<dt>游戏名称</dt>
+					<!-- {loop $left_game $games} -->
+					<dd><a href="{url list//$games['gameid']/}">{$games['game_name']}</a></dd>
+					<!-- {/loop} -->				
+				</dl>
+				<ul class="menu_infor" style="display:none;">
+				    <!-- {loop $left_game $games} -->
+					<li><a href="{url list//$games['gameid']/}">{$games['game_name']}</a></li>
+					<!-- {/loop} -->
+					<li><a href="{url list//other_games/}">其它游戏</a></li>
+				</ul>
+			</div>
+		    <!--{if isset($taglist)}-->
+		    <!--{loop $taglist  $tag}-->
+			<div class="l_dash"></div>
+			<div class="menu_list" style="overflow:visible;">
+				<dl>
+					<dt>{$tag['name']}</dt>
+			<!--{if !empty($tag['child'])}-->
+			<!--{eval $tmpTag = $tag['child'];}-->
+				<!--{loop $tag['child'] $key $tag}-->
+					  <dd><a href="{url list///$tag['id']}">{$tag['name']}</a></dd> 
+			    <!--{/if}--><!--{/loop}-->
+			    </dl>
+			     <ul class="menu_infor" style="display:none;">
+			<!--{loop $tmpTag  $t}-->
+				 <li><a href="{url list///$tag['id']}">{$t['name']}</a></li>
+		    <!--{/loop}-->
+		      </ul>
+			</div>	
+			<!--{/loop}-->
+			<!--{/if}-->
+	    </div>
+		<div class="qa_list">
+			<h2>常见问答</h2>
+			<ul>
+			<!-- {eval $num=0} -->
+			<!-- {if isset($common_list)} -->
+		    	<!-- {loop $common_list $key $common} -->
+				<li>
+					<span class="num">{eval echo $num +=1;}</span>
+					<a href="{$common['url']}">{$common['title']}</a>
+				</li>
+				<!-- {/loop} -->
+	         <!-- {/if} -->
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div id="layer_sell_v1" class="UED_hide">       
+    <div class="pop_box">
+        <div class="pop_tittle">
+          <h3 id="UED_layer_h3_v31">友情提示</h3>
+          <a href="javascript:void 0" onclick="$.LAYER.close();" class="close"></a>
+        </div>
+        <div class="pop_mainbox">
+        	<div class="side_icon">
+            	<s class="ico_warning_5"></s>
+            </div>
+            <div class="right_main">
+            	<h4>很抱歉，您的帐号已被管理员禁言处理，请您自觉遵守5173言论规则。</h4>
+                <p class="mt10"><a href="javascript:void 0" class="btnlink_b_small" onclick="$.LAYER.close();location.href='/';"><span>我知道了</span></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="layer_sell_v2" class="UED_hide">       
+    <div class="pop_box">
+        <div class="pop_tittle">
+          <h3 id="UED_layer_h3_v31">友情提示</h3>
+          <a href="javascript:void 0" onclick="$.LAYER.close();" class="close"></a>
+        </div>
+        <div class="pop_mainbox">
+        	<div class="side_icon">
+            	<s class="ico_warning_5"></s>
+            </div>
+            <div class="right_main">
+            	<h4>您的上一次提问还没有被回答，不能继续追问！</h4>
+                <p class="mt10"><a href="javascript:void 0" class="btnlink_b_small" onclick="$.LAYER.close();"><span>我知道了</span></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="layer_sell_v3" class="UED_hide">       
+    <div class="pop_box">
+        <div class="pop_tittle">
+          <h3 id="UED_layer_h3_v31">友情提示</h3>
+          <a href="javascript:void 0" onclick="$.LAYER.close();" class="close"></a>
+        </div>
+        <div class="pop_mainbox">
+        	<div class="side_icon">
+            	<s class="ico_warning_5"></s>
+            </div>
+            <div class="right_main">
+            	<h4>对不起，提交失败！</h4>
+                <p class="mt10"><a href="javascript:void 0" class="btnlink_b_small" onclick="$.LAYER.close();"><span>我知道了</span></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="layer_sell_v4" class="UED_hide">       
+    <div class="pop_box">
+        <div class="pop_tittle">
+          <h3 id="UED_layer_h3_v31">友情提示</h3>
+          <a href="javascript:void 0" onclick="$.LAYER.close();" class="close"></a>
+        </div>
+        <div class="pop_mainbox">
+        	<div class="side_icon">
+            	<s class="ico_warning_5"></s>
+            </div>
+            <div class="right_main">
+            	<h4>对不起，您提问的太频繁了，请稍候再进行提问！</h4>
+                <p class="mt10"><a href="javascript:void 0" class="btnlink_b_small" onclick="$.LAYER.close();"><span>我知道了</span></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="layer_sell_v5" class="UED_hide">       
+    <div class="pop_box">
+        <div class="pop_tittle">
+          <h3 id="UED_layer_h3_v31">友情提示</h3>
+          <a href="javascript:void 0" onclick="$.LAYER.close();" class="close"></a>
+        </div>
+        <div class="pop_mainbox">
+        	<div class="side_icon">
+            	<s class="ico_warning_5"></s>
+            </div>
+            <div class="right_main">
+            	<h4>描述内容不能为空！</h4>
+                <p class="mt10"><a href="javascript:void 0" class="btnlink_b_small" onclick="$.LAYER.close();"><span>我知道了</span></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="layer_sell_v6" class="UED_hide">       
+    <div class="pop_box">
+        <div class="pop_tittle">
+          <h3 id="UED_layer_h3_v31">友情提示</h3>
+          <a href="javascript:void 0" onclick="$.LAYER.close();" class="close"></a>
+        </div>
+        <div class="pop_mainbox">
+        	<div class="side_icon">
+            	<s class="ico_warning_5"></s>
+            </div>
+            <div class="right_main">
+            	<h4>亲，问题提交一次就OK，不用重复提交哦！</h4>
+                <p class="mt10"><a href="javascript:void 0" class="btnlink_b_small" onclick="$.LAYER.close();"><span>我知道了</span></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--{template footer}-->
+<script type="text/javascript">
+var type = {$detailSelectType};
+$(function(){
+    $(".type_tabs li:eq("+type+")").addClass("current");
+});
+$(".type_tabs li").	mouseout(function(){ 
+	$(".type_tabs li").each(function(){ 
+		$(this).removeClass();
+	});
+	$(".type_tabs li:eq("+type+")").addClass("current");
+});
+
+$(".type_tabs li").mouseover(function(){ 
+	$(this).addClass("current");
+});
+ function check_title(){
+     var title_length = $("#input-title").val().length;
+     var cha=eval("500"+"-"+title_length);
+     if(cha >= 0){
+     	$("#title_num").html(cha);
+     }else{
+     	$("#title_num").html('0');
+     }   
+ }
+ 
+ function on_ask(){
+ 	var description = $("#input-title").val();
+ 	if(description == ''){
+ 		alert("请输入问题详情");
+ 		return;
+ 	}else if(description.length < 1 || description.length > 500){
+ 		alert("问题详情请保持在1-500个字内。");
+ 		return;
+ 	}
+ 	var now = (new Date()).valueOf()/1000;
+ 	$.ajax({
+         type: "POST",
+         url: "{url question/ajaxask}",
+         data: "description="+description+"&pid=$pid",
+         success: function(data){
+         	 if(data == 1){
+            	    jQuery.LAYER.show({id:'layer_sell_v1'});
+             }else if(data == 2){
+            	    jQuery.LAYER.show({id:'layer_sell_v2'});
+             }else if(data == 4){
+            	    jQuery.LAYER.show({id:'layer_sell_v4'});
+             }else if(data == 5){
+            	    jQuery.LAYER.show({id:'layer_sell_v5'});
+             }else if(data == 6){
+            	    jQuery.LAYER.show({id:'layer_sell_v6'});
+             }else{
+            	 if(data.indexOf('-') > -1){
+             		if(data.substr(0,1) == 3){
+                  		var question_id = data.substr(2);
+                  		if(/^\d+$/.test(question_id)){
+                  			location.href = "{$url}"+question_id+'/'+now;
+                  		}else{
+                  			jQuery.LAYER.show({id:'layer_sell_v3'});
+                  		}
+                  	}
+             	}
+             }
+         }
+     });
+ }
+ 
+   function on_zhuiwen(){$("#zhuiwenbox").toggle();}
+   function on_vote(id,type){
+	   $.ajax({
+	         type: "POST",
+	         url: "{url question/ajaxsatisfy}",
+	         data: "question_id="+id+"&type="+type,
+	         success: function(data){
+	             if(data == 1){
+	            	 alert("您的评价已提交成功，感谢您对5173的支持！");
+	            	 $("#supportLi").addClass("current");
+	            	 window.location.reload()
+	             }else if(data == 2){
+	            	 alert("您的评价已提交成功，感谢您对5173的支持！");
+	            	 $("#againstLi").addClass("current");
+	            	 window.location.reload()
+	             }else if(data == 3){
+	            	 alert("亲，你已经评价了哦！");
+	             }else if(data == 4){
+	            	 alert("对不起,您不能对该问题进行评价！");
+	             }
+	             else if(data == 0){
+	            	 alert("评价失败！");
+	             }
+	         }
+	     });
+   }
+   // 绑定 专属客服操作
+   function bindAuthor(id,loginName,nick_name)
+   {
+	   var login_name = '{$login_name}';
+	   if(login_name =='游客') 
+	   {
+		   if(location.href.indexOf('bind=') == -1 )
+		   {
+			   location.href = 'https://passport.5173.com/?returnUrl='+location.href+'/bind='+id;
+		   }
+		   else
+		   {
+			   location.href = location.href;
+		   }
+		} 
+	   else
+	   {
+			$.bindZsKf({
+			       login_name:loginName,
+			       nick_name:nick_name,
+			       id:id 
+			 });
+		}
+   }
+   var bind = '{$bind}';
+   if(bind=='bind')
+   {
+	   if(!window.name)
+	   {
+		   window.name = 'refrash';
+		   var Url = location.href;
+		   var goUrl = Url.substring(0,Url.lastIndexOf('/')-1);
+			$.bindZsKf({
+			       login_name:'{$operatorInfo['cno']}',
+			       nick_name:'{$operatorInfo['login_name']}',
+			       id:'{$operatorInfo['id']}'
+			   });
+	   }
+   } 
+   </script>
+   
+<script type="text/javascript">
+  NTKF_PARAM = {
+                siteid: "{$xn_siteid}",                            //Ntalker提供平台基础id,
+                sellerid: "{$xn_sellerid}",
+				settingid: "{$xn_default_settingid}",          //Ntalker分配的缺省客服组id  
+                itemid: "",                     //商品id
+                uid: "",                                //用户id
+                uname: "",                     //用户名              
+                orderid: "",                     //订单id
+                orderprice: "",                         //订单价格
+                userlevel: ""
+            }  
+</script>
+<script type="text/javascript" src="http://download.ntalker.com/b2b/ntkfstat.js" charset="utf-8"></script>

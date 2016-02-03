@@ -1,0 +1,107 @@
+<!--{template header,admin}-->
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/dialog.js" type="text/javascript"></script>
+<script src="js/admin.js" type="text/javascript"></script>
+
+<div id="append">
+</div>
+<div style="width:100%; height:15px;color:#000;margin:0px 0px 10px;">
+    <div style="float:left;"><a href="index.php?admin_main/stat{$setting['seo_suffix']}" target="main"><b>控制面板首页</b></a>&nbsp;&raquo;&nbsp;接单管理</div>
+</div>
+<!--{if isset($message)}-->
+<!--{eval $type=isset($type)?$type:'correctmsg'; }-->
+<table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+    <tr>
+        <td class="{$type}">{$message}</td>
+    </tr>
+</table>
+<!--{/if}-->
+<form method="post" action="index.php?admin_config/orders">
+    <table width="100%"  cellspacing="0" cellpadding="6" align="center" class="tableborder">
+        <tbody>
+        	<caption>搜索选项</caption>
+            <tr class="altbg2">              
+	            <td  lass="altbg2">用户名: <input type="text" value="{if $login_name_search !=''}$login_name_search{/if}"  maxlength="100" name="user_name"   onmouseover="this.focus()" id="kw"></td>
+	            <td  lass="altbg2">是否忙碌:
+	            <select name="busy">
+	            	<option value="-1">全部</option>
+	            	<option value="1" {if $busy_search==1}selected{/if}>忙碌</option>
+	            	<option value="0" {if $busy_search==0}selected{/if}>空闲</option>
+	             </select>
+	            </td>     
+	            <td class="altbg2">是否有单:
+	             <select name="bill">
+	               <option value="-1" {if $bill_search==-1}selected{/if}>全部</option>
+	               <option value="1" {if $bill_search==1}selected{/if}>有</option>
+	               <option value="0" {if $bill_search==0}selected{/if}>无</option>
+	             </select>
+	            </td>       
+	            <td><input class="btn" type="submit" name="submit_search" value="搜索" /></td>
+        </tr>
+        </tbody>
+    </table> 
+</form>
+<table width="100%" cellpadding="4" cellspacing="1" class="tableborder"> 
+       <tr class="header" >
+            <td>登录名</td>
+            <td>姓名</td>
+            <td>首问单量</td>
+            <td>追问单量</td>     
+            <td>操作</td>
+        </tr>
+        <!-- {if isset($answer_list)} {loop $answer_list $key $answer_bills} -->  
+        <tr>
+            <td class="alt2" id="name{$key}">{$answer_bills['login_name']}</td>     
+            <td class="alt2">{$answer_bills['name']}</td>
+            <td class="alt2"><span style="color:{if (!empty($setting['limit_handle_count']) && $answer_bills['num'] >=$setting['limit_handle_count'])}red{/if}">{$answer_bills['num']}</span></td>
+            <td class="alt2"><span style="color:{if (!empty($setting['limit_handle_count']) && $answer_bills['num'] >=$setting['limit_handle_count'])}red{/if}">{$answer_bills['num_add']}</span></td>
+            <td class="alt2"> <input type="hidden" value="{$key}">
+            <select name="isbusy"  {if $answer_bills['isbusy'] == 1}style="color:red;"{/if} onchange="setIsBusy(this,{$key})">
+            <option value='1'  {if $answer_bills['isbusy'] == 1}selected="selected"{/if}>忙碌</option>
+            <option value='0' {if $answer_bills['isbusy'] == 0}selected="selected"{/if}>空闲</option>
+            </select>&nbsp;&nbsp;
+            <a href="javascript:;" onclick="_reset('{$answer_bills['login_name']}');">重置</a>
+            </td>   
+        </tr>
+        <!-- {/loop} --> 
+        <!-- {/if} --> 
+</table>
+<div class="pages"><div class="scott" style="float:right;">{$departstr}</div></div>
+<script type="text/javascript">
+function setIsBusy(obj,key){
+	var value = obj.value;
+	if(obj.value==1){
+		obj.style.color='red';
+	}
+	var name = $("#name"+key).text();
+	$.post("index.php?admin_config/orders_setIsBusy.html", {isbusy:value,author_name:name},
+ 		function(data){
+  			if(data == 1) {
+  		    	 alert("修改成功");
+  		    }else if(data == 3) {
+  		    	 alert("你没有 接单客服理忙碌空闲设置 权限！");
+				 window.location.href="?admin_config/orders";
+  		    }
+			else{
+  		    	alert("修改失败");
+				window.location.href="?admin_config/orders";
+  		    }
+  	});
+}
+function _reset(key){
+	  if(confirm("您确定要重置，请谨慎操作!")){
+		  $.post("index.php?admin_config/orders_resetorder", {name:key},
+	 		function(data){
+	  			if(data == 1) {
+	  		    	alert("修改成功"); 
+	  		    	window.location.reload()
+	  		    }else if(data == 3) {
+	  		    	alert("你没有 重置接单量 权限!"); 
+	  		    }else{
+	  		    	alert("修改失败");
+	  		    }
+			});
+	  }
+}
+</script>
+<!--{template footer,admin}-->

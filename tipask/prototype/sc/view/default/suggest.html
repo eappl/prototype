@@ -1,0 +1,368 @@
+<!--{template header}-->
+<link rel="stylesheet" type="text/css" href="http://img01.5173cdn.com/fed/build/2.00/css/upload_img_v1.css" />
+<style type="text/css">
+.logo_zixun a:hover{color:#0066CC;text-decoration:none;}
+</style>
+<div id="J_wytsCpage" class="box1000 m_t_10 clearfix">
+<div class="zx_location">您的位置：<a href="./">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+	<a href="http://sc.5173.com/index.php?question/ask_skip.html">选择问题类型</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+	<a href="http://sc.5173.com/index.php?question/ask_run/{$question_type}.html">选择{$question_type_list[$question_type]}类型</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;{$url}
+	<span>{$question_type_list[$question_type]}详情</span>
+</div>    
+ {if $loginName != '游客' && !empty($operatorInfo)}
+<div class="service_manager">
+   	<div class="l_img">
+   		 <!--{if !empty($operatorInfo['is_photo'])}--> 
+ 		       <img src="{$operatorInfo['photo']}" width="76px" height="76px"/>
+ 		 <!--{else}-->
+ 		 	   <img src="http://img01.5173cdn.com/zixun_center/build/1.00/images/default_kf.png" width="76px" height="76px"/>
+         <!--{/if}-->
+			{if $operatorInfo['isbusy']==1 || $operatorInfo['isonjob']==0}
+				<span class="noline">当前不在线</span>
+			{else}
+				<span class="online">当前在线</span>
+			{/if}
+   	</div>
+   	    <div class="r_txt"><b>◆</b>您好，我是您的专属客服&nbsp;<strong class="c_f60">{$operatorInfo['cno']}</strong>（{$operatorInfo['name']}），很高兴能帮助您。</div> 
+</div>
+{/if}
+<div class="fed-toolstip tips_sc">
+        <div class="fed-tipsarr fed-arrtop"><span class="arr-3">◆</span><span class="arr-1">◆</span><span class="arr-2">◆</span></div>
+        <div class="fed-tipcon">
+        <p class="ico-text"></p>
+        <ul>
+			<!--{if $telDisplay == 1}--> 
+			<li><span class="w_65">我的电话：</span><span>{$operatorInfo['tel']}</span></li>
+			<!--{/if}-->
+             <li><span class="w_65">我的手机：</span><span>{$operatorInfo['mobile']}</span></li>
+             <li><span class="w_65">我的微信：</span><span>{$operatorInfo['weixin']}</span></li>
+              <!--{if $qqDisplay == 1}-->
+			 <li><span class="w_65">我的QQ：</span><span>{$operatorInfo['QQ']}</span></li>
+             <!--{/if}-->
+			 <li><span class="w_65">已回复：</span><span class="c_06c">{$selfAuthorNum}条</span>&nbsp;记录</li>
+         </ul>
+        <p></p>
+        </div>
+</div>  
+<form action="{url question/suggest}" name="suggest_form" id="suggest_form" method="post" enctype="multipart/form-data">
+    <div class="service_content">
+        <!-- {if $ask_front_name == '游客'} -->
+    	<div class="unlogin-tips p_top"><span class="fedtips-b-1"><s class="ico_info_1"></s>建议您先&nbsp;<a href="{$login_url}" class="underline">登录</a>&nbsp;，登录后提交的建议将记录在“我的服务记录”中，以便您查看进度、补充建议内容。</span></div>
+ 		<!-- {/if} -->      
+       <dl class="update_service clearfix">
+    	   <dt class="heit30">{$question_type_list[$question_type]}类型：</dt>
+           <dd>
+             <div id="J_cpt_ts" class="f_left like_select">
+                  <span class="text">{$qtypeName['name']}</span>
+                  <input type="hidden" value="{$qtypeId}" name="qtypeId" id="qtypeId"/>
+                  <input type="hidden" value="{$cid1}" name="cid1"/>
+              </div>
+            </dd>
+        </dl>
+        
+        <dl class="update_service clearfix">
+            <dt>{$question_type_list[$question_type]}内容：<s>*</s></dt>
+            <dd>
+            <div class="write_ques">
+	            		<textarea class="ques_t J_relation" id="complaints" name="description" placeholder="我们非常重视您的建议 ，请在这里告诉我们为确保您的个人信息安全 ，请勿在问题内容中填写帐号、密码、联系方式等信息" name="description">{$description}</textarea>            <ul class="operate">
+                <li id="J_sctp"><s class="sctp"></s><span>上传图片</span></li>
+            </ul>
+            <ul class="upload_img">
+                <li class="loadimgbox">
+                <!--上传图片HTML结构开始 uploadbtn-->
+                    <div class="single_up" style="float: none;">
+                        <div class="initial">
+                            <div id="uploadbtn_box" class="pic">
+                                <p class="num">&nbsp;</p>
+
+                                <p>暂无图片</p>
+                            </div>
+                        </div>
+                        <div>
+                            <input id="uploadbtn" type="button" value="上传新图片" class="uploadheight up_btn_1" class="uploadheight" />
+                            <input id="uploadbtn_imgpath" type="hidden" name="imgpath" value="" />
+                        </div>
+                    </div>
+                    <!--上传图片HTML结构结束 uploadbtn-->            
+                </li>             
+            </ul>
+            </div>
+
+	        	<span class="fed_formtips_error detail_error" id="askDesrptNull" style="display:none"><s class="ico_error_1"></s>请输入{$question_type_list[$question_type]}内容</span>
+	        	<span class="fed_formtips_error detail_error" id="askDesrptShort" style="display:none"><s class="ico_error_1"></s>{$question_type_list[$question_type]}内容不少于5个汉字</span>
+            </dd>
+        </dl>
+        {if $loginName == '游客'}
+        <dl class="update_service clearfix">
+        	<dt class="heit30">我的用户名：<s>*</s></dt>
+            <dd class="contact_num">
+	            <input type="text" placeholder="请输入您的5173登录用户名" id="user_txt" name="author" class="long_2 holderfont" value="{$author}">
+	            <span class="fed_formtips_error" style="display:none" id="userError"><s class="ico_error_1"></s>请输入用户名</span>
+	            <span class="fed_formtips_error" style="display:none" id="userTypeError"><s class="ico_error_1"></s>请输正确格式的5173登陆用户名</span>
+            </dd>
+        </dl>
+        {/if}
+         <dl class="update_service clearfix">
+        	<dt class="heit30">我的联系方式：</dt>
+            <dd class="contact_num">
+            	<ul class="contact_txt">
+                	<li>
+                		<input type="text" class="long_2 holderfont" placeholder="手机号" id="moblephone" value="{$comment['contact']['mobile']}" name="contact[mobile]"/>
+                		<s class="must">*</s>
+                	</li>
+                    <li><input type="text" class="long_2 holderfont" placeholder="QQ号" id="qqNumber" value="{$comment['contact']['qq']}" name="contact[qq]"　value="{$comment['contact']['qq']}"><s class="must">*</s></li>
+                    <li><input type="text" class="long_2 holderfont" placeholder="微信号" id="weixin" value="{$comment['contact']['weixin']}" name="contact[weixin]"　value="{$comment['contact']['weixin']}"></li>
+
+                </ul>
+            </dd>
+        </dl>
+		        <dl>
+            <dd>
+                <div style="padding-left:100px;">
+                        <span class="fed_formtips_error detail_error" style="display:none" id="moblephoneError"><s class="ico_error_1"></s>请输入正确格式的手机号</span>
+                        <span class="fed_formtips_error detail_error" style="display:none" id="moblephoneNull"><s class="ico_error_1"></s>请输入手机号</span>
+                        <span class="fed_formtips_error detail_error" style="display:none" id="qqNumberNull"><s class="ico_error_1"></s>请输入QQ号</span>
+						<span class="fed_formtips_error detail_error" style="display:none" id="qqNumberError"><s class="ico_error_1"></s>请输入正确格式的QQ号</span>
+                        <span class="fed_formtips_error detail_error" style="display:none" id="weixinError"><s class="ico_error_1"></s>请输入正确格式的微信号</span>
+                        <span class="fed_formtips_error detail_error" style="display:none" id="allError"><s class="ico_error_1"></s>手机号或微信号或QQ号格式不正确</span>
+                </div>
+            </dd>
+        </dl>
+        
+        {if $loginName == '游客'}
+        <dl class="update_service clearfix">
+        	<dt class="heit30">验证码：</dt>
+            <dd class="upcode">
+	            <input type="text" id="J_code" name="J_code" class="code" value="{$J_code}">
+	            <img src="{url question/get_code}" id="yzm_img" onclick="javascript:this.src='?question/get_code/'+Math.random();" style="cursor:pointer;"/>
+	            <span class="exchange_a" style="cursor:pointer;font-size: 12px;" 
+	            onclick="javascript:document.getElementById('yzm_img').src='?question/get_code/'+Math.random();">看不清，换一张</span>	            
+            </dd> 
+            <span  id="yzm_msg_error" ></span>
+        </dl>    
+        {/if}
+        {if $loginName != '游客' && !empty($operatorInfo)}
+    		<input type="hidden" name="login_name" value="{$operatorInfo['login_name']}" />
+   		 {/if} 
+        <div class="sumbit_loca">
+	        <input type="hidden" name="act" value="submit"/> 
+	        <a class="submit_ques">提交{$question_type_list[$question_type]}</a>
+	        <span  id="repeatSubmit" ></span>
+        </div>
+	<div class="box_qus box_loc3">
+            <div class="box_top box_bg">
+                <strong>为您找到相关问题10个</strong>
+            </div>
+            <div class="box_content">
+                <ul>
+                 
+                </ul>
+            </div>
+            <div class="box_bottom box_bg"></div>
+        </div>
+    </div>
+    </form>
+</div>
+<a href="http://bar.5173.com/showtopic-811345.aspx" id="entrance" class="entrance" target="_blank"></a>
+ <div id="daiyanbao_com_content" closerate="4" playrate="-2" style="position: fixed;_position: absolute;text-align: left;overflow: visible;bottom :0;right:0;display:block; z-index:999;"> <script src="//res.daiyanbao.com/client/20150506/www.5173.com.js"></script> </div>
+<!--{template footer}-->
+
+<script type="text/javascript">
+	var postMobile = '{$comment['contact']['mobile']}';
+	var thisPage = {name:"suggest"};
+	var submitFlg = 0;//防重复提交
+    $(function(){
+        $.fed.tabs("#tabs3",{event:"click",currindex:0,interval:0});
+        $.fed.tabs("#tabs4",{event:"mouseover",currindex:0,interval:0});
+        $.famsg.floatdiv("#entrance",{top:258,offset:0});
+        $('#btn_demo_1').click(function(){
+            $.LAYER.show({id:'layer_order',layerContainer:'mark',overlay:{color:'#000',opacity:0.5}})
+        });
+        $("#user_txt").fedPlaceHoder("holderfont");
+        $("#complaints").fedPlaceHoder("holderfont"); // 建议内容
+    	$("#moblephone").fedPlaceHoder("holderfont");
+    	$("#qqNumber").fedPlaceHoder("holderfont");
+    	$("#weixin").fedPlaceHoder("holderfont");
+    });
+	
+    $(".service_manager .r_txt .c_f60").mouseover(function(){
+		$(".tips_sc").show();	
+	});
+	$(".tips_sc").mouseover(function(){
+		$(".tips_sc").show();	
+	}); 
+	$(".tips_sc").mouseout(function(){
+		$(".tips_sc").hide();	
+	}); 
+	
+    $("#moblephone").focus(function(){
+    	var contact = $.trim($(this).val());
+    	var result = contact.search(/^\d{3}\*{4}\d{4}$/g);
+    	if(result != -1)
+    	{
+    		$(this).attr('value','');
+    	}
+    }); 
+   	$('.submit_ques').bind('click', function() {
+   		var submit_flag = true;
+   		var description = $.trim($("#complaints").val());	//建议内容
+     	var mobileValue = $.trim($("#moblephone").val());
+ 	    var qqValue = $.trim($("#qqNumber").val());
+ 	    var weixinValue = $.trim($("#weixin").val());
+ 	    var userValue = $.trim($("#user_txt").val());
+ 	    var threeCount  = 0;
+   		// 咨询内容验证
+        if(description == "我们非常重视您的建议 ，请在这里告诉我们 ，为确保您的个人信息安全 ，请勿在问题内容中填写帐号、密码、联系方式等信息")
+        {   
+            submit_flag = false;
+            $("#askDesrptNull").show();
+        }
+        else
+        {
+            $("#askDesrptNull").hide();
+        }
+
+        if(description != "我们非常重视您的建议，请在这里告诉我们" &&　description.length<5)
+        {
+            submit_flag = false;
+            $("#askDesrptShort").show();
+        }
+        else
+        {
+            $("#askDesrptShort").hide();
+        }
+   		
+   		// 我的用户名
+   		if(userValue == "请输入您的5173登录用户名")
+   		{
+   			submit_flag = false;
+   			$("#userError").show();
+   			$("#userTypeError").hide();
+   		}
+   		else
+   		{
+   			if(userValue.length>20)
+   			{
+   				submit_flag = false;
+   	   			$("#userTypeError").show();
+   			}
+   			else
+   			{
+   				$("#userError").hide();
+   				$("#userTypeError").hide();
+   			}
+   		}
+   	
+   		 // 手机号
+   		var mobileReg = /^13[0-9]{1}[0-9]{8}$|15[0-9]{9}$|18[0-9]{9}$|14[0-9]{9}$|17[0-9]{9}$/;
+   		var qqReg = /^[1-9][0-9]{4,11}$/;
+   		
+   	// 联系方式
+   		if(mobileValue == '手机号')
+		{
+ 			submit_flag = false;
+ 			$("#moblephoneNull").show();
+ 			$("#moblephoneError").hide();
+ 		}
+ 	 	else
+ 	 	{
+ 	 		$("#moblephoneNull").hide();
+ 	 	}
+   		
+ 	    if( mobileValue != '手机号' )
+		{
+ 	 		if(mobileValue == postMobile)
+ 	 		{
+ 	 		}
+ 	 		else if(!mobileReg.test(mobileValue))
+ 	   		{
+ 	 			submit_flag = false;
+ 	 			threeCount ++;
+ 	 			$("#moblephoneError").show();
+ 	   		}
+ 	 		else
+ 	 		{
+ 	 			$("#moblephoneError").hide();
+ 	 		}
+ 		}
+ 	 
+   		  // qq号
+   		if(qqValue != 'QQ号')
+   		{
+   			if(!qqReg.test(qqValue))
+   			{
+   				submit_flag = false;
+   				threeCount ++;
+   				$("#qqNumberError").show();
+   			}
+   			else
+   			{
+   				$("#qqNumberError").hide();
+   			}
+   		}
+   		else
+   		{
+   			submit_flag = false;
+			$("#qqNumberNull").show();
+   		}
+   		  // 微信号
+   		if(mobileValue != '手机号' && weixinValue != '微信号')
+   		{
+   			if(weixinValue.length >20 || weixinValue.length<4 || /[\*]/.test(weixinValue))
+   			{
+   				submit_flag = false;
+   				threeCount ++;
+   				$("#weixinError").show();		
+   			}
+   			else
+   			{
+   				$("#weixinError").hide();			
+   			}
+   		}
+   		else
+   		{
+   			$("#weixinError").hide();
+   		} 
+   		if(mobileValue !='手机号' && threeCount>=2)
+   		{
+   			submit_flag = false;
+   			$("#moblephoneError").hide();
+   			$("#qqNumberError").hide();
+   			$("#weixinError").hide();	
+   			$("#allError").show();		
+   		}
+   		else
+   		{
+   			$("#allError").hide();		
+   		}
+   		  
+  		// 验证码验证
+   		if($("#J_code").length > 0)
+   		{
+       		if($.trim($("#J_code").val()) == '')
+       		{
+       			$("#yzm_msg_error").html("<span class='fed_formtips_error'><s class='ico_error_1'></s>请输入验证码。</span>");
+       			submit_flag = false;
+       		}
+       		else
+       		{
+       			$("#yzm_msg_error").html("");
+       		}
+       	}
+   		if(submit_flag)
+   		{
+   			submit('suggest_form');
+   		}        		      	
+    });
+   	
+   	function submit(form_id) {
+    	if (submitFlg == 0) {  		
+    		submitFlg = 1;
+    		$("#repeatSubmit").html("");
+    		$('#'+form_id).submit();
+    	}else{
+   			$("#repeatSubmit").html("<span class='fed_formtips_error'><s class='ico_error_1'></s>亲，问题提交一次就OK，不用重复提交哦！</span>");
+    	}
+    }
+</script>
+

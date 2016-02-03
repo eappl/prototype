@@ -1,0 +1,54 @@
+<!--{template header}-->
+<div class="box1000 m_t_10 clearfix">
+	<div class="zx_location">您的位置：<a href="./">服务中心首页</a>&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span>我要投诉</span></div>
+    <div class="service_content">
+    	<div class="box-l alert_status">
+    	<div class="search_null">
+        	<s class="ico_success_5"></s>
+            <h3>投诉提交成功！请您保持联系方式畅通，客户经理将在8小时内联系您处理。</h3>          
+        </div>
+    	</div>
+         <ul class="status_jd2">
+            <li class="dian"></li>
+            <li class="xian_on"></li>
+            <li class="dian_on"></li>
+            <li class="xian"></li>
+            <li class="dian"></li>
+            <li class="xian"></li>
+            <li class="dian"></li>
+        </ul> 
+          <ul class="status_detail3 m_l3">
+            <li>提交投诉<span>{$date}</span></li>
+            <li><strong>等待受理</strong>客户经理将尽快受理该投诉，请耐心等待。</li>
+            <li>客服处理</li>
+            <li>确认&amp;评价</li>
+            <li>投诉处理结束</li>
+         </ul>
+         <p class="jump_text"><ins id="spanSeconds">10</ins>秒后自动跳转至“<a href="{url question/my_complain}">我的投诉</a>”</p>
+    </div>
+</div>
+<!--{template footer}-->
+<script type="text/javascript">
+var seconds = 10;
+onload = function()
+{
+  t = window.setInterval(redirection, 1000);
+}
+function redirection()
+{
+  if (seconds <= 0)
+  {
+    window.clearInterval(t);
+    return;
+  }
+
+  seconds --;
+  document.getElementById('spanSeconds').innerHTML = seconds;
+
+  if (seconds == 0)
+  {
+    window.clearInterval(t);
+    location.href = "{url question/my_complain}";
+  }
+}
+</script>

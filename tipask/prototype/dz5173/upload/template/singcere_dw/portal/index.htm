@@ -1,0 +1,149 @@
+<!--{subtemplate common/header}-->
+
+<script src="template/singcere_dw/src/js/jquery-1.7.1.min.js?{VERHASH}" type="text/javascript"></script>
+<script type="text/javascript">  jQuery.noConflict();</script>
+<script src="template/singcere_dw/src/js/jquery.nivo.slider.pack.js?{VERHASH}" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(window).load(function(){
+    jQuery("#nivoslider-125").nivoSlider({
+        effect:"random",
+        slices:15,
+        boxCols:8,
+        boxRows:4,
+        animSpeed:500,
+        pauseTime:5000,
+        startSlide:0,
+        directionNav:true,
+        directionNavHide:true,
+        controlNav:true,
+        controlNavThumbs:false,
+        controlNavThumbsFromRel:true,
+        keyboardNav:true,
+        pauseOnHover:true,
+        manualAdvance:false
+    });
+});
+</script>
+<style id="diy_style" type="text/css"></style>
+
+<div class="wp" style="margin-top:20px;">
+  <div class="ct2 wp cl">
+    <div class="mn" style=" margin-bottom:0;">
+      <div class="slider-wrapper theme-default">
+        <div class="ribbon"></div>
+        <!--[diy=diy_hd]-->
+        <div id="diy_hd" class="area"></div>
+        <!--[/diy]--> 
+      </div>
+    </div>
+    <div class="sd"> 
+      <!--[diy=diytr]-->
+      <div id="diytr" class="area"></div>
+      <!--[/diy]--> 
+    </div>
+  </div>
+  <div class="ct2 wp cl">
+    <div class="mn" style="overflow:visible;">
+      <div class="bm_h cl">
+        <h2>站点动态</h2>
+      </div>
+      <div class="bm_c cl">
+        <div class="ind_qyjnqyer">
+          <div class="ind_qyjn z"> 
+            <!-- 文章 --> 
+            <!--[diy=diywz]-->
+            <div class="area" id="diywz"></div>
+            <!--[/diy]--> 
+          </div>
+          <div class="ind_qyer fr">
+            <!-- 用户 --> 
+            <!--[diy=diyer]-->
+            <div class="area" id="diyer"></div>
+            <!--[/diy]--> 
+          </div>
+          <div class="cb"></div>
+        </div>
+        
+        <!-- 微播 --> 
+        <!--[diy=diyweibo]-->
+        <div class="area" id="diyweibo"></div>
+        <!--[/diy]--> 
+        
+        <!-- 相册 --> 
+        <!--[diy=diythumbs]-->
+        <div class="area" id="diythumbs"></div>
+        <!--[/diy]--> 
+
+        <div class="ind_bbs">
+          <div class="ind_travels z"> 
+            <!-- 攻略 --> 
+            <!--[diy=diygl]-->
+            <div class="area" id="diygl"></div>
+            <!--[/diy]--> 
+          </div>
+          <div class="ind_hotbbs fr"> 
+            <!-- 论坛热门板块 --> 
+            <!--[diy=diyltrm]-->
+            <div class="area" id="diyltrm"></div>
+            <!--[/diy]--> 
+          </div>
+          <div class="cb"></div>
+        </div>
+      </div>
+      
+      <!--[diy=diycategorytop]-->
+      <div class="area" id="diycategorytop"></div>
+      <!--[/diy]--> 
+    </div>
+    <div class="sd"> 
+      <!--[diy=diytb]-->
+      <div id="diytb" class="area"></div>
+      <!--[/diy]--> 
+    </div>
+  </div>
+</div>
+<script src="misc.php?mod=diyhelp&action=get&type=index&diy=$_GET['diy']&r={echo random(4)}" type="text/javascript"></script> 
+<!--js begin--> 
+<script>
+jQuery(function(){
+    msgmove();
+    jQuery("#citycommentindex ul").hover(function(){
+        jQuery(this).attr("name","hovered"); //鼠标经过设置ul的name值为"hovered"
+    },function(){
+        jQuery(this).removeAttr("name");
+    });
+    
+    
+    
+    
+    function msgmove(){ 
+        var isIE=!!window.ActiveXObject;
+        var isIE6=isIE&&!window.XMLHttpRequest;
+        if(jQuery("#citycommentindex ul").attr("name") != "hovered"){
+            //判断ul的name属性是否为"hovered"，决定下面代码块是否运行，以实现鼠标经过暂停滚动。
+            var height = jQuery("#citycommentindex li:last").height();
+            if(isIE6){
+                //判断IE6，jQuery的animate动画和opacity透明在一起使用在IE6中会出现中文重影现象，
+                //所以在ie6中实行透明的禁用。
+                jQuery("#citycommentindex li:last").css({"height":0});
+            }else{ 
+                jQuery("#citycommentindex li:last").css({"opacity":0,"height":0});
+                //列表最后的li透明和高度设置为0 
+            }
+            jQuery("#citycommentindex li:first").before(jQuery("#citycommentindex li:last"));
+            //把列表最后的li提升到顶部，实现有限列表项无限循环滚动显示
+            jQuery("#citycommentindex li:first").animate({"height":height},"slow");
+            //列表顶部的li高度逐渐变高以把下面的li推下去
+            if(!isIE6){
+                jQuery("#citycommentindex li:first").animate({"opacity":"1"},"slow");
+ 
+                //在非IE6浏览器中设置透明淡入效果
+            }
+        }
+        setTimeout(msgmove,5000);
+    }
+});
+</script> 
+<!--slider--> 
+<!--js end--> 
+<!--{subtemplate common/footer}-->
